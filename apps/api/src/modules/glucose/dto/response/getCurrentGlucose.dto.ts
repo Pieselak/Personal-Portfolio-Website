@@ -45,7 +45,7 @@ export class GetCurrentGlucoseResponse {
     enum: GlucoseTrends,
     enumName: 'GlucoseTrend',
     description: 'Direction of glucose level change trend',
-    example: GlucoseTrends.FLAT,
+    example: GlucoseTrends.STABLE,
   })
   trend: string;
 

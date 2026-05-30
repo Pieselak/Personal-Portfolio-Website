@@ -22,10 +22,10 @@ export function SelectLanguagePage() {
       <div className="space-y-6 w-full">
         <div className="flex flex-col gap-1">
           <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            {t("user.languagePage.title")}
+            {t("pages.selectLanguage.title")}
           </h1>
           <p className="text-muted-foreground">
-            {t("user.languagePage.subtitle")}
+            {t("pages.selectLanguage.subtitle")}
           </p>
         </div>
 
@@ -41,11 +41,7 @@ export function SelectLanguagePage() {
                 key={language.code}
                 custom={index}
                 variants={itemVariants}
-                className={`grow min-w-26 px-4 py-3 rounded-xl border transition-all duration-250 font-medium cursor-pointer ${
-                  currentLanguage === language.code
-                    ? "bg-accent/20 border-ring text-primary shadow-sm"
-                    : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"
-                }`}
+                className={`grow min-w-26`}
                 onClick={() => {
                   i18n.changeLanguage(language.code);
                   if (langRedirect) {
@@ -54,17 +50,23 @@ export function SelectLanguagePage() {
                 }}
               >
                 <div
-                  className={`flex-1 flex flex-col items-center gap-2 w-full`}
+                  className={`flex-1 flex flex-col items-center gap-2 w-full px-4 py-3 rounded-xl border transition-all duration-250 font-medium cursor-pointer ${
+                    currentLanguage === language.code
+                      ? "bg-accent/20 border-ring text-primary shadow-sm"
+                      : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"
+                  }`}
                 >
                   <language.flag className="size-10 rounded-full bg-secondary p-0.5" />
-                  <span>{language.name}</span>
+                  <span>
+                    ({language.code.toUpperCase()}) {language.name}
+                  </span>
                 </div>
               </motion.button>
             ))}
           </motion.div>
         ) : (
           <p className="bg-card border-2 border-dashed border-border rounded-2xl p-12 text-center text-muted-foreground">
-            {t("user.languagePage.noLanguages")}
+            {t("pages.selectLanguage.noLanguages")}
           </p>
         )}
       </div>

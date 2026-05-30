@@ -10,12 +10,14 @@ import {
 import { GetCurrentGlucoseResponse } from '../dto/response/getCurrentGlucose.dto';
 import { GetGraphDataResponse } from '../dto/response/getGraphData.dto';
 import { GetSensorDataResponse } from '../dto/response/getSensorData.dto';
+import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
 
 @Controller('glucose')
 @ApiTags('Glucose Data')
 export class GlucoseController {
   constructor(private readonly glucoseService: GlucoseService) {}
 
+  @CheckMaintenance()
   @Get('current')
   @ApiOperation({
     summary: 'Get current glucose data',
@@ -35,6 +37,7 @@ export class GlucoseController {
     return await this.glucoseService.getCurrentGlucose();
   }
 
+  @CheckMaintenance()
   @Get('graph')
   @ApiOperation({
     summary: 'Get glucose graph data',
@@ -54,6 +57,7 @@ export class GlucoseController {
     return await this.glucoseService.getGraphData();
   }
 
+  @CheckMaintenance()
   @Get('sensor')
   @ApiOperation({
     summary: 'Get sensor data',

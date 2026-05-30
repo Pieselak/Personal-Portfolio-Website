@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:api": "swagger-typescript-api generate -p ../api/src/swagger/api-schema.json -o ./src/app/api --axios --name generated-api.ts --api-class-name API"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
@@ -23,12 +24,14 @@
     "react-i18next": "^16.3.4",
     "react-router": "^7.13.2",
     "react-router-dom": "^7.9.6",
-    "react-spinners": "^0.17.0",
-    "tailwindcss": "^4.1.17"
+    "react-spinners": "0.17.0",
+    "swagger-typescript-api": "^13.12.0",
+    "tailwindcss": "^4.1.17",
+    "zustand": "5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.12.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.1.0",

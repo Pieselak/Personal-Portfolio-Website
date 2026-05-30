@@ -3,9 +3,6 @@ import {
   HttpException,
   Inject,
   Injectable,
-  Logger,
-  OnModuleDestroy,
-  OnModuleInit,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
@@ -16,77 +13,49 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { clearTimeout } from 'node:timers';
 import { GlucoseProviders } from '../../glucose.enum';
 import { GLUCOSE_CONSTANTS } from '../../../../constants/glucose.constants';
-import { GlucoseLibreConfig } from '../../../../config/glucose-libre.config';
+import { GlucoseLibreConfig } from '../../../../config';
 import { GetCurrentGlucoseResponse } from '../../dto/response/getCurrentGlucose.dto';
 import { GetGraphDataResponse } from '../../dto/response/getGraphData.dto';
 import { GetSensorDataResponse } from '../../dto/response/getSensorData.dto';
 import { GlucoseLibreAuthService } from './libreAuth.service';
 import { GlucoseRepository } from '../../repositories/glucose.repository';
 import { GlucoseLibreTransformer } from './libre.transformer';
-import { GlucoseData, IGlucoseService } from '../../glucose.types';
+import { BaseGlucoseService } from '../../glucose.types';
 import { LibreApiResponse } from '../../dto/external/libreResponse.dto';
 
 @Injectable()
-export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
-  private readonly logger = new Logger(GlucoseLibreService.name);
-
-  private isAvailable = false;
-  private inFlight: Promise<any> | null = null;
-
-  private glucoseFetchTimeout: NodeJS.Timeout | null = null;
-  private glucoseData: GlucoseData | null = null;
-  private glucoseRefreshAt: number | null = null;
-
+export class GlucoseLibreService extends BaseGlucoseService {
   constructor(
-    private readonly config: GlucoseLibreConfig,
+    @Inject(GlucoseLibreConfig) private readonly config: GlucoseLibreConfig,
     private readonly authService: GlucoseLibreAuthService,
     private readonly httpService: HttpService,
     private readonly repository: GlucoseRepository,
     private readonly transformer: GlucoseLibreTransformer,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+    @Inject(CACHE_MANAGER) protected cacheManager: Cache,
+  ) {
+    super(cacheManager);
+  }
 
   initialize(): void {
+    super.initialize();
+
     try {
-      this.config.ensureValid();
+      this.config.validate();
       this.isAvailable = true;
-      this.logger.log('Libre Glucose service is available.');
+      this.logger.debug('Service initialized.');
+      this.scheduleFetchGlucose();
     } catch (error) {
       this.isAvailable = false;
       this.logger.error(error instanceof Error ? error.message : error);
-      return;
     }
 
-    this.scheduleFetchGlucose();
-  }
-
-  onModuleDestroy() {
-    this.isAvailable = false;
-    if (this.glucoseFetchTimeout) {
-      clearTimeout(this.glucoseFetchTimeout);
-    }
-  }
-
-  private ensureAvailable(): void {
-    if (!this.isAvailable) {
-      throw new ServiceUnavailableException(
-        'Glucose Libre service is not available.',
-      );
-    }
+    this.isInitialized = true;
   }
 
   private async ensureFetched(): Promise<void> {
     if (!this.glucoseData) {
       await this.fetchGlucose();
     }
-  }
-
-  private getRefreshAt(): number {
-    return this.glucoseRefreshAt ?? 0;
-  }
-
-  private getRefreshIn(): number {
-    return Math.max(0, this.getRefreshAt() - Date.now());
   }
 
   private async scheduleFetchGlucose() {
@@ -123,12 +92,12 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
       }
     }
 
-    const refresh = this.glucoseRefreshAt! - currentTimestamp;
+    const refresh = this.glucoseRefreshAt - currentTimestamp;
     this.glucoseFetchTimeout = setTimeout(
       () => this.scheduleFetchGlucose(),
-      refresh,
+      refresh, // refresh,
     );
-    this.logger.debug(`Next Libre glucose fetch scheduled in ${refresh} ms`);
+    this.logger.debug(`Next glucose fetch scheduled in ${refresh} ms`);
   }
 
   private async handleResponse(
@@ -137,8 +106,6 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
     switch (response.status) {
       case 200:
         break;
-      case 400:
-        throw new BadRequestException('Invalid request.');
       case 429:
         const retryAfter: number =
           Number(response.headers['retry-after']) || 60;
@@ -147,18 +114,18 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
           Date.now() + retryAfter * GLUCOSE_CONSTANTS.SEC_TO_MS,
           retryAfter * GLUCOSE_CONSTANTS.SEC_TO_MS,
         );
-        throw new ThrottlerException(
-          `Rate limit exceeded, retry after ${retryAfter} seconds.`,
+        throw new ServiceUnavailableException(
+          `Libre API error: ${response.status} ${response.statusText} - ${response.data?.message ?? 'No additional error info'}`,
+          'SERVICE_UNAVAILABLE',
         );
-      default:
-        throw new ServiceUnavailableException('Libre endpoint is unavailable.');
     }
 
     const data = response.data?.data;
     if (!data) {
       this.logger.error('Invalid response structure', response.data);
       throw new ServiceUnavailableException(
-        'Invalid response structure from Libre.',
+        'Invalid response structure from Libre API.',
+        'SERVICE_UNAVAILABLE',
       );
     }
 
@@ -166,19 +133,20 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
   }
 
   private async fetchGlucose() {
-    const promise = this.inFlight;
+    const promise = this.fetchInProgress;
     if (promise) {
       return await promise;
     }
 
-    this.inFlight = (async () => {
+    this.fetchInProgress = (async () => {
       try {
         const rateLimit = await this.cacheManager.get<number>(
           GLUCOSE_CONSTANTS.LIBRE.CACHE_KEYS.RATELIMIT_FETCH_GLUCOSE,
         );
         if (rateLimit) {
-          throw new ThrottlerException(
-            `Rate limit exceeded, try in ${Math.max(0, rateLimit - Date.now())} seconds.`,
+          throw new ServiceUnavailableException(
+            `Libre API rate limit exceeded, try again later.`,
+            'SERVICE_UNAVAILABLE',
           );
         }
         const { token, patientId } = await this.authService.getToken();
@@ -209,29 +177,18 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
           });
         }
       } catch (error) {
-        this.logger.error(`Libre error: ${error?.message ?? error}`);
+        this.logger.error(error?.message ?? error);
         if (error instanceof HttpException) throw error;
         throw new ServiceUnavailableException(
-          'Failed to fetch Libre data.',
-          error,
+          'Failed to fetch data from Libre API.',
+          'SERVICE_UNAVAILABLE',
         );
       } finally {
-        this.inFlight = null;
+        this.fetchInProgress = null;
       }
     })();
 
-    return this.inFlight;
-  }
-
-  async getUnit(): Promise<string> {
-    this.ensureAvailable();
-    await this.ensureFetched();
-
-    if (!this.glucoseData?.unit) {
-      throw new ServiceUnavailableException('Glucose unit is not available.');
-    }
-
-    return this.glucoseData.unit;
+    return this.fetchInProgress;
   }
 
   async isSensorActive(): Promise<boolean> {
@@ -239,10 +196,27 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
     await this.ensureFetched();
 
     if (!this.glucoseData?.sensorData) {
-      throw new ServiceUnavailableException('Sensor data is not available.');
+      throw new ServiceUnavailableException(
+        'Sensor data is not available.',
+        'SENSOR_DATA_UNAVAILABLE',
+      );
     }
 
     return this.glucoseData.sensorData.isActive;
+  }
+
+  async getUnit(): Promise<string> {
+    this.ensureAvailable();
+    await this.ensureFetched();
+
+    if (!this.glucoseData?.unit) {
+      throw new ServiceUnavailableException(
+        'Glucose unit is not available.',
+        'UNIT_UNAVAILABLE',
+      );
+    }
+
+    return this.glucoseData.unit;
   }
 
   async getCurrentGlucose(): Promise<GetCurrentGlucoseResponse> {
@@ -252,6 +226,7 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
     if (!this.glucoseData?.currentGlucose) {
       throw new ServiceUnavailableException(
         'Current glucose data is not available.',
+        'CURRENT_DATA_UNAVAILABLE',
       );
     }
 
@@ -266,7 +241,10 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
     await this.ensureFetched();
 
     if (!this.glucoseData?.graphData) {
-      throw new ServiceUnavailableException('Graph data is not available.');
+      throw new ServiceUnavailableException(
+        'Graph data is not available.',
+        'GRAPH_DATA_UNAVAILABLE',
+      );
     }
 
     const response = this.glucoseData.graphData;
@@ -280,7 +258,10 @@ export class GlucoseLibreService implements IGlucoseService, OnModuleDestroy {
     await this.ensureFetched();
 
     if (!this.glucoseData?.sensorData) {
-      throw new ServiceUnavailableException('Sensor data is not available.');
+      throw new ServiceUnavailableException(
+        'Sensor data is not available.',
+        'SENSOR_DATA_UNAVAILABLE',
+      );
     }
 
     return this.glucoseData.sensorData;

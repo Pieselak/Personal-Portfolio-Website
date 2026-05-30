@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
 import { CacheModule } from '@nestjs/cache-manager';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { ConfigModule } from '../../config/config.module';
 
 import { GlucoseController } from './controllers/glucose.controller';
 import { GlucoseAuthController } from './controllers/glucoseAuth.controller';
 import { GlucoseStatisticsController } from './controllers/glucoseStatistics.controller';
-
-import { HttpConfig } from '../../config/http.config';
-import { CacheConfig } from '../../config/cache.config';
-import { GlucoseConfig } from '../../config/glucose.config';
+import { GlucoseSettingsController } from './controllers/glucoseSettings.controller';
 
 import { GlucoseService } from './services/glucose.service';
 import { GlucoseLibreService } from './services/libre/libre.service';
@@ -17,28 +15,32 @@ import { GlucoseLibreAuthService } from './services/libre/libreAuth.service';
 import { GlucoseLibreTransformer } from './services/libre/libre.transformer';
 import { GlucoseDexcomService } from './services/dexcom/dexcom.service';
 import { GlucoseDexcomAuthService } from './services/dexcom/dexcomAuth.service';
-
-import { GlucoseDexcomConfig } from '../../config/glucose-dexcom.config';
-import { GlucoseLibreConfig } from '../../config/glucose-libre.config';
+import { GlucoseDexcomTransformer } from './services/dexcom/dexcom.transformer';
 
 import { DexcomEntity } from './entities/dexcom.entity';
+import { GlucoseEntity } from './entities/glucose.entity';
+import { SettingsEntity } from '../../entities/settings.entity';
+
 import { GlucoseDexcomRepository } from './repositories/dexcom.repository';
 import { GlucoseRepository } from './repositories/glucose.repository';
-import { GlucoseEntity } from './entities/glucose.entity';
+import { CacheConfig, HttpConfig } from '../../config';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
+    ConfigModule,
     HttpModule.registerAsync({
       useClass: HttpConfig,
     }),
     CacheModule.registerAsync({
       useClass: CacheConfig,
     }),
-    TypeOrmModule.forFeature([DexcomEntity, GlucoseEntity]),
+    TypeOrmModule.forFeature([SettingsEntity, DexcomEntity, GlucoseEntity]),
   ],
   controllers: [
     GlucoseController,
     GlucoseAuthController,
+    GlucoseSettingsController,
     GlucoseStatisticsController,
   ],
   providers: [
@@ -48,10 +50,8 @@ import { GlucoseEntity } from './entities/glucose.entity';
     GlucoseLibreTransformer,
     GlucoseDexcomService,
     GlucoseDexcomAuthService,
+    GlucoseDexcomTransformer,
     GlucoseDexcomRepository,
-    GlucoseConfig,
-    GlucoseLibreConfig,
-    GlucoseDexcomConfig,
     GlucoseRepository,
   ],
 })

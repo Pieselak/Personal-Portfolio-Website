@@ -14,6 +14,6 @@ export class GlucoseEntity {
   @Column({ type: 'varchar', length: 25 })
   provider: string;
 
-  @Column({ type: 'datetime', unique: true, name: 'timestamp' })
+  @Column({ type: 'timestamptz', unique: true, name: 'timestamp' })
   timestamp: Date;
 }

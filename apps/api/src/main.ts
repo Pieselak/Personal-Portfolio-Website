@@ -8,6 +8,13 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:2000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
   app.useStaticAssets('public', {
     prefix: '/assets/',
   });
@@ -18,11 +25,20 @@ async function bootstrap() {
     .setDescription('API documentation for the portfolio website')
     .setVersion('1.0')
     .build();
+
   const documentFactory = () =>
     SwaggerModule.createDocument(app, documentConfig);
+
   SwaggerModule.setup('docs', app, documentFactory(), {
     jsonDocumentUrl: '/docs-json',
+    yamlDocumentUrl: '/docs-yaml',
   });
+
+  const fs = require('fs');
+  fs.writeFileSync(
+    'src/swagger/api-schema.json',
+    JSON.stringify(documentFactory(), null, 2),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
   console.log(`Server started on port ${process.env.PORT}`);

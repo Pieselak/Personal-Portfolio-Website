@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProjectsController } from './projects.controller';
-import { ProjectsService } from './project.service';
+import { ProjectsController } from './controllers/projects.controller';
+import { ProjectsService } from './services/project.service';
 import { ProjectEntity } from './entities/project.entity';
 import { ProjectStatusEntity } from './entities/projectStatus.entity';
 import { ProjectStatusColorEntity } from './entities/projectStatusColor.entity';
-import { ProjectsRepository } from './projects.repository';
+import { ProjectsRepository } from './repositories/projects.repository';
 import { ProjectTagEntity } from './entities/projectTag.entity';
 
 @Module({

@@ -1,12 +1,12 @@
 import {
+  BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
-  NotImplementedException,
   OnModuleDestroy,
   OnModuleInit,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { GlucoseConfig } from '../../../config/glucose.config';
 import { GlucoseLibreService } from './libre/libre.service';
 import { GlucoseDexcomService } from './dexcom/dexcom.service';
 import { GetCurrentGlucoseResponse } from '../dto/response/getCurrentGlucose.dto';
@@ -19,19 +19,23 @@ import { GetLowestGlucoseResponse } from '../dto/response/getLowestGlucose.dto';
 import { GetTimeInRangeQuery } from '../dto/input/getTimeInRange.dto';
 import { GetAverageGlucoseQuery } from '../dto/input/getAverageGlucose.dto';
 import { GlucoseRepository } from '../repositories/glucose.repository';
-import { IGlucoseService } from '../glucose.types';
-import { ModuleRef } from '@nestjs/core';
+import { GLUCOSE_CONSTANTS } from '../../../constants/glucose.constants';
+import { BaseGlucoseService } from '../glucose.types';
+import { GetProviderModesResponse } from '../dto/response/getProviderModes.dto';
+import { SetProviderModeBody } from '../dto/input/setProviderMode.dto';
+import { SetProviderModeResponse } from '../dto/response/setProviderMode.dto';
 
 @Injectable()
 export class GlucoseService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(GlucoseService.name);
-  private readonly glucoseServiceMap: Record<string, IGlucoseService> = {};
+  private readonly glucoseServiceMap: Record<string, BaseGlucoseService> = {};
 
   private isAvailable = false;
-  private selectedGlucoseService: IGlucoseService | null = null;
+  private selectedGlucoseService: BaseGlucoseService | null = null;
+  private selectedProviderName: string | null = null;
+  private providerCheckerInterval: NodeJS.Timeout | null = null;
 
   constructor(
-    private readonly config: GlucoseConfig,
     private readonly repository: GlucoseRepository,
     private readonly libreService: GlucoseLibreService,
     private readonly dexcomService: GlucoseDexcomService,
@@ -42,15 +46,67 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      this.config.ensureValid();
+      const sensorProvider = await this.repository.getSensorProvider();
 
-      const providerConfig = this.config.sensorProvider;
-      if (providerConfig === 'none') {
-        this.isAvailable = false;
-        this.logger.log('Glucose module is disabled by configuration.');
+      this.providerCheckerInterval = setInterval(async () => {
+        const currentProvider = await this.repository.getSensorProvider();
+        if (currentProvider.provider !== sensorProvider.provider) {
+          this.logger.debug(
+            `Glucose provider changed from ${sensorProvider.provider} to ${currentProvider.provider}. Reinitializing...`,
+          );
+          this.onModuleDestroy();
+          await this.onModuleInit();
+        } else if (currentProvider.provider === 'auto') {
+          if (
+            this.selectedGlucoseService &&
+            !(await this.selectedGlucoseService.isSensorActive())
+          ) {
+            this.logger.debug(
+              `Selected glucose provider ${sensorProvider.provider} is no longer active. Reinitializing...`,
+            );
+            this.onModuleDestroy();
+            await this.onModuleInit();
+          }
+        }
+      }, GLUCOSE_CONSTANTS.PROVIDER_CHECK_INTERVAL_MS);
+
+      if (sensorProvider.provider == 'none') {
+        this.isAvailable = true;
+        this.selectedGlucoseService = null;
+        this.logger.warn('Glucose module is disabled by configuration.');
         return;
-      } else if (this.glucoseServiceMap[providerConfig]) {
-        this.selectedGlucoseService = this.glucoseServiceMap[providerConfig];
+      } else if (sensorProvider.provider == 'auto') {
+        for (const glucoseServiceMapKey in this.glucoseServiceMap) {
+          const service = this.glucoseServiceMap[glucoseServiceMapKey];
+          try {
+            service.initialize();
+            const isActive = await service.isSensorActive();
+            if (isActive) {
+              this.selectedGlucoseService = service;
+              this.selectedProviderName = glucoseServiceMapKey;
+              this.logger.log(
+                `Auto-detected glucose provider: ${glucoseServiceMapKey}`,
+              );
+              break;
+            }
+            service.onModuleDestroy();
+          } catch (error) {
+            throw new ServiceUnavailableException(
+              `Error checking glucose provider ${glucoseServiceMapKey}: ${
+                error instanceof Error ? error.message : error
+              }`,
+            );
+          }
+        }
+        if (!this.selectedGlucoseService) {
+          throw new ServiceUnavailableException(
+            'No active glucose sensor found for auto provider.',
+          );
+        }
+      } else if (this.glucoseServiceMap[sensorProvider.provider]) {
+        this.selectedProviderName = sensorProvider.provider;
+        this.selectedGlucoseService =
+          this.glucoseServiceMap[sensorProvider.provider];
       } else {
         throw new ServiceUnavailableException('Invalid glucose provider.');
       }
@@ -58,7 +114,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
       this.isAvailable = true;
       this.selectedGlucoseService.initialize();
       this.logger.log(
-        `Glucose module initialized with provider: ${providerConfig}`,
+        `Glucose module initialized with provider: ${sensorProvider.provider}${sensorProvider.provider === 'auto' ? ` (${this.selectedProviderName})` : ''}.`,
       );
     } catch (error) {
       this.isAvailable = false;
@@ -68,13 +124,27 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
 
   onModuleDestroy() {
     this.isAvailable = false;
+    if (this.providerCheckerInterval) {
+      clearInterval(this.providerCheckerInterval);
+      this.providerCheckerInterval = null;
+    }
+    if (this.selectedGlucoseService) {
+      this.selectedGlucoseService.onModuleDestroy();
+    }
     this.selectedGlucoseService = null;
   }
 
   private ensureAvailable(): void {
-    if (!this.isAvailable || !this.selectedGlucoseService) {
+    if (!this.isAvailable) {
       throw new ServiceUnavailableException(
-        'Glucose service is not available.',
+        'Glucose module is not available.',
+        'MODULE_UNAVAILABLE',
+      );
+    }
+    if (!this.selectedGlucoseService) {
+      throw new ServiceUnavailableException(
+        'Glucose module is disabled.',
+        'MODULE_DISABLED',
       );
     }
   }
@@ -107,7 +177,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     return await this.repository.getTimeInRange({
       unit: unit,
       hours: params.hours,
-      provider: this.config.sensorProvider,
+      provider: this.selectedProviderName || undefined,
       // Temporary hardcoded values until user-specific targets are implemented
       targetLow: 80,
       targetHigh: 180,
@@ -126,7 +196,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     return await this.repository.getAverageGlucose({
       unit: unit,
       hours: params.hours,
-      provider: this.config.sensorProvider,
+      provider: this.selectedProviderName || undefined,
     });
   }
 
@@ -140,7 +210,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     return await this.repository.getHighestGlucose({
       unit: unit,
       hours: params.hours,
-      provider: this.config.sensorProvider,
+      provider: this.selectedProviderName || undefined,
     });
   }
 
@@ -154,7 +224,48 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     return await this.repository.getLowestGlucose({
       unit: unit,
       hours: params.hours,
-      provider: this.config.sensorProvider,
+      provider: this.selectedProviderName || undefined,
     });
+  }
+
+  async getProviderModes(): Promise<GetProviderModesResponse> {
+    const currentProvider = await this.repository.getSensorProvider();
+    const providers = Object.keys(this.glucoseServiceMap);
+    providers.unshift('none', 'auto');
+
+    const modes = providers.map((mode) => ({
+      name: mode,
+      selected: mode === currentProvider.provider,
+    }));
+
+    return { providers: modes };
+  }
+
+  async setProviderMode(
+    body: SetProviderModeBody,
+  ): Promise<SetProviderModeResponse> {
+    const providers = Object.keys(this.glucoseServiceMap);
+    providers.unshift('none', 'auto');
+    if (!providers.includes(body.provider)) {
+      throw new BadRequestException('Invalid glucose provider.');
+    }
+
+    const providerSetting = await this.repository.getSensorProvider();
+    if (providerSetting && providerSetting.provider === body.provider) {
+      return {
+        provider: providerSetting.provider,
+        message: `Provider mode is already set to ${body.provider}`,
+      };
+    }
+
+    try {
+      await this.repository.saveSensorProvider(body.provider);
+      return {
+        provider: body.provider,
+        message: `Provider mode has been set to ${body.provider}.`,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to update provider mode.');
+    }
   }
 }

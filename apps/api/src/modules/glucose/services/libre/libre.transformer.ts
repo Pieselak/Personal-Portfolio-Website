@@ -26,7 +26,7 @@ export class GlucoseLibreTransformer {
     // Sensor name
     const sensorName: GlucoseSensors | null = sensorIsActive
       ? GlucoseSensors.LIBRE
-      : null; // HARD-CODED (Can not get Libre sensor generation from API)
+      : null; // HARD-CODED (Can't get Libre sensor generation from API)
     // Sensor image
     const sensorImage: string | null = sensorIsActive
       ? GLUCOSE_CONSTANTS.IMAGES.LIBRE
@@ -37,7 +37,7 @@ export class GlucoseLibreTransformer {
         data.activeSensors[0].sensor.a * GLUCOSE_CONSTANTS.SEC_TO_MS
       : null;
     // Sensor expire in
-    let sensorExpireIn: number | null =
+    const sensorExpireIn: number | null =
       sensorIsActive && sensorExpireAt
         ? sensorExpireAt - currentTimestamp
         : null;
@@ -46,7 +46,7 @@ export class GlucoseLibreTransformer {
     // Is glucose current (up to date)
     const glucoseIsCurrent =
       sensorIsActive &&
-      currentTimestamp - glucoseTimestamp >
+      currentTimestamp - glucoseTimestamp <=
         GLUCOSE_CONSTANTS.LIBRE.FETCH_TIMEOUT_MS;
 
     // Glucose unit
@@ -87,16 +87,16 @@ export class GlucoseLibreTransformer {
     let glucoseTrend: GlucoseTrends;
     switch (data.connection.glucoseMeasurement.TrendArrow) {
       case 1:
-        glucoseTrend = GlucoseTrends.DECREASING;
+        glucoseTrend = GlucoseTrends.FALLING;
         break;
       case 2:
-        glucoseTrend = GlucoseTrends.DECREASING_SLOWLY;
+        glucoseTrend = GlucoseTrends.FALLING_SLOW;
         break;
       case 3:
-        glucoseTrend = GlucoseTrends.FLAT;
+        glucoseTrend = GlucoseTrends.STABLE;
         break;
       case 4:
-        glucoseTrend = GlucoseTrends.RISING_SLOWLY;
+        glucoseTrend = GlucoseTrends.RISING_SLOW;
         break;
       case 5:
         glucoseTrend = GlucoseTrends.RISING;

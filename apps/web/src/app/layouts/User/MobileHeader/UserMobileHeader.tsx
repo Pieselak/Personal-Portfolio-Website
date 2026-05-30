@@ -46,7 +46,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
           whileTap={{ scale: 0.95 }}
           onClick={() => setMenuOpen(true)}
           className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-          aria-label={t("user.nav.open")}
+          aria-label={t("layouts.user.nav.openMenu")}
         >
           <MenuIcon className="size-4.5" />
         </motion.button>
@@ -69,7 +69,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                   setMenuOpen(false);
                 }}
                 className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-                aria-label={t("user.nav.close")}
+                aria-label={t("layouts.user.nav.closeMenu")}
               >
                 <XIcon className="size-4.5" />
               </motion.button>
@@ -82,7 +82,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                   <Link
                     to="/language"
                     className="p-2.5"
-                    aria-label={t("user.nav.language")}
+                    aria-label={t("layouts.user.nav.changeLanguage")}
                     onClick={() => setMenuOpen(false)}
                   >
                     <LanguagesIcon className="size-4.5" />
@@ -93,7 +93,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  aria-label={t("user.nav.theme")}
+                  aria-label={t("layouts.user.nav.changeTheme")}
                 >
                   {theme === "light" ? (
                     <MoonStarIcon className="size-4.5" />
@@ -131,7 +131,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                     {navigationItem.icon && (
                       <navigationItem.icon className="size-4.5" />
                     )}
-                    {t(`user.nav.pages.${navigationItem.label}`)}
+                    {t(`layouts.user.nav.pages.${navigationItem.label}`)}
                   </Link>
                 </motion.div>
               ))}

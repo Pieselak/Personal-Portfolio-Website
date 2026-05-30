@@ -1,6 +1,21 @@
-import { requireEnv } from '../helpers/env';
 import { Injectable } from '@nestjs/common';
-import { validateConfig } from '../helpers/config';
+import { plainToInstance } from 'class-transformer';
+import { IsUrl, IsString, validateSync } from '@nestjs/class-validator';
+
+class GlucoseLibreConfigDto {
+  @IsUrl()
+  LIBRE_API_URL: string;
+  @IsString()
+  LIBRE_VERSION: string;
+  @IsString()
+  LIBRE_PRODUCT: string;
+  @IsString()
+  LIBRE_ACCOUNT_ID: string;
+  @IsString()
+  LIBRE_EMAIL: string;
+  @IsString()
+  LIBRE_PASSWORD: string;
+}
 
 @Injectable()
 export class GlucoseLibreConfig {
@@ -12,20 +27,31 @@ export class GlucoseLibreConfig {
   readonly password: string;
 
   constructor() {
-    this.apiUrl = requireEnv('LIBRE_API_URL');
-    this.version = requireEnv('LIBRE_VERSION');
-    this.product = requireEnv('LIBRE_PRODUCT');
-    this.accountId = requireEnv('LIBRE_ACCOUNT_ID');
-    this.email = requireEnv('LIBRE_EMAIL');
-    this.password = requireEnv('LIBRE_PASSWORD');
+    const config = plainToInstance(GlucoseLibreConfigDto, process.env);
+    const errors = validateSync(config);
+
+    if (errors.length > 0) {
+      throw new Error(`Invalid configuration: ${errors}`);
+    }
+
+    this.apiUrl = config.LIBRE_API_URL;
+    this.version = config.LIBRE_VERSION;
+    this.product = config.LIBRE_PRODUCT;
+    this.accountId = config.LIBRE_ACCOUNT_ID;
+    this.email = config.LIBRE_EMAIL;
+    this.password = config.LIBRE_PASSWORD;
   }
 
-  ensureValid(): void {
-    validateConfig(this.apiUrl, 'LIBRE_API_URL');
-    validateConfig(this.version, 'LIBRE_VERSION');
-    validateConfig(this.product, 'LIBRE_PRODUCT');
-    validateConfig(this.accountId, 'LIBRE_ACCOUNT_ID');
-    validateConfig(this.email, 'LIBRE_EMAIL');
-    validateConfig(this.password, 'LIBRE_PASSWORD');
+  public validate(): void {
+    if (
+      !this.apiUrl ||
+      !this.version ||
+      !this.product ||
+      !this.accountId ||
+      !this.email ||
+      !this.password
+    ) {
+      throw new Error(`${GlucoseLibreConfig.name} is missing required fields`);
+    }
   }
 }

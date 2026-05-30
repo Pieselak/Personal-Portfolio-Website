@@ -5,9 +5,9 @@ export enum GlucoseProviders {
 
 export enum GlucoseSensors {
   LIBRE = 'Freestyle Libre',
+  DEXCOM_G6 = 'Dexcom G6',
   DEXCOM_G7 = 'Dexcom G7',
-  DEXCOM_ONE = 'Dexcom One',
-  DEXCOM_ONE_PLUS = 'Dexcom One Plus',
+  DEXCOM_ONE_PLUS = 'Dexcom One+',
 }
 
 export enum GlucoseUnits {
@@ -30,12 +30,12 @@ export enum GlucoseColors {
 }
 
 export enum GlucoseTrends {
-  RISING_RAPIDLY = 'risingRapidly',
-  RISING = 'rising',
-  RISING_SLOWLY = 'risingSlowly',
-  FLAT = 'flat',
-  DECREASING_SLOWLY = 'decreasingSlowly',
-  DECREASING = 'decreasing',
-  DECREASING_RAPIDLY = 'decreasingRapidly',
   NONE = 'none',
+  RISING_FAST = 'risingFast',
+  RISING = 'rising',
+  RISING_SLOW = 'risingSlow',
+  STABLE = 'stable',
+  FALLING_SLOW = 'fallingSlow',
+  FALLING = 'falling',
+  FALLING_FAST = 'fallingFast',
 }

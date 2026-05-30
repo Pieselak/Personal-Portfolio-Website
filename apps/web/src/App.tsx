@@ -9,16 +9,16 @@ import {
 
 // import { HomePage } from "@/app/modules/User/Home/Home.page.tsx";
 // import { AboutMePage } from "@/app/modules/User/AboutMe/AboutMe.page.tsx";
-import { MyProjectsListPage } from "@/app/modules/User/MyProjects/MyProjectsList.tsx";
-import { MyProjectsDetailsPage } from "@/app/modules/User/MyProjects/MyProjectsDetails.tsx";
-import { MyGlucosePage } from "@/app/modules/User/MyGlucose/MyGlucose.page.tsx";
+import { MyProjectsListPage } from "@/app/modules/User/Projects/ProjectsList.tsx";
+import { MyProjectsDetailsPage } from "@/app/modules/User/Projects/ProjectsDetails.tsx";
+import { GlucosePage } from "@/app/modules/User/Glucose/Glucose.page.tsx";
 import { SelectLanguagePage } from "@/app/modules/User/SelectLanguage/SelectLanguage.page.tsx";
 
-import { LoadingPage } from "@/app/modules/Loading/Loading.page.tsx";
-import { NotFoundPage } from "@/app/modules/NotFound/NotFound.page.tsx";
-import { ForbiddenPage } from "@/app/modules/Forbidden/Forbidden.page.tsx";
-import { MaintenancePage } from "@/app/modules/Maintenance/Maintenance.page.tsx";
-import { UnderConstructionPage } from "@/app/modules/UnderConstruction/UnderConstruction.page.tsx";
+import { LoadingPage } from "@/app/modules/Common/Loading/Loading.page.tsx";
+import { NotFoundPage } from "@/app/modules/Common/NotFound/NotFound.page.tsx";
+import { ForbiddenPage } from "@/app/modules/Common/Forbidden/Forbidden.page.tsx";
+import { MaintenancePage } from "@/app/modules/Common/Maintenance/Maintenance.page.tsx";
+import { UnderConstructionPage } from "@/app/modules/Common/UnderConstruction/UnderConstruction.page.tsx";
 
 import { UserLayout } from "@/app/layouts/User/User.layout.tsx";
 import { Suspense, useEffect } from "react";
@@ -58,10 +58,7 @@ function App() {
             <Route index element={<MyProjectsListPage />} />
             <Route path=":projectId" element={<MyProjectsDetailsPage />} />
           </Route>
-          <Route path="glucose">
-            <Route index element={<Navigate to="graph" />} />
-            <Route path=":section" element={<MyGlucosePage />} />
-          </Route>
+          <Route path="glucose/:section?" element={<GlucosePage />} />
           <Route path="language" element={<SelectLanguagePage />} />
           <Route path="login" />
           <Route path="logout" />

@@ -1,0 +1,1353 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/status": {
+      "get": {
+        "description": "Checks the current operational status of the service.",
+        "operationId": "StatusController_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service status check response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusCheckResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Check service status",
+        "tags": [
+          "Status"
+        ]
+      }
+    },
+    "/status/maintenance": {
+      "patch": {
+        "description": "Enables or disables maintenance mode for the service. Requires permission: status.maintenance:update",
+        "operationId": "StatusController_setMaintenanceMode",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaintenanceModeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Maintenance mode updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceModeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update maintenance mode",
+        "tags": [
+          "Status"
+        ]
+      }
+    },
+    "/projects": {
+      "get": {
+        "description": "Fetches and returns an array of all project entities stored in the system.",
+        "operationId": "ProjectsController_getProjects",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of all projects retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetProjectResponse"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Retrieve a list of all projects",
+        "tags": [
+          "Projects"
+        ]
+      },
+      "post": {
+        "description": "Creates a new project entity with the provided data. Requires permission: projects:create",
+        "operationId": "ProjectsController_createProject",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Project created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a new project",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/projects/{uuid}": {
+      "get": {
+        "description": "Fetches and returns a single project entity based on the provided ID.",
+        "operationId": "ProjectsController_getProjectById",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProjectResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project with the specified ID not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Retrieve a project",
+        "tags": [
+          "Projects"
+        ]
+      },
+      "patch": {
+        "description": "Updates the project entity identified by the provided ID with new data.  Requires permission: projects:update",
+        "operationId": "ProjectsController_updateProject",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Project updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProjectResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Project with the specified ID not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update an existing project",
+        "tags": [
+          "Projects"
+        ]
+      },
+      "delete": {
+        "description": "Deletes the project entity identified by the provided ID. Requires permission: projects:delete",
+        "operationId": "ProjectsController_deleteProject",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "Project with the specified ID not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a project",
+        "tags": [
+          "Projects"
+        ]
+      }
+    },
+    "/glucose/current": {
+      "get": {
+        "description": "Retrieves the current glucose reading.",
+        "operationId": "GlucoseController_getCurrentGlucose",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved glucose data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCurrentGlucoseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get current glucose data",
+        "tags": [
+          "Glucose Data"
+        ]
+      }
+    },
+    "/glucose/graph": {
+      "get": {
+        "description": "Retrieves glucose data formatted for graphing purposes.",
+        "operationId": "GlucoseController_getGraphData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved graph data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGraphDataResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get glucose graph data",
+        "tags": [
+          "Glucose Data"
+        ]
+      }
+    },
+    "/glucose/sensor": {
+      "get": {
+        "description": "Retrieves data about the glucose sensor.",
+        "operationId": "GlucoseController_getSensorData",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved sensor data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSensorDataResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get sensor data",
+        "tags": [
+          "Glucose Data"
+        ]
+      }
+    },
+    "/glucose/auth/dexcom/url": {
+      "get": {
+        "description": "Retrieves the OAuth URL for Dexcom authentication. Requires permission: glucose.auth:read",
+        "operationId": "GlucoseAuthController_getDexcomOAuthURL",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved Dexcom OAuth URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildDexcomOAuthURLResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get Dexcom OAuth URL",
+        "tags": [
+          "Glucose Authentication"
+        ]
+      }
+    },
+    "/glucose/auth/dexcom/callback": {
+      "get": {
+        "description": "Handles OAuth authentication with Dexcom service. Requires permission: glucose.auth:authorize",
+        "operationId": "GlucoseAuthController_handleDexcomOAuth",
+        "parameters": [
+          {
+            "name": "code",
+            "required": false,
+            "in": "query",
+            "description": "OAuth authorization code received from Dexcom",
+            "schema": {
+              "example": "a1b2c3d4e5f6g7h8i9j0",
+              "type": "string"
+            }
+          },
+          {
+            "name": "error",
+            "required": false,
+            "in": "query",
+            "description": "Error message if OAuth authorization failed",
+            "schema": {
+              "example": "access_denied",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully authenticated with Dexcom",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandleDexcomOAuthResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, possibly due to OAuth error"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Dexcom OAuth endpoint",
+        "tags": [
+          "Glucose Authentication"
+        ]
+      }
+    },
+    "/glucose/settings/providers": {
+      "get": {
+        "description": "List of available glucose data providers. Requires permission: glucose.settings:read",
+        "operationId": "GlucoseSettingsController_getProviderModes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of glucose data providers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProviderModesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get available glucose data providers",
+        "tags": [
+          "Glucose Settings"
+        ]
+      }
+    },
+    "/glucose/settings/provider": {
+      "patch": {
+        "description": "Set the mode for glucose data provider. Supported modes include \"auto\", \"libre\", \"dexcom\". Requires permission: glucose.settings:update",
+        "operationId": "GlucoseSettingsController_setProviderMode",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetProviderModeBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Glucose provider mode updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetProviderModeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update glucose data provider mode",
+        "tags": [
+          "Glucose Settings"
+        ]
+      }
+    },
+    "/glucose/statistics/time-in-range": {
+      "get": {
+        "description": "Retrieves time in range statistics for glucose levels.",
+        "operationId": "GlucoseStatisticsController_getTimeInRange",
+        "parameters": [
+          {
+            "name": "hours",
+            "required": false,
+            "in": "query",
+            "description": "Number of hours to look back for time in range calculation",
+            "schema": {
+              "minimum": 1,
+              "example": 24,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved time in range data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTimeInRangeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get time in range data",
+        "tags": [
+          "Glucose Statistics"
+        ]
+      }
+    },
+    "/glucose/statistics/average": {
+      "get": {
+        "description": "Retrieves average glucose level statistics.",
+        "operationId": "GlucoseStatisticsController_getAverageGlucose",
+        "parameters": [
+          {
+            "name": "hours",
+            "required": false,
+            "in": "query",
+            "description": "Number of hours to look back for average glucose calculation",
+            "schema": {
+              "minimum": 1,
+              "example": 24,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved average glucose data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAverageGlucoseResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get average glucose",
+        "tags": [
+          "Glucose Statistics"
+        ]
+      }
+    },
+    "/glucose/statistics/highest": {
+      "get": {
+        "description": "Retrieves the highest recorded glucose level.",
+        "operationId": "GlucoseStatisticsController_getHighestGlucose",
+        "parameters": [
+          {
+            "name": "hours",
+            "required": false,
+            "in": "query",
+            "description": "Number of hours to look back for highest glucose reading",
+            "schema": {
+              "minimum": 1,
+              "example": 24,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved highest glucose data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetHighestGlucoseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get highest glucose",
+        "tags": [
+          "Glucose Statistics"
+        ]
+      }
+    },
+    "/glucose/statistics/lowest": {
+      "get": {
+        "description": "Retrieves the lowest recorded glucose level.",
+        "operationId": "GlucoseStatisticsController_getLowestGlucose",
+        "parameters": [
+          {
+            "name": "hours",
+            "required": false,
+            "in": "query",
+            "description": "Number of hours to look back for lowest glucose reading",
+            "schema": {
+              "minimum": 1,
+              "example": 24,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved lowest glucose data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLowestGlucoseResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get lowest glucose",
+        "tags": [
+          "Glucose Statistics"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Portfolio website API",
+    "description": "API documentation for the portfolio website",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "ServiceStatus": {
+        "type": "string",
+        "enum": [
+          "operational",
+          "maintenance"
+        ],
+        "description": "Service operational status"
+      },
+      "StatusCheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Service operational status",
+            "example": "operational",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ServiceStatus"
+              }
+            ]
+          },
+          "uptime": {
+            "type": "number",
+            "description": "Service uptime in seconds",
+            "example": 86400
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Current timestamp",
+            "example": 1704064800
+          }
+        },
+        "required": [
+          "status",
+          "uptime",
+          "timestamp"
+        ]
+      },
+      "MaintenanceModeInput": {
+        "type": "object",
+        "properties": {
+          "enable": {
+            "type": "boolean",
+            "description": "Indicates if the maintenance mode should be enabled or disabled",
+            "example": true
+          }
+        },
+        "required": [
+          "enable"
+        ]
+      },
+      "MaintenanceModeResponse": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates if the maintenance mode is enabled",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Message indicating the maintenance mode status",
+            "example": "Maintenance mode has been enabled."
+          }
+        },
+        "required": [
+          "enabled",
+          "message"
+        ]
+      },
+      "GetProjectResponse": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateProjectBody": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateProjectBody": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateProjectResponse": {
+        "type": "object",
+        "properties": {}
+      },
+      "GlucoseUnit": {
+        "type": "string",
+        "enum": [
+          "mmol/L",
+          "mg/dL"
+        ],
+        "description": "Unit of measurement for glucose value"
+      },
+      "GlucoseColor": {
+        "type": "string",
+        "enum": [
+          "none",
+          "green",
+          "yellow",
+          "orange",
+          "red"
+        ],
+        "description": "Color indicator representing the glucose level range"
+      },
+      "GlucoseTrend": {
+        "type": "string",
+        "enum": [
+          "none",
+          "risingFast",
+          "rising",
+          "risingSlow",
+          "stable",
+          "fallingSlow",
+          "falling",
+          "fallingFast"
+        ],
+        "description": "Direction of glucose level change trend"
+      },
+      "GlucoseStatus": {
+        "type": "string",
+        "enum": [
+          "high",
+          "computable",
+          "low"
+        ],
+        "description": "Current status of glucose measurement"
+      },
+      "GetCurrentGlucoseResponse": {
+        "type": "object",
+        "properties": {
+          "isCurrent": {
+            "type": "boolean",
+            "description": "Indicates whether the glucose measurement is current and up-to-date",
+            "example": true
+          },
+          "value": {
+            "type": "number",
+            "description": "Current glucose measurement value",
+            "example": 118
+          },
+          "unit": {
+            "description": "Unit of measurement for glucose value",
+            "example": "mg/dL",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseUnit"
+              }
+            ]
+          },
+          "color": {
+            "description": "Color indicator representing the glucose level range",
+            "example": "green",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseColor"
+              }
+            ]
+          },
+          "trend": {
+            "description": "Direction of glucose level change trend",
+            "example": "stable",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseTrend"
+              }
+            ]
+          },
+          "status": {
+            "description": "Current status of glucose measurement",
+            "example": "computable",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseStatus"
+              }
+            ]
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Unix timestamp in milliseconds when the glucose reading was taken",
+            "example": 1672531199000
+          },
+          "refreshAt": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the next data update will occur",
+            "example": 1672534799000
+          },
+          "refreshIn": {
+            "type": "number",
+            "description": "Time in milliseconds until the next data update is expected",
+            "example": 60000
+          }
+        },
+        "required": [
+          "isCurrent",
+          "value",
+          "unit",
+          "color",
+          "trend",
+          "status",
+          "timestamp",
+          "refreshAt",
+          "refreshIn"
+        ]
+      },
+      "GraphDataPoint": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number",
+            "description": "Glucose measurement value at the specified timestamp",
+            "example": 118
+          },
+          "unit": {
+            "description": "Unit of measurement for glucose value",
+            "example": "mg/dL",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseUnit"
+              }
+            ]
+          },
+          "color": {
+            "description": "Color indicator representing the glucose level range",
+            "example": "green",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseColor"
+              }
+            ]
+          },
+          "status": {
+            "description": "Status of the glucose measurement",
+            "example": "computable",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseStatus"
+              }
+            ]
+          },
+          "timestamp": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the glucose reading was taken",
+            "example": 1672531199000
+          }
+        },
+        "required": [
+          "value",
+          "unit",
+          "color",
+          "status",
+          "timestamp"
+        ]
+      },
+      "GetGraphDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Collection of glucose data points for graph visualization",
+            "example": [
+              {
+                "value": 118,
+                "unit": "mg/dL",
+                "color": "green",
+                "status": "computable",
+                "timestamp": 1672531199000
+              },
+              {
+                "value": 115,
+                "unit": "mg/dL",
+                "color": "green",
+                "status": "computable",
+                "timestamp": 1672534799000
+              }
+            ],
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GraphDataPoint"
+            }
+          },
+          "targetLow": {
+            "type": "number",
+            "description": "Lower threshold of the target glucose range",
+            "example": 70
+          },
+          "targetHigh": {
+            "type": "number",
+            "description": "Upper threshold of the target glucose range",
+            "example": 180
+          },
+          "levelLow": {
+            "type": "number",
+            "description": "Lower threshold of the critical glucose level",
+            "example": 54
+          },
+          "levelHigh": {
+            "type": "number",
+            "description": "Upper threshold of the critical glucose level",
+            "example": 250
+          },
+          "refreshAt": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the next data update will occur",
+            "example": 1672534799000
+          },
+          "refreshIn": {
+            "type": "number",
+            "description": "Time in milliseconds until the next data update is expected",
+            "example": 60000
+          }
+        },
+        "required": [
+          "data",
+          "targetLow",
+          "targetHigh",
+          "levelLow",
+          "levelHigh",
+          "refreshAt",
+          "refreshIn"
+        ]
+      },
+      "GlucoseSensor": {
+        "type": "string",
+        "enum": [
+          "Freestyle Libre",
+          "Dexcom G6",
+          "Dexcom G7",
+          "Dexcom One+"
+        ],
+        "description": "Name of the glucose sensor device"
+      },
+      "GetSensorDataResponse": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean",
+            "description": "Indicates whether the sensor is currently active",
+            "example": true
+          },
+          "name": {
+            "description": "Name of the glucose sensor device",
+            "example": "Freestyle Libre",
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseSensor"
+              }
+            ]
+          },
+          "image": {
+            "type": "string",
+            "description": "Image URL of the glucose sensor device",
+            "example": "https://example.com/images/libre2.png",
+            "nullable": true
+          },
+          "lastUploadAt": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the sensor data was last uploaded",
+            "example": 1672531199000,
+            "nullable": true
+          },
+          "expireAt": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the sensor will expire",
+            "example": 1672531199000,
+            "nullable": true
+          },
+          "expireIn": {
+            "type": "number",
+            "description": "Time in milliseconds when the sensor will expire",
+            "example": 172800000,
+            "nullable": true
+          }
+        },
+        "required": [
+          "isActive",
+          "name",
+          "image",
+          "lastUploadAt",
+          "expireAt",
+          "expireIn"
+        ]
+      },
+      "BuildDexcomOAuthURLResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Dexcom OAuth authorization URL for user authentication",
+            "example": "https://sandbox-api.dexcom.com/v2/oauth2/login?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&response_type=code&scope=offline_access"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "HandleDexcomOAuthResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message indicating the result of the OAuth authentication process",
+            "example": "Dexcom OAuth successful."
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "GetProviderModesResponse": {
+        "type": "object",
+        "properties": {
+          "providers": {
+            "description": "List of available modes for the glucose provider with their selection status",
+            "example": [
+              {
+                "name": "none",
+                "selected": true
+              },
+              {
+                "name": "auto",
+                "selected": false
+              }
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "providers"
+        ]
+      },
+      "SetProviderModeBody": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "The mode to set for the glucose provider",
+            "example": "auto"
+          }
+        },
+        "required": [
+          "provider"
+        ]
+      },
+      "SetProviderModeResponse": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "The mode that was set for the glucose provider",
+            "example": "auto"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message indicating the result of setting the provider mode",
+            "example": "Glucose provider mode has been set to auto."
+          }
+        },
+        "required": [
+          "provider",
+          "message"
+        ]
+      },
+      "GetTimeInRangeResponse": {
+        "type": "object",
+        "properties": {
+          "sufficientData": {
+            "type": "boolean",
+            "description": "Indicates whether sufficient data is available for calculation",
+            "example": true
+          },
+          "percentageHigh": {
+            "type": "number",
+            "description": "Percentage of time with critically high glucose levels",
+            "example": 5
+          },
+          "percentageAboveRange": {
+            "type": "number",
+            "description": "Percentage of time above target glucose range",
+            "example": 15
+          },
+          "percentageInRange": {
+            "type": "number",
+            "description": "Percentage of time within target glucose range",
+            "example": 70
+          },
+          "percentageBelowRange": {
+            "type": "number",
+            "description": "Percentage of time below target glucose range",
+            "example": 7
+          },
+          "percentageLow": {
+            "type": "number",
+            "description": "Percentage of time with critically low glucose levels",
+            "example": 3
+          },
+          "hours": {
+            "type": "number",
+            "description": "Number of hours included in the calculation period",
+            "example": 24
+          }
+        },
+        "required": [
+          "sufficientData",
+          "percentageHigh",
+          "percentageAboveRange",
+          "percentageInRange",
+          "percentageBelowRange",
+          "percentageLow"
+        ]
+      },
+      "GetAverageGlucoseResponse": {
+        "type": "object",
+        "properties": {
+          "sufficientData": {
+            "type": "boolean",
+            "description": "Indicates if there is sufficient data to calculate",
+            "example": true
+          },
+          "value": {
+            "type": "number",
+            "description": "Average glucose value",
+            "example": 118
+          },
+          "unit": {
+            "description": "Unit of measurement for glucose value",
+            "example": "mg/dL",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseUnit"
+              }
+            ]
+          },
+          "hours": {
+            "type": "number",
+            "description": "Optional number of hours to consider for the calculation",
+            "example": 24
+          }
+        },
+        "required": [
+          "sufficientData",
+          "value",
+          "unit"
+        ]
+      },
+      "GetHighestGlucoseResponse": {
+        "type": "object",
+        "properties": {
+          "sufficientData": {
+            "type": "boolean",
+            "description": "Indicates whether sufficient data is available for calculation",
+            "example": true
+          },
+          "value": {
+            "type": "number",
+            "description": "Highest glucose measurement value recorded in the specified period",
+            "example": 320
+          },
+          "unit": {
+            "description": "Unit of measurement for glucose value",
+            "example": "mg/dL",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseUnit"
+              }
+            ]
+          },
+          "hours": {
+            "type": "number",
+            "description": "Number of hours included in the calculation period",
+            "example": 24
+          }
+        },
+        "required": [
+          "sufficientData",
+          "value",
+          "unit"
+        ]
+      },
+      "GetLowestGlucoseResponse": {
+        "type": "object",
+        "properties": {
+          "sufficientData": {
+            "type": "boolean",
+            "description": "Indicates whether sufficient data is available for calculation",
+            "example": true
+          },
+          "value": {
+            "type": "number",
+            "description": "Lowest glucose measurement value recorded in the specified period",
+            "example": 55
+          },
+          "unit": {
+            "description": "Unit of measurement for glucose value",
+            "example": "mg/dL",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/GlucoseUnit"
+              }
+            ]
+          },
+          "hours": {
+            "type": "number",
+            "description": "Number of hours included in the calculation period",
+            "example": 24
+          }
+        },
+        "required": [
+          "sufficientData",
+          "value",
+          "unit"
+        ]
+      }
+    }
+  }
+}

@@ -15,14 +15,14 @@ export class ProjectEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 36, default: () => 'UUID()', unique: true })
+  @Column({ type: 'uuid', unique: true })
   uuid: string;
 
   @ManyToOne(() => ProjectStatusEntity, { cascade: true, eager: true })
   @JoinColumn({ name: 'status_id' })
   status: ProjectStatusEntity;
 
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'text', nullable: true })
   image: string;
 
   @Column({ type: 'varchar', length: 255 })
@@ -34,10 +34,10 @@ export class ProjectEntity {
   @Column({ type: 'text', name: 'detailed_description' })
   detailedDescription: string;
 
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   tags: string;
 
-  @Column({ type: 'longtext', nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   developers: string;
 
   @Column({ type: 'boolean', default: false, name: 'source_code_open' })

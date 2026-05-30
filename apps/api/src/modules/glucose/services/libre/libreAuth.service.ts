@@ -6,7 +6,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { GlucoseLibreConfig } from '../../../../config/glucose-libre.config';
+import { GlucoseLibreConfig } from '../../../../config';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ThrottlerException } from '@nestjs/throttler';
 import { lastValueFrom } from 'rxjs';
@@ -42,15 +42,6 @@ export class GlucoseLibreAuthService {
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-
-  async onModuleInit() {
-    try {
-      this.config.ensureValid();
-    } catch (error) {
-      this.initFail = true;
-      this.logger.error(error instanceof Error ? error.message : error);
-    }
-  }
 
   private ensureAvailable(): void {
     if (this.initFail) {

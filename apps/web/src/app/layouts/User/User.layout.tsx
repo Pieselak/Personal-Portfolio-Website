@@ -1,10 +1,10 @@
-import { motion, MotionConfig } from "framer-motion";
-import { Outlet, useLocation } from "react-router-dom";
+import { AnimatePresence, motion, MotionConfig } from "framer-motion";
+import { useLocation, useOutlet } from "react-router-dom";
 import {
+  type LucideIcon,
   CandyIcon,
   FoldersIcon,
   HomeIcon,
-  type LucideIcon,
   UserIcon,
 } from "lucide-react";
 
@@ -29,6 +29,7 @@ const navigationItems: navigationItem[] = [
 export function UserLayout() {
   const isMobile = useIsMobile();
   const location = useLocation();
+  const element = useOutlet();
 
   return (
     <MotionConfig transition={{ duration: 0.25, ease: "easeInOut" }}>
@@ -39,18 +40,22 @@ export function UserLayout() {
           <UserHeader navigationItems={navigationItems} />
         )}
 
-        <motion.main
-          key={location.pathname}
-          initial={{ opacity: 0, transform: "scale(1)" }}
-          animate={{ opacity: 1, transform: "scale(1)" }}
-          transition={{
-            opacity: { duration: 0.2 },
-            transform: { duration: 0.25 },
-          }}
-          className="flex flex-1 justify-center items-start overflow-hidden p-3 pmax-w-6xl"
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
-          <Outlet />
-        </motion.main>
+          <motion.main
+            key={location.pathname}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ ease: "easeInOut" }}
+            className="flex flex-1 justify-center items-start overflow-hidden p-3 max-w-6xl w-full"
+          >
+            {element}
+          </motion.main>
+        </AnimatePresence>
+
         <UserFooter />
       </div>
     </MotionConfig>

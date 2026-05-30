@@ -1,6 +1,19 @@
-import { requireEnv } from '../helpers/env';
 import { Injectable } from '@nestjs/common';
-import { validateConfig } from '../helpers/config';
+import { plainToInstance } from 'class-transformer';
+import { IsUrl, validateSync, IsString } from '@nestjs/class-validator';
+
+class GlucoseDexcomConfigDto {
+  @IsUrl()
+  DEXCOM_API_URL: string;
+  @IsString()
+  DEXCOM_API_VERSION: string;
+  @IsString()
+  DEXCOM_CLIENT_ID: string;
+  @IsString()
+  DEXCOM_CLIENT_SECRET: string;
+  @IsString()
+  DEXCOM_REDIRECT_URI: string;
+}
 
 @Injectable()
 export class GlucoseDexcomConfig {
@@ -11,18 +24,29 @@ export class GlucoseDexcomConfig {
   readonly redirectUri: string;
 
   constructor() {
-    this.apiUrl = requireEnv('DEXCOM_API_URL');
-    this.apiVersion = requireEnv('DEXCOM_API_VERSION');
-    this.clientId = requireEnv('DEXCOM_CLIENT_ID');
-    this.clientSecret = requireEnv('DEXCOM_CLIENT_SECRET');
-    this.redirectUri = requireEnv('DEXCOM_REDIRECT_URI');
+    const config = plainToInstance(GlucoseDexcomConfigDto, process.env);
+    const errors = validateSync(config);
+
+    if (errors.length > 0) {
+      throw new Error(`Invalid configuration: ${errors}`);
+    }
+
+    this.apiUrl = config.DEXCOM_API_URL;
+    this.apiVersion = config.DEXCOM_API_VERSION;
+    this.clientId = config.DEXCOM_CLIENT_ID;
+    this.clientSecret = config.DEXCOM_CLIENT_SECRET;
+    this.redirectUri = config.DEXCOM_REDIRECT_URI;
   }
 
-  ensureValid(): void {
-    validateConfig(this.apiUrl, 'DEXCOM_API_URL');
-    validateConfig(this.apiVersion, 'DEXCOM_API_VERSION');
-    validateConfig(this.clientId, 'DEXCOM_CLIENT_ID');
-    validateConfig(this.clientSecret, 'DEXCOM_CLIENT_SECRET');
-    validateConfig(this.redirectUri, 'DEXCOM_REDIRECT_URI');
+  public validate(): void {
+    if (
+      !this.apiUrl ||
+      !this.apiVersion ||
+      !this.clientId ||
+      !this.clientSecret ||
+      !this.redirectUri
+    ) {
+      throw new Error(`${GlucoseDexcomConfig.name} is missing required fields`);
+    }
   }
 }

@@ -16,12 +16,14 @@ import { GetTimeInRangeQuery } from '../dto/input/getTimeInRange.dto';
 import { GetAverageGlucoseQuery } from '../dto/input/getAverageGlucose.dto';
 import { GetHighestGlucoseQuery } from '../dto/input/getHighestGlucose.dto';
 import { GetLowestGlucoseQuery } from '../dto/input/getLowestGlucose.dto';
+import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
 
 @Controller('glucose/statistics')
 @ApiTags('Glucose Statistics')
 export class GlucoseStatisticsController {
   constructor(private readonly glucoseService: GlucoseService) {}
 
+  @CheckMaintenance()
   @Get('time-in-range')
   @ApiOperation({
     summary: 'Get time in range data',
@@ -46,6 +48,7 @@ export class GlucoseStatisticsController {
     return await this.glucoseService.getTimeInRange(query);
   }
 
+  @CheckMaintenance()
   @Get('average')
   @ApiOperation({
     summary: 'Get average glucose',
@@ -70,6 +73,8 @@ export class GlucoseStatisticsController {
     return await this.glucoseService.getAverageGlucose(query);
   }
 
+  @CheckMaintenance()
+  @Get('highest')
   @ApiOperation({
     summary: 'Get highest glucose',
     description: 'Retrieves the highest recorded glucose level.',
@@ -84,13 +89,13 @@ export class GlucoseStatisticsController {
   @ApiServiceUnavailableResponse({
     description: 'Service is unavailable',
   })
-  @Get('highest')
   async getHighestGlucose(
     @Query() query: GetHighestGlucoseQuery,
   ): Promise<GetHighestGlucoseResponse> {
     return await this.glucoseService.getHighestGlucose(query);
   }
 
+  @CheckMaintenance()
   @Get('lowest')
   @ApiOperation({
     summary: 'Get lowest glucose',

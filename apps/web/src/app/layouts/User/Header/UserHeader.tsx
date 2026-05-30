@@ -34,7 +34,7 @@ export function UserHeader({ navigationItems }: userHeaderProps) {
         <Link
           to="/language"
           className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-          aria-label={t("user.nav.language")}
+          aria-label={t("layouts.user.nav.changeLanguage")}
         >
           <LanguagesIcon className="size-4.5" />
         </Link>
@@ -53,7 +53,7 @@ export function UserHeader({ navigationItems }: userHeaderProps) {
             {navigationItem.icon && (
               <navigationItem.icon className="size-4.5" />
             )}
-            {t(`user.nav.pages.${navigationItem.label}`)}
+            {t(`layouts.user.nav.pages.${navigationItem.label}`)}
           </Link>
         ))}
       </nav>
@@ -62,7 +62,7 @@ export function UserHeader({ navigationItems }: userHeaderProps) {
         whileTap={{ scale: 0.95 }}
         className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        aria-label={t("user.nav.theme")}
+        aria-label={t("layouts.user.nav.changeTheme")}
       >
         {theme === "light" ? (
           <MoonStarIcon className="size-4.5" />

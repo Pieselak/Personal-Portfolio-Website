@@ -14,8 +14,7 @@ export interface LibreApiGlucoseRecord {
   isLow: boolean;
 }
 
-export interface LibreApiGlucoseMeasurementRecord
-  extends LibreApiGlucoseRecord {
+export interface LibreApiGlucoseMeasurementRecord extends LibreApiGlucoseRecord {
   TrendArrow: number;
 }
 

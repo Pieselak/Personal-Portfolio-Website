@@ -1,4 +1,4 @@
-export interface DexcomApiEvgsRecord {
+export interface DexcomApiEgvsRecord {
   recordId: string;
   systemTime: string;
   displayTime: string;
@@ -15,9 +15,42 @@ export interface DexcomApiEvgsRecord {
   displayApp: string | null;
 }
 
-export interface DexcomApiEvgsResponse {
+export interface DexcomApiEgvsResponse {
   recordType: string;
   recordVersion: string;
   userId: string;
-  records: DexcomApiEvgsRecord[];
+  records: DexcomApiEgvsRecord[];
+}
+
+export interface DexcomApiDevicesRecord {
+  transmitterGeneration: string;
+  transmitterGenerationVariant: string;
+  displayDevice: string;
+  displayApp: string;
+  lastUploadDate: string;
+  alertSchedules: Array<any>;
+  transmitterId: string;
+}
+
+export interface DexcomApiDevicesResponse {
+  recordType: string;
+  recordVersion: string;
+  userId: string;
+  records: DexcomApiDevicesRecord[];
+}
+
+export interface DexcomApiDataRangeResponse {
+  recordType: string;
+  recordVersion: string;
+  userId: string;
+  egvs: {
+    start: {
+      systemTime: string;
+      displayTime: string;
+    };
+    end: {
+      systemTime: string;
+      displayTime: string;
+    };
+  };
 }

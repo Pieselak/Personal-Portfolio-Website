@@ -6,7 +6,7 @@ import {
   BadRequestException,
   HttpException,
 } from '@nestjs/common';
-import { GlucoseDexcomConfig } from '../../../../config/glucose-dexcom.config';
+import { GlucoseDexcomConfig } from '../../../../config';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { BuildDexcomOAuthURLResponse } from '../../dto/response/buildDexcomOAuthURL.dto';
@@ -49,15 +49,6 @@ export class GlucoseDexcomAuthService {
     private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
-
-  async onModuleInit() {
-    try {
-      this.config.ensureValid();
-    } catch (error) {
-      this.initFail = true;
-      this.logger.error(error instanceof Error ? error.message : error);
-    }
-  }
 
   private ensureAvailable(): void {
     if (this.initFail) {
@@ -190,7 +181,6 @@ export class GlucoseDexcomAuthService {
         );
 
         await this.storeTokenData(data);
-        console.log(data);
         return `${data.token_type} ${data.access_token}`;
       } catch (error) {
         this.logger.error(

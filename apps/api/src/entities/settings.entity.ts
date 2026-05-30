@@ -6,12 +6,12 @@ export class SettingsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 15, unique: true })
+  @Column({ type: 'varchar', length: 25, unique: true })
   code: string;
 
   @Column({ type: 'varchar', length: 100 })
   label?: string;
 
-  @Column({ type: 'longtext' })
+  @Column({ type: 'jsonb' })
   value: string;
 }

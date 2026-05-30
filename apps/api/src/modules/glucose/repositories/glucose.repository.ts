@@ -10,6 +10,7 @@ import { GetTimeInRangeResponse } from '../dto/response/getTimeInRange.dto';
 import { GetHighestGlucoseResponse } from '../dto/response/getHighestGlucose.dto';
 import { GetLowestGlucoseResponse } from '../dto/response/getLowestGlucose.dto';
 import { GetAverageGlucoseResponse } from '../dto/response/getAverageGlucose.dto';
+import { SettingsEntity } from '../../../entities/settings.entity';
 
 @Injectable()
 export class GlucoseRepository {
@@ -17,6 +18,8 @@ export class GlucoseRepository {
   constructor(
     @InjectRepository(GlucoseEntity)
     private readonly glucoseRepo: Repository<GlucoseEntity>,
+    @InjectRepository(SettingsEntity)
+    private readonly settingsRepo: Repository<SettingsEntity>,
   ) {}
 
   private applyFilters(
@@ -230,5 +233,31 @@ export class GlucoseRepository {
         `Failed to retrieve lowest glucose.`,
       );
     }
+  }
+
+  async saveSensorProvider(provider: string): Promise<void> {
+    const value = JSON.stringify({ provider: provider });
+    const existing = await this.settingsRepo.findOne({
+      where: { code: 'GLUCOSE_PROVIDER' },
+    });
+    if (existing) {
+      existing.value = value;
+      await this.settingsRepo.save(existing);
+    } else {
+      const setting = this.settingsRepo.create({
+        code: 'GLUCOSE_PROVIDER',
+        label: 'status.glucoseProvider',
+        value,
+      });
+      await this.settingsRepo.save(setting);
+    }
+  }
+
+  async getSensorProvider(): Promise<{ provider: string }> {
+    const result = await this.settingsRepo.findOne({
+      where: { code: 'GLUCOSE_PROVIDER' },
+    });
+    const provider = result?.value ? JSON.parse(result.value).provider : 'none';
+    return { provider };
   }
 }

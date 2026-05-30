@@ -207,4 +207,6 @@
     body {
         @apply bg-background text-foreground p-0 m-0 w-full min-h-dvh;
     }
+
+
 }
