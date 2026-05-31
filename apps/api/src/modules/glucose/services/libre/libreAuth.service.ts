@@ -77,6 +77,7 @@ export class GlucoseLibreAuthService {
     }
 
     const data: LibreTokenResponse = response.data;
+    console.log(data);
     if (
       !data.data.authTicket.token ||
       !data.data.authTicket.expires ||
