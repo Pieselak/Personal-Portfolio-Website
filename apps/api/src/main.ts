@@ -5,8 +5,20 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
-async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+import express from 'express';
+import serverless from 'serverless-http';
+import { ExpressAdapter } from '@nestjs/platform-express';
+
+const isDev = process.env.NODE_ENV === 'development';
+
+const expressApp = express();
+let cachedHandler: any;
+
+async function createNestApp() {
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    new ExpressAdapter(expressApp),
+  );
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN || 'http://localhost:2000',
@@ -18,6 +30,7 @@ async function bootstrap() {
   app.useStaticAssets('public', {
     prefix: '/assets/',
   });
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const documentConfig = new DocumentBuilder()
@@ -26,21 +39,73 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  const documentFactory = () =>
-    SwaggerModule.createDocument(app, documentConfig);
+  const document = SwaggerModule.createDocument(app, documentConfig);
 
-  SwaggerModule.setup('docs', app, documentFactory(), {
+  SwaggerModule.setup('docs', app, document, {
     jsonDocumentUrl: '/docs-json',
     yamlDocumentUrl: '/docs-yaml',
   });
 
-  const fs = require('fs');
-  fs.writeFileSync(
-    'src/swagger/api-schema.json',
-    JSON.stringify(documentFactory(), null, 2),
-  );
+  await app.init();
+
+  return app;
+}
+
+/**
+ * 🔥 DEV MODE (lokalnie)
+ * klasyczny serwer NestJS
+ */
+async function bootstrapDev() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:2000',
+    credentials: true,
+  });
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  const config = new DocumentBuilder()
+    .setTitle('Portfolio website API')
+    .setDescription('API documentation for the portfolio website')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('docs', app, document, {
+    jsonDocumentUrl: '/docs-json',
+    yamlDocumentUrl: '/docs-yaml',
+  });
 
   await app.listen(process.env.PORT ?? 3000);
-  console.log(`Server started on port ${process.env.PORT}`);
+
+  console.log(
+    `🚀 Server running on http://localhost:${process.env.PORT ?? 3000}`,
+  );
 }
-bootstrap();
+
+/**
+ * ☁️ PRODUCTION (Vercel serverless)
+ */
+async function bootstrapServerless() {
+  if (!cachedHandler) {
+    await createNestApp();
+    cachedHandler = serverless(expressApp);
+  }
+
+  return cachedHandler;
+}
+
+/**
+ * 🔥 ENTRYPOINT
+ */
+if (isDev) {
+  bootstrapDev();
+}
+
+// Vercel zawsze wymaga exportu
+export default async function handler(req: any, res: any) {
+  const serverlessHandler = await bootstrapServerless();
+  return serverlessHandler(req, res);
+}
