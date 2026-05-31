@@ -84,9 +84,9 @@ export class GlucoseLibreAuthService {
     const data: LibreTokenResponse = response.data;
     console.log(data);
     if (
-      data.data?.authTicket?.token ||
-      data.data?.authTicket?.expires ||
-      data.data?.authTicket?.duration
+      !data.data?.authTicket?.token ||
+      !data.data?.authTicket?.expires ||
+      !data.data?.authTicket?.duration
     ) {
       throw new ServiceUnavailableException(
         'Invalid token response from Libre.',
