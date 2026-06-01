@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/assets/:match*",
+      "destination": "/public/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/main.js"
+    }
+  ]
+}
