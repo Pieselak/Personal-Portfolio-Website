@@ -25,9 +25,13 @@ import {
 } from '../../dto/external/dexcomResponse.dto';
 import { GlucoseDexcomTransformer } from './dexcom.transformer';
 import { GlucoseProviders } from '../../glucose.enum';
+import { DexcomAPI } from '../../dto/external/dexcomGeneratedApi';
+import { HTTP_CONSTANTS } from '../../../../constants/http.constants';
 
 @Injectable()
 export class GlucoseDexcomService extends BaseGlucoseService {
+  private readonly api: DexcomAPI<void>;
+
   constructor(
     @Inject(GlucoseDexcomConfig) private readonly config: GlucoseDexcomConfig,
     private readonly authService: GlucoseDexcomAuthService,
@@ -37,6 +41,10 @@ export class GlucoseDexcomService extends BaseGlucoseService {
     @Inject(CACHE_MANAGER) cacheManager: Cache,
   ) {
     super(cacheManager);
+    this.api = new DexcomAPI({
+      baseURL: `${this.config.apiUrl}`,
+      timeout: HTTP_CONSTANTS.TIMEOUT_MS,
+    });
   }
 
   initialize(): void {

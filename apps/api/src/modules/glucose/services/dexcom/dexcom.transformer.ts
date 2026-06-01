@@ -7,7 +7,6 @@ import {
   GlucoseUnits,
 } from '../../glucose.enum';
 import { GlucoseData } from '../../glucose.types';
-import { LibreApiResponse } from '../../dto/external/libreResponse.dto';
 import {
   DexcomApiDevicesResponse,
   DexcomApiEgvsResponse,
@@ -47,6 +46,11 @@ export class GlucoseDexcomTransformer {
     const sensorImage: string | null = sensorIsActive
       ? GLUCOSE_CONSTANTS.IMAGES.DEXCOM
       : null;
+    const sensorActivatedAt: number | null = sensorIsActive
+      ? currentTimestamp -
+        egvsData.records[0].transmitterTicks * GLUCOSE_CONSTANTS.SEC_TO_MS
+      : null;
+
     // Sensor expire at
     const sensorExpireAt: number | null = sensorIsActive
       ? currentTimestamp +
@@ -198,6 +202,7 @@ export class GlucoseDexcomTransformer {
         isActive: sensorIsActive,
         name: sensorName,
         image: sensorImage,
+        activatedAt: sensorActivatedAt,
         lastUploadAt: sensorIsActive
           ? new Date(deviceData.records[0].lastUploadDate).getTime()
           : null,

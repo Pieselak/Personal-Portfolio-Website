@@ -77,12 +77,11 @@ export class GlucoseLibreAuthService {
             'Unknown error',
         );
         throw new ServiceUnavailableException(
-          `Libre token endpoint is unavailable. ${response.status} ${response.statusText}`,
+          'Libre token endpoint is unavailable.',
         );
     }
 
     const data: LibreTokenResponse = response.data;
-    console.log(data);
     if (
       !data.data?.authTicket?.token ||
       !data.data?.authTicket?.expires ||

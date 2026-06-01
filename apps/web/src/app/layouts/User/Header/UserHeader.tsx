@@ -44,10 +44,10 @@ export function UserHeader({ navigationItems }: userHeaderProps) {
           <Link
             key={navigationItem.url}
             to={navigationItem.url}
-            className={`flex gap-1 items-center border px-2 py-1 rounded-md hover:border-ring cursor-pointer transition-[border-color, background-color] duration-250 ${
+            className={`flex gap-1 items-center border px-2 py-1 rounded-md cursor-pointer transition-[border-color, background-color] duration-250 ${
               pathname.split("/")[1] === navigationItem.url.substring(1)
-                ? "bg-muted border-ring text-accent-foreground"
-                : "border-transparent text-muted-foreground"
+                ? "border-ring bg-muted text-accent-foreground"
+                : "border-transparent text-muted-foreground hover:border-ring hover:text-primary"
             }`}
           >
             {navigationItem.icon && (

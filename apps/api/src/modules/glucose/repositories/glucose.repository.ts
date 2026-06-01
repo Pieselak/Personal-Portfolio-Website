@@ -86,7 +86,7 @@ export class GlucoseRepository {
             'high',
           )
           .addSelect(
-            'SUM(CASE WHEN glucose.value >= :targetHigh AND glucose.value < :levelHigh THEN 1 ELSE 0 END)',
+            'SUM(CASE WHEN glucose.value > :targetHigh AND glucose.value <= :levelHigh THEN 1 ELSE 0 END)',
             'aboveRange',
           )
           .addSelect(
@@ -111,7 +111,6 @@ export class GlucoseRepository {
       ).getRawOne();
 
       const total = parseInt(result.total) || 0;
-
       const toPercentage = (count: number) => {
         if (total > 0) {
           return Math.round((count / total) * 100);
@@ -119,13 +118,19 @@ export class GlucoseRepository {
         return 0;
       };
 
+      const percentageLow = toPercentage(parseInt(result.low));
+      const percentageBelowRange = toPercentage(parseInt(result.belowRange));
+      const percentageInRange = toPercentage(parseInt(result.inRange));
+      const percentageAboveRange = toPercentage(parseInt(result.aboveRange));
+      const percentageHigh = toPercentage(parseInt(result.high));
+
       return {
         isDataSufficient: total > 0,
-        percentageLow: toPercentage(parseInt(result.low)),
-        percentageBelowRange: toPercentage(parseInt(result.belowRange)),
-        percentageInRange: toPercentage(parseInt(result.inRange)),
-        percentageAboveRange: toPercentage(parseInt(result.aboveRange)),
-        percentageHigh: toPercentage(parseInt(result.high)),
+        percentageLow: percentageLow,
+        percentageBelowRange: percentageBelowRange,
+        percentageInRange: percentageInRange,
+        percentageAboveRange: percentageAboveRange,
+        percentageHigh: percentageHigh,
         hours: result.hours,
       };
     } catch (error) {

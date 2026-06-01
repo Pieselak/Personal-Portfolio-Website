@@ -1,0 +1,4 @@
+export const HTTP_CONSTANTS = {
+  TIMEOUT_MS: 30000,
+  MAX_REDIRECT_COUNT: 5,
+};

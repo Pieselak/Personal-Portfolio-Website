@@ -81,3 +81,12 @@ export const useGlucoseHighest = (hours?: number) => {
     select: (response): GetHighestGlucoseResponse => response.data,
   });
 };
+
+export const useGlucoseModes = () => {
+  return useQuery({
+    queryKey: ["glucose", "mode"],
+    queryFn: () =>
+      ApiClient.glucose.glucoseSettingsControllerGetProviderModes(),
+    select: (response) => response.data,
+  });
+};

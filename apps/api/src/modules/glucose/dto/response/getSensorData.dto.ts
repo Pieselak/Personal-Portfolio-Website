@@ -29,6 +29,14 @@ export class GetSensorDataResponse {
 
   @ApiProperty({
     type: Number,
+    description: 'Unix timestamp in milliseconds when the sensor was activated',
+    example: 1672531199000,
+    nullable: true,
+  })
+  activatedAt: number | null;
+
+  @ApiProperty({
+    type: Number,
     description:
       'Unix timestamp in milliseconds when the sensor data was last uploaded',
     example: 1672531199000,

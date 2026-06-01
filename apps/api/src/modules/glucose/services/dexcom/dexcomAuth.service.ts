@@ -7,225 +7,186 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { GlucoseDexcomConfig } from '../../../../config';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
 import { BuildDexcomOAuthURLResponse } from '../../dto/response/buildDexcomOAuthURL.dto';
 import { HandleDexcomOAuthResponse } from '../../dto/response/handleDexcomOAuth.dto';
 import { HandleDexcomOAuthQuery } from '../../dto/input/handleDexcomOAuth.dto';
 import { GlucoseDexcomRepository } from '../../repositories/dexcom.repository';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { GLUCOSE_CONSTANTS } from '../../../../constants/glucose.constants';
-import { ThrottlerException } from '@nestjs/throttler';
-import { AxiosResponse } from 'axios';
-
-interface DexcomTokenResponse {
-  access_token: string;
-  expires_in: number;
-  token_type: string;
-  refresh_token: string;
-  refresh_expires_in: number;
-  session_state?: string;
-}
-
-enum DexcomTokenGrantType {
-  AUTHORIZATION_CODE = 'authorization_code',
-  REFRESH_TOKEN = 'refresh_token',
-}
+import {
+  DexcomAPI,
+  AuthCode,
+  RefreshToken,
+  AuthCodeResponse,
+  RefreshTokenResponse,
+} from '../../dto/external/dexcomGeneratedApi';
+import { HTTP_CONSTANTS } from '../../../../constants/http.constants';
 
 @Injectable()
 export class GlucoseDexcomAuthService {
   private readonly logger = new Logger(GlucoseDexcomAuthService.name);
-  private readonly RATE_LIMIT_KEYS = {
-    FETCH_ACCESS_TOKEN: 'dexcomFetchAccessToken',
-    FETCH_ACCESS_RATELIMIT: 'dexcomFetchAccessRateLimit',
-  };
+  private readonly api: DexcomAPI<void>;
 
-  private initFail = false;
-  private authFetchPromise: Promise<string> | null = null;
+  private authFetchWithAuthorisationCodePromise: Promise<string> | null = null;
+  private authFetchWithRefreshTokenPromise: Promise<string> | null = null;
 
   constructor(
     private readonly config: GlucoseDexcomConfig,
     private readonly dexcomRepository: GlucoseDexcomRepository,
-    private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.api = new DexcomAPI({
+      baseURL: `${this.config.apiUrl}`,
+      timeout: HTTP_CONSTANTS.TIMEOUT_MS,
+    });
+  }
 
-  private ensureAvailable(): void {
-    if (this.initFail) {
+  private async checkRateLimit(ratelimitKey: string): Promise<void> {
+    if (await this.cacheManager.get<number>(ratelimitKey)) {
       throw new ServiceUnavailableException(
-        'Glucose Dexcom auth service is not available.',
+        'Dexcom API rate limit exceeded',
+        'RATELIMIT_EXCEEDED',
       );
     }
   }
 
-  private async buildTokenParams(
-    type: DexcomTokenGrantType,
-    code?: string,
-  ): Promise<URLSearchParams> {
-    const params = new URLSearchParams();
-    params.append('client_id', this.config.clientId);
-    params.append('client_secret', this.config.clientSecret);
-    params.append('grant_type', type);
-
-    if (type === DexcomTokenGrantType.AUTHORIZATION_CODE) {
-      if (!code) {
-        throw new BadRequestException('Authorization code is required.');
-      }
-      params.append('code', code);
-      params.append('redirect_uri', this.config.redirectUri);
-    } else if (type === DexcomTokenGrantType.REFRESH_TOKEN) {
-      const refresh_token = await this.dexcomRepository.getRefreshToken();
-      if (!refresh_token) {
-        throw new ServiceUnavailableException('Refresh token not found');
-      }
-      params.append('refresh_token', refresh_token);
-    } else {
-      throw new BadRequestException('Invalid token grant type.');
-    }
-
-    return params;
-  }
-
   private async handleTokenResponse(
-    response: AxiosResponse<DexcomTokenResponse>,
+    response: AuthCodeResponse | RefreshTokenResponse,
     refreshToken?: string,
-  ): Promise<DexcomTokenResponse> {
-    switch (response.status) {
-      case 200:
-        break;
-      case 400:
-        if (refreshToken) {
-          await this.dexcomRepository.deleteRefreshToken(refreshToken);
-          throw new BadRequestException('Invalid refresh token.');
-        }
-        throw new BadRequestException('Invalid request.');
-      case 429:
-        const retryAfter: number =
-          Number(response.headers['retry-after']) || 60;
-        await this.cacheManager.set(
-          this.RATE_LIMIT_KEYS.FETCH_ACCESS_RATELIMIT,
-          Date.now() + retryAfter * GLUCOSE_CONSTANTS.SEC_TO_MS,
-          retryAfter * GLUCOSE_CONSTANTS.SEC_TO_MS,
-        );
-        throw new ThrottlerException(
-          `Rate limit exceeded, retry after ${retryAfter} seconds.`,
-        );
-      default:
-        throw new ServiceUnavailableException(
-          'Dexcom token endpoint is unavailable.',
-        );
-    }
-
-    const data: DexcomTokenResponse = response.data;
+  ): Promise<AuthCodeResponse | RefreshTokenResponse> {
     if (
-      !data.access_token ||
-      !data.expires_in ||
-      !data.token_type ||
-      !data.refresh_token
+      !response.access_token ||
+      !response.expires_in ||
+      !response.token_type ||
+      !response.refresh_token
     ) {
+      if (refreshToken) {
+        await this.dexcomRepository.deleteRefreshToken(refreshToken);
+      }
       throw new ServiceUnavailableException(
         'Invalid token response from Dexcom.',
       );
     }
-
-    return data;
+    return response;
   }
 
-  private async storeTokenData(data: DexcomTokenResponse): Promise<void> {
-    await this.dexcomRepository.saveRefreshToken(data.refresh_token);
+  private async storeTokenData(
+    data: AuthCodeResponse | RefreshTokenResponse,
+  ): Promise<void> {
+    await this.dexcomRepository.saveRefreshToken(data.refresh_token!);
     await this.cacheManager.set(
       GLUCOSE_CONSTANTS.DEXCOM.CACHE_KEYS.AUTH_TOKEN,
       `${data.token_type} ${data.access_token}`,
-      Math.max(60, data.expires_in - GLUCOSE_CONSTANTS.DEXCOM.BUFFER_SEC) *
+      Math.max(60, data.expires_in! - GLUCOSE_CONSTANTS.DEXCOM.BUFFER_SEC) *
         GLUCOSE_CONSTANTS.SEC_TO_MS,
     );
   }
 
-  private async fetchToken(
-    type: DexcomTokenGrantType,
-    code?: string,
+  private async fetchTokenViaApi(
+    tokenRequest: AuthCode | RefreshToken,
+  ): Promise<AuthCodeResponse | RefreshTokenResponse> {
+    await this.checkRateLimit(
+      GLUCOSE_CONSTANTS.DEXCOM.CACHE_KEYS.RATELIMIT_FETCH_TOKEN,
+    );
+    return (await this.api.v3.postTokenV3(tokenRequest)).data;
+  }
+
+  private async validateAndStoreToken(
+    response: AuthCodeResponse | RefreshTokenResponse,
+    refreshToken?: string,
   ): Promise<string> {
-    this.ensureAvailable();
-    if (this.authFetchPromise) {
-      return this.authFetchPromise;
+    const data = await this.handleTokenResponse(response, refreshToken);
+    await this.storeTokenData(data);
+    return `${data.token_type} ${data.access_token}`;
+  }
+
+  private async fetchAuthTokenFromRefreshToken(
+    refreshToken: string,
+  ): Promise<string> {
+    if (this.authFetchWithRefreshTokenPromise) {
+      return this.authFetchWithRefreshTokenPromise;
     }
 
-    this.authFetchPromise = (async () => {
-      const params = await this.buildTokenParams(type, code);
+    this.authFetchWithRefreshTokenPromise = (async () => {
       try {
-        const rateLimit = await this.cacheManager.get<number>(
-          this.RATE_LIMIT_KEYS.FETCH_ACCESS_RATELIMIT,
+        const tokenRequest: RefreshToken = {
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
+        };
+        return await this.validateAndStoreToken(
+          await this.fetchTokenViaApi(tokenRequest),
+          refreshToken,
         );
-        if (rateLimit) {
-          throw new ThrottlerException(
-            `Rate limit exceeded, try in ${Math.max(0, rateLimit - Date.now())} seconds.`,
-          );
-        }
-
-        const response = await lastValueFrom(
-          this.httpService.post<DexcomTokenResponse>(
-            `${this.config.apiUrl}/${this.config.apiVersion}/oauth2/token`,
-            params.toString(),
-            {
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-              },
-              validateStatus: () => true,
-            },
-          ),
-        );
-
-        const data = await this.handleTokenResponse(
-          response,
-          params.get('refresh_token') || undefined,
-        );
-
-        await this.storeTokenData(data);
-        return `${data.token_type} ${data.access_token}`;
       } catch (error) {
-        this.logger.error(
-          `Error fetching Dexcom access token: ${error?.message ?? error}`,
-        );
-        if (error instanceof HttpException) throw error;
-        throw new ServiceUnavailableException(
-          'Failed to fetch Dexcom access token.',
-          error,
-        );
+        throw error;
       } finally {
-        this.authFetchPromise = null;
+        this.authFetchWithRefreshTokenPromise = null;
       }
     })();
 
-    return this.authFetchPromise;
+    return this.authFetchWithRefreshTokenPromise;
   }
 
-  private async fetchTokenWithCode(code: string): Promise<string> {
-    this.logger.debug(
-      'Fetching new Dexcom access token using authorization code',
-    );
-    return this.fetchToken(DexcomTokenGrantType.AUTHORIZATION_CODE, code);
+  private async fetchAuthTokenFromAuthorisationCode(
+    authorisationCode: string,
+  ): Promise<string> {
+    if (this.authFetchWithAuthorisationCodePromise) {
+      return this.authFetchWithAuthorisationCodePromise;
+    }
+
+    this.authFetchWithAuthorisationCodePromise = (async () => {
+      try {
+        const tokenRequest: AuthCode = {
+          grant_type: 'authorization_code',
+          code: authorisationCode,
+          redirect_uri: this.config.redirectUri,
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
+        };
+        return await this.validateAndStoreToken(
+          await this.fetchTokenViaApi(tokenRequest),
+        );
+      } catch (error) {
+        throw error;
+      } finally {
+        this.authFetchWithAuthorisationCodePromise = null;
+      }
+    })();
+
+    return this.authFetchWithAuthorisationCodePromise;
   }
 
-  private async refreshToken(): Promise<string> {
-    this.logger.debug('Fetching new Dexcom access token using refresh token');
-    return this.fetchToken(DexcomTokenGrantType.REFRESH_TOKEN);
-  }
-
-  async getToken(regenerateToken: boolean = false): Promise<string> {
-    this.ensureAvailable();
+  async getToken(forceRefreshToken: boolean = false): Promise<string> {
     const cachedToken = await this.cacheManager.get<string>(
       GLUCOSE_CONSTANTS.DEXCOM.CACHE_KEYS.AUTH_TOKEN,
     );
-    if (!cachedToken || regenerateToken) {
-      return await this.refreshToken();
+
+    if (!cachedToken || forceRefreshToken) {
+      const refreshToken = await this.dexcomRepository.getRefreshToken();
+      if (!refreshToken) {
+        this.logger.error('No refresh token found in database');
+        throw new ServiceUnavailableException(
+          'Failed to fetch Dexcom access token using refresh token',
+        );
+      }
+
+      const tokenRequest: RefreshToken = {
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+        client_id: this.config.clientId,
+        client_secret: this.config.clientSecret,
+      };
+
+      return await this.fetchAuthTokenFromRefreshToken(refreshToken);
     }
+
     this.logger.debug('Using cached Dexcom access token');
     return cachedToken;
   }
 
   buildOAuthURL(): BuildDexcomOAuthURLResponse {
-    this.ensureAvailable();
-
     const params = new URLSearchParams();
     params.append('client_id', this.config.clientId);
     params.append('redirect_uri', this.config.redirectUri);
@@ -240,7 +201,6 @@ export class GlucoseDexcomAuthService {
   async handleOAuth(
     query: HandleDexcomOAuthQuery,
   ): Promise<HandleDexcomOAuthResponse> {
-    this.ensureAvailable();
     if (query.error) {
       throw new BadRequestException(query.error || 'Authorization error.');
     }
@@ -248,7 +208,15 @@ export class GlucoseDexcomAuthService {
       throw new BadRequestException('Missing authorization code.');
     }
 
-    await this.fetchTokenWithCode(query.code);
+    const tokenRequest: AuthCode = {
+      grant_type: 'authorization_code',
+      code: query.code,
+      redirect_uri: this.config.redirectUri,
+      client_id: this.config.clientId,
+      client_secret: this.config.clientSecret,
+    };
+
+    await this.fetchAuthTokenFromAuthorisationCode(query.code);
     return { message: 'Dexcom OAuth successful.' };
   }
 }

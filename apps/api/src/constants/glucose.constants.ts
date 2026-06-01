@@ -20,8 +20,13 @@ export const GLUCOSE_CONSTANTS = {
     RETRY_MS: 15000,
     SENSOR_LIFETIME_SEC: 864000,
     CACHE_KEYS: {
-      RATELIMIT_FETCH_GLUCOSE: 'libre_ratelimit_fetch_glucose',
+      RATELIMIT_FETCH_GLUCOSE: 'dexcom_ratelimit_fetch_glucose',
+      RATELIMIT_FETCH_TOKEN: 'dexcom_ratelimit_fetch_token',
       AUTH_TOKEN: 'dexcom_auth_token',
+    },
+    FETCH_KEYS: {
+      REFRESH_TOKEN: 'dexcom_refresh_token',
+      AUTHORISATION_CODE: 'dexcom_authorisation_code',
     },
   },
 

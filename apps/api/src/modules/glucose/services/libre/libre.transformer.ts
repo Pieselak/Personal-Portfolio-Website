@@ -31,10 +31,15 @@ export class GlucoseLibreTransformer {
     const sensorImage: string | null = sensorIsActive
       ? GLUCOSE_CONSTANTS.IMAGES.LIBRE
       : null;
+    // Sensor activated at
+    const sensorActivatedAt: number | null = sensorIsActive
+      ? data.activeSensors[0].sensor.a * GLUCOSE_CONSTANTS.SEC_TO_MS
+      : null;
     // Sensor expire at
     const sensorExpireAt: number | null = sensorIsActive
-      ? currentTimestamp +
-        data.activeSensors[0].sensor.a * GLUCOSE_CONSTANTS.SEC_TO_MS
+      ? (data.activeSensors[0].sensor.a +
+          GLUCOSE_CONSTANTS.LIBRE.SENSOR_LIFETIME_SEC) *
+        GLUCOSE_CONSTANTS.SEC_TO_MS
       : null;
     // Sensor expire in
     const sensorExpireIn: number | null =
@@ -190,6 +195,7 @@ export class GlucoseLibreTransformer {
         isActive: sensorIsActive,
         name: sensorName,
         image: sensorImage,
+        activatedAt: sensorActivatedAt,
         lastUploadAt: sensorIsActive ? glucoseTimestamp : null,
         expireAt: sensorExpireAt,
         expireIn: sensorExpireIn,

@@ -98,6 +98,9 @@ importers:
       serverless-http:
         specifier: ^4.0.0
         version: 4.0.0
+      swagger-typescript-api:
+        specifier: ^13.12.0
+        version: 13.12.0(react@19.2.4)
       typeorm:
         specifier: ^0.3.27
         version: 0.3.28(mysql2@3.20.0(@types/node@22.19.15))(pg@8.21.0)(redis@5.12.1)(ts-node@10.9.2(@types/node@22.19.15)(typescript@5.9.3))
