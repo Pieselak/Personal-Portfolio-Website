@@ -63,13 +63,9 @@ export function GlucosePage() {
           </p>
         </motion.div>
 
-        <motion.div variants={itemVariants}>
-          <GlucoseCurrent />
-        </motion.div>
+        <GlucoseCurrent />
 
-        <motion.div variants={itemVariants}>
-          <GlucoseNavigation />
-        </motion.div>
+        <GlucoseNavigation />
 
         {renderSection()}
       </motion.div>

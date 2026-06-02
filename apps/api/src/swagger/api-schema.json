@@ -1087,6 +1087,12 @@
             "example": "https://example.com/images/libre2.png",
             "nullable": true
           },
+          "activatedAt": {
+            "type": "number",
+            "description": "Unix timestamp in milliseconds when the sensor was activated",
+            "example": 1672531199000,
+            "nullable": true
+          },
           "lastUploadAt": {
             "type": "number",
             "description": "Unix timestamp in milliseconds when the sensor data was last uploaded",
@@ -1110,6 +1116,7 @@
           "isActive",
           "name",
           "image",
+          "activatedAt",
           "lastUploadAt",
           "expireAt",
           "expireIn"

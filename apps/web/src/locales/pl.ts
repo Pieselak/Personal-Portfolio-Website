@@ -53,9 +53,32 @@ const pl = {
           title: "Witaj na mojej stronie!",
           subtitle:
             "Cieszę się, że tu jesteś! Jestem Patryk, pasjonat technologii i programowania. Na tej stronie znajdziesz informacje o mnie, moich projektach oraz moje dane dotyczące glukozy we krwi z mojego CGM. Zapraszam do eksploracji i kontaktu!",
+          sections: {
+            aboutme: {
+              description:
+                "Poznaj moje doświadczenie, umiejętności i zainteresowania.",
+            },
+            projects: {
+              description:
+                "Przeglądaj moje portfolio projektów osobistych i zawodowych.",
+            },
+            glucose: {
+              description:
+                "Przeglądaj moje dane glukozy we krwi w czasie rzeczywistym.",
+            },
+          },
+          welcome: "Witaj! 👋",
+          welcomeDescription:
+            "Pasjonuję się tworzeniem innowacyjnych rozwiązań cyfrowych i utrzymywaniem zdrowego stylu życia. Ta strona prezentuje moją podróż przez technologię i przejrzystość danych osobistych.",
+          skills: [
+            "React & TypeScript",
+            "Full-stack Development",
+            "Wizualizacja danych",
+          ],
+          explore: "Odkryj",
         },
 
-        aboutMe: {
+        aboutme: {
           title: "O mnie",
           subtitle:
             "Cześć! Nazywam się Patryk Znamirowski i jestem pasjonatem technologii, programowania oraz zdrowego stylu życia. Na tej stronie znajdziesz informacje o mojej karierze, zainteresowaniach oraz projektach, nad którymi pracuję. Zapraszam do poznania mnie bliżej!",
@@ -155,6 +178,12 @@ const pl = {
             summary: "Nie udało się wczytać podsumowania glukozy.",
             insufficientData:
               "Nie ma jeszcze wystarczającej ilości danych do wiarygodnego obliczenia.",
+            module_unavailable:
+              "Moduł glukozy jest niedostępny z powodu wystąpienia wewnętrznego błędu.",
+            module_disabled:
+              "Moduł glukozy zotał wyłączony przez administratora strony.",
+            module_no_provider:
+              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
           },
         },
       },

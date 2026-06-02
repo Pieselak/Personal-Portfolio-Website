@@ -130,13 +130,13 @@ export function getTimeInRangeSegments(
       key: "percentageHigh",
       labelKey: "pages.user.glucose.ranges.high",
       value: data.percentageHigh,
-      className: "bg-red-glucose",
+      className: "bg-orange-glucose",
     },
     {
       key: "percentageAboveRange",
       labelKey: "pages.user.glucose.ranges.aboveRange",
       value: data.percentageAboveRange,
-      className: "bg-orange-glucose",
+      className: "bg-yellow-glucose",
     },
     {
       key: "percentageInRange",

@@ -53,6 +53,22 @@ const de = {
           title: "Willkommen auf meiner Website!",
           subtitle:
             "Ich freue mich, dass du hier bist! Ich bin Patryk, ein Technologie- und Programmier-Enthusiast. Auf dieser Website findest du Informationen über mich, meine Projekte und meine Blutzuckerdaten aus meinem CGM. Viel Spaß beim Entdecken und melde dich gerne bei mir!",
+          sections: {
+            aboutme: {
+              description: "Erfahre mehr über meinen Hintergrund, meine Erfahrung und meine Interessen.",
+            },
+            projects: {
+              description: "Erkunde mein Portfolio mit persönlichen und beruflichen Projekten.",
+            },
+            glucose: {
+              description: "Schau dir meine Echtzeit-Blutzuckerdaten von meinem CGM-Gerät an.",
+            },
+          },
+          welcome: "Willkommen! 👋",
+          welcomeDescription:
+            "Ich bin leidenschaftlich an der Entwicklung innovativer digitaler Lösungen und einem gesunden Lebensstil interessiert. Diese Website zeigt meine Reise durch Technologie und Datentransparenz.",
+          skills: ["React & TypeScript", "Full-stack Development", "Datenvisualisierung"],
+          explore: "Entdecken",
         },
 
         aboutme: {
@@ -155,6 +171,12 @@ const de = {
             summary: "Glukosezusammenfassung konnte nicht geladen werden.",
             insufficientData:
               "Es gibt noch nicht genug Daten für eine zuverlässige Berechnung.",
+            module_unavailable:
+              "Moduł glukozy jest niedostępny z powodu wystąpienia błędu.",
+            module_disabled:
+              "Moduł glukozy zotał wyłączony przez administratora strony.",
+            module_no_provider:
+              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
           },
         },
       },

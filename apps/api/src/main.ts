@@ -36,11 +36,13 @@ async function bootstrap() {
     yamlDocumentUrl: '/docs-yaml',
   });
 
-  // const fs = require('fs');
-  // fs.writeFileSync(
-  //   'src/swagger/api-schema.json',
-  //   JSON.stringify(documentFactory(), null, 2),
-  // );
+  if (process.env.NODE_ENV == 'localdevelopment') {
+    const fs = require('fs');
+    fs.writeFileSync(
+      'src/swagger/api-schema.json',
+      JSON.stringify(documentFactory(), null, 2),
+    );
+  }
 
   await app.listen(process.env.PORT ?? 3000);
   logger.log(`Server started on port ${process.env.PORT}`);

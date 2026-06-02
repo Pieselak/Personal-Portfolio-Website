@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { GlucoseService } from '../services/glucose.service';
 import {
   ApiInternalServerErrorResponse,

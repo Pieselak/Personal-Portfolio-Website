@@ -122,10 +122,10 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                 >
                   <Link
                     to={navigationItem.url}
-                    className={`flex gap-3 items-center px-3 py-2 w-full border border-border rounded-md hover:border-ring cursor-pointer transition-[border-color, background-color] duration-250 ${
+                    className={`flex gap-3 items-center px-3 py-2 w-full border border-border rounded-md cursor-pointer transition-[border-color, background-color] duration-250 ${
                       pathname.split("/")[1] === navigationItem.url.substring(1)
-                        ? "bg-muted border-ring text-accent-foreground"
-                        : "bg-card"
+                        ? "border-ring bg-muted text-accent-foreground"
+                        : "bg-card text-muted-foreground hover:border-ring hover:text-primary"
                     }`}
                   >
                     {navigationItem.icon && (

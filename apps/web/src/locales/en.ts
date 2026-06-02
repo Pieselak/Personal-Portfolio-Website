@@ -53,6 +53,22 @@ const en = {
           title: "Welcome to my website!",
           subtitle:
             "I'm glad you're here! I'm Patryk, a technology and programming enthusiast. On this website, you'll find information about me, my projects, and my blood glucose data from my CGM. Feel free to explore and get in touch!",
+          sections: {
+            aboutme: {
+              description: "Learn about my background, experience, and interests.",
+            },
+            projects: {
+              description: "Explore my portfolio of personal and professional projects.",
+            },
+            glucose: {
+              description: "View my real-time blood glucose data from my CGM device.",
+            },
+          },
+          welcome: "Welcome! 👋",
+          welcomeDescription:
+            "I'm passionate about building innovative digital solutions and maintaining a healthy lifestyle. This site showcases my journey through technology and personal data transparency.",
+          skills: ["React & TypeScript", "Full-stack Development", "Data Visualization"],
+          explore: "Explore",
         },
 
         aboutme: {
@@ -155,6 +171,12 @@ const en = {
             summary: "Glucose summary could not be loaded.",
             insufficientData:
               "There is not enough data to calculate a reliable result yet.",
+            module_unavailable:
+              "Moduł glukozy jest niedostępny z powodu wystąpienia błędu.",
+            module_disabled:
+              "Moduł glukozy zotał wyłączony przez administratora strony.",
+            module_no_provider:
+              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
           },
         },
       },

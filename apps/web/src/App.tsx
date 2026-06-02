@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-// import { HomePage } from "@/app/modules/User/Home/Home.page.tsx";
+import { HomePage } from "@/app/modules/User/Home/Home.page.tsx";
 // import { AboutMePage } from "@/app/modules/User/AboutMe/AboutMe.page.tsx";
 import { MyProjectsListPage } from "@/app/modules/User/Projects/ProjectsList.tsx";
 import { MyProjectsDetailsPage } from "@/app/modules/User/Projects/ProjectsDetails.tsx";
@@ -48,7 +48,7 @@ function App() {
           <Route index element={<Navigate to="home" />} />
           <Route
             path="home"
-            element={<UnderConstructionPage /> /*<HomePage />*/}
+            element={<HomePage />}
           />
           <Route
             path="about"

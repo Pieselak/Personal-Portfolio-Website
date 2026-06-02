@@ -1,80 +1,56 @@
 import { useTranslation } from "react-i18next";
-import {
-  CopyrightIcon,
-  LinkIcon,
-  MailIcon,
-  MonitorIcon,
-  ServerCogIcon,
-  UserIcon,
-} from "lucide-react";
-import { UserFooterItem } from "@/app/layouts/User/Footer/UserFooterItem.tsx";
+
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export function UserFooter() {
   const { t } = useTranslation();
+  const footerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
-    <footer className="flex flex-wrap justify-between items-baseline w-full p-3 gap-3 bg-background border-t-2 border-border overflow-x-hidden">
-      <div className="flex flex-col flex-1 justify-center items-center gap-2">
-        <h1 className="text-primary font-bold">
-          {t("user.footer.creator.title")}
-        </h1>
-        <UserFooterItem
-          title={t("user.footer.creator.madeBy.title")}
-          content={t("user.footer.creator.madeBy.content")}
-          icon={UserIcon}
-        />
-        <UserFooterItem
-          title={t("user.footer.creator.copyright.title")}
-          content={t("user.footer.creator.copyright.content", {
-            year: new Date().getFullYear(),
-          })}
-          icon={CopyrightIcon}
-        />
+    <motion.footer
+      initial="hidden"
+      animate="visible"
+      variants={footerVariants}
+      className="w-full bg-background border-t border-border"
+    >
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Copyright - Top */}
+        <div className="flex justify-center items-center mb-6 pb-6 border-b border-border/50">
+          <p className="text-md font-bold text-primary">
+            {t("layouts.user.footer.copyright", {
+              year: new Date().getFullYear(),
+            })}
+          </p>
+        </div>
+
+        {/* Links - Bottom */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-sm text-muted-foreground">
+          <Link
+            to="contact"
+            className="hover:text-primary transition-colors duration-250"
+          >
+            {t("layouts.user.footer.contact")}
+          </Link>
+          <span className="hidden sm:inline text-border/50">•</span>
+          <Link
+            to="terms"
+            className="hover:text-primary transition-colors duration-250"
+          >
+            {t("layouts.user.footer.termsOfService")}
+          </Link>
+          <span className="hidden sm:inline text-border/50">•</span>
+          <Link
+            to="privacy"
+            className="hover:text-primary transition-colors duration-250"
+          >
+            {t("layouts.user.footer.privacyPolicy")}
+          </Link>
+        </div>
       </div>
-
-      <div className="flex flex-col flex-1 justify-center items-center gap-2">
-        <h1 className="text-primary font-bold">
-          {t("user.footer.contact.title")}
-        </h1>
-        <UserFooterItem
-          title={t("user.footer.contact.email.title")}
-          content="znamirowskipatryk@gmail.com"
-          icon={MailIcon}
-          url="mailto:znamirowskipatryk@gmail.com"
-        />
-      </div>
-
-      <div className="flex flex-col flex-1 justify-center items-center gap-2">
-        <h1 className="text-primary font-bold">
-          {t("user.footer.links.title")}
-        </h1>
-        <UserFooterItem
-          title="Github"
-          content="/Pieselak"
-          icon={LinkIcon}
-          url="https://github.com/Pieselak"
-        />
-        <UserFooterItem
-          title="Linkedin"
-          content="/patryk-znamirowski"
-          icon={LinkIcon}
-          url="https://www.linkedin.com/in/patryk-znamirowski"
-        />
-      </div>
-
-      <div className="flex flex-col flex-1 justify-center items-center gap-2">
-        <h1 className="text-primary font-bold">
-          {t("user.footer.technologies.title")}
-        </h1>
-
-        <UserFooterItem
-          title="Frontend"
-          content="Vite, React, TailwindCSS"
-          icon={MonitorIcon}
-        />
-
-        <UserFooterItem title="Backend" content="NestJS" icon={ServerCogIcon} />
-      </div>
-    </footer>
+    </motion.footer>
   );
 }

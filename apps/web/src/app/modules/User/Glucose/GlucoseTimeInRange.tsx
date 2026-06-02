@@ -56,9 +56,9 @@ export function GlucoseTimeInRange() {
         </p>
       </div>
 
-      <div className="grid gap-6 grid-cols-[120px_1fr]">
-        <div className="flex items-stretch justify-center rounded-xl border border-border bg-muted/30 p-4">
-          <div className="flex h-auto w-14 flex-col overflow-hidden rounded-full border border-border bg-card shadow-inner">
+      <div className="grid gap-6 grid-cols-[80px_1fr]">
+        <div className="flex items-stretch justify-center rounded-xl border border-border bg-muted/30 p-2">
+          <div className="flex h-full w-full flex-col overflow-hidden rounded-md border border-border">
             {segments.map((segment) => (
               <div
                 key={segment.key}

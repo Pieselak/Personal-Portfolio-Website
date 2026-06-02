@@ -31,6 +31,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
   private readonly glucoseServiceMap: Record<string, BaseGlucoseService> = {};
 
   private isAvailable = false;
+  private sensorProviderMode: string | null = null;
   private selectedGlucoseService: BaseGlucoseService | null = null;
   private selectedProviderName: string | null = null;
   private providerCheckerInterval: NodeJS.Timeout | null = null;
@@ -46,13 +47,15 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      const sensorProvider = await this.repository.getSensorProvider();
+      this.sensorProviderMode = (
+        await this.repository.getSensorProvider()
+      ).provider;
 
       this.providerCheckerInterval = setInterval(async () => {
         const currentProvider = await this.repository.getSensorProvider();
-        if (currentProvider.provider !== sensorProvider.provider) {
+        if (currentProvider.provider !== this.sensorProviderMode) {
           this.logger.debug(
-            `Glucose provider changed from ${sensorProvider.provider} to ${currentProvider.provider}. Reinitializing...`,
+            `Glucose provider changed from ${this.sensorProviderMode} to ${currentProvider.provider}. Reinitializing...`,
           );
           this.onModuleDestroy();
           await this.onModuleInit();
@@ -62,7 +65,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
             !(await this.selectedGlucoseService.isSensorActive())
           ) {
             this.logger.debug(
-              `Selected glucose provider ${sensorProvider.provider} is no longer active. Reinitializing...`,
+              `Selected glucose provider ${this.sensorProviderMode} is no longer active. Reinitializing...`,
             );
             this.onModuleDestroy();
             await this.onModuleInit();
@@ -70,12 +73,12 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
         }
       }, GLUCOSE_CONSTANTS.PROVIDER_CHECK_INTERVAL_MS);
 
-      if (sensorProvider.provider == 'none') {
+      if (this.sensorProviderMode == 'none') {
         this.isAvailable = true;
         this.selectedGlucoseService = null;
         this.logger.warn('Glucose module is disabled by configuration.');
         return;
-      } else if (sensorProvider.provider == 'auto') {
+      } else if (this.sensorProviderMode == 'auto') {
         for (const glucoseServiceMapKey in this.glucoseServiceMap) {
           const service = this.glucoseServiceMap[glucoseServiceMapKey];
           try {
@@ -103,10 +106,10 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
             'No active glucose sensor found for auto provider.',
           );
         }
-      } else if (this.glucoseServiceMap[sensorProvider.provider]) {
-        this.selectedProviderName = sensorProvider.provider;
+      } else if (this.glucoseServiceMap[this.sensorProviderMode]) {
+        this.selectedProviderName = this.sensorProviderMode;
         this.selectedGlucoseService =
-          this.glucoseServiceMap[sensorProvider.provider];
+          this.glucoseServiceMap[this.sensorProviderMode];
       } else {
         throw new ServiceUnavailableException('Invalid glucose provider.');
       }
@@ -114,7 +117,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
       this.isAvailable = true;
       this.selectedGlucoseService.initialize();
       this.logger.log(
-        `Glucose module initialized with provider: ${sensorProvider.provider}${sensorProvider.provider === 'auto' ? ` (${this.selectedProviderName})` : ''}.`,
+        `Glucose module initialized with provider: ${this.sensorProviderMode}${this.sensorProviderMode === 'auto' ? ` (${this.selectedProviderName})` : ''}.`,
       );
     } catch (error) {
       this.isAvailable = false;
@@ -141,10 +144,16 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
         'MODULE_UNAVAILABLE',
       );
     }
-    if (!this.selectedGlucoseService) {
+    if (this.sensorProviderMode === 'none') {
       throw new ServiceUnavailableException(
         'Glucose module is disabled.',
         'MODULE_DISABLED',
+      );
+    }
+    if (!this.selectedGlucoseService) {
+      throw new ServiceUnavailableException(
+        'Glucose module has no active provider.',
+        'MODULE_NO_PROVIDER',
       );
     }
   }
