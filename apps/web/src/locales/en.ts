@@ -8,113 +8,167 @@ const en = {
   translation: {
     pages: {
       loading: {
-        message:
-          "The hamsters running in the server wheels need a moment to catch their breath. Patience...",
+        message: "Preparing the interface and synchronizing data.",
       },
-
       serverError: {
         title: "500 Server Error",
         message:
-          "Congratulations, you managed to break the server! (Or I just forgot a semicolon in the code). The search for a fire extinguisher is ongoing.",
+          "The service is currently unavailable. Please try again in a moment.",
       },
-
       notFound: {
         title: "404 Not Found",
         message:
-          "Page missing in action. Maybe it was abducted by aliens, or you just mistyped the URL. Either way – there is nothing here.",
+          "The requested page is not available. Check the address or return to the portfolio.",
       },
-
       forbidden: {
         title: "403 Forbidden",
-        message:
-          "Hey, hey, hey! Where do you think you're going with those muddy boots? You have no power here. Turn around slowly and leave this area.",
+        message: "You do not have permission to access this section.",
       },
-
       maintenance: {
         title: "Maintenance in progress",
         message:
-          "We're currently dusting off the cables and watering the database. We'll be back as soon as everything dries up.",
+          "The application is temporarily unavailable while essential maintenance is completed.",
       },
-
       underConstruction: {
-        title: "Under Construction",
+        title: "Section in preparation",
         message:
-          "Pouring virtual concrete here. We forgot to deliver this page in the last sprint, but we promise we'll finish it someday.",
+          "This section is being prepared and will be available after review.",
       },
-
       selectLanguage: {
+        eyebrow: "Interface language",
         title: "Select language",
-        subtitle: "Select the preferred language for this website.",
-        noLanguages: "No languages available at the moment.",
+        subtitle:
+          "Choose the language used for navigation, status messages, and portfolio content.",
+        noLanguages: "No languages are available at the moment.",
       },
-
       user: {
         home: {
-          title: "Welcome to my website!",
+          eyebrow: "Student developer portfolio",
+          title: "Simple, clear projects built with React and TypeScript.",
           subtitle:
-            "I'm glad you're here! I'm Patryk, a technology and programming enthusiast. On this website, you'll find information about me, my projects, and my blood glucose data from my CGM. Feel free to explore and get in touch!",
-          sections: {
-            aboutme: {
-              description: "Learn about my background, experience, and interests.",
+            "I am a high school student learning full-stack development by building practical apps, clean interfaces, and small data tools.",
+          primaryCta: "View glucose project",
+          secondaryCta: "See projects",
+          proofPoints: ["React", "TypeScript", "NestJS"],
+          panel: {
+            badge: "Current focus",
+            title: "A clean portfolio that stays easy to understand.",
+            description:
+              "The interface is intentionally minimal: readable pages, reusable components, and clear paths to the work.",
+          },
+          capabilities: {
+            cleanInterfaces: {
+              title: "Clean interfaces",
+              description:
+                "Simple layouts with clear hierarchy and easy navigation.",
             },
-            projects: {
-              description: "Explore my portfolio of personal and professional projects.",
+            dataVisualization: {
+              title: "Data visualization",
+              description:
+                "Charts and metric panels designed for fast interpretation, not decoration.",
             },
-            glucose: {
-              description: "View my real-time blood glucose data from my CGM device.",
+            secureArchitecture: {
+              title: "Full-stack reliability",
+              description:
+                "Typed React and NestJS foundations that stay understandable as the project grows.",
             },
           },
-          welcome: "Welcome! 👋",
-          welcomeDescription:
-            "I'm passionate about building innovative digital solutions and maintaining a healthy lifestyle. This site showcases my journey through technology and personal data transparency.",
-          skills: ["React & TypeScript", "Full-stack Development", "Data Visualization"],
-          explore: "Explore",
+          sections: {
+            aboutme: {
+              description:
+                "Learn more about Patryk and how he approaches building projects.",
+            },
+            projects: {
+              description:
+                "Review selected work in a clean project gallery.",
+            },
+            glucose: {
+              description:
+                "Inspect the glucose data feature and its dashboard patterns.",
+            },
+          },
         },
-
         aboutme: {
+          eyebrow: "Profile",
           title: "About me",
           subtitle:
-            "Hello! My name is Patryk Znamirowski and I am passionate about technology, programming, and a healthy lifestyle. On this page, you will find information about my career, interests, and the projects I am currently working on. Get to know me better!",
+            "I am Patryk Znamirowski, a high school student learning full-stack development through real projects.",
+          statement:
+            "I like building useful web apps that are easy to read, easy to use, and simple to maintain.",
+          description:
+            "My current stack is React, TypeScript, NestJS, Tailwind, and typed API contracts. This portfolio is a place to show what I am learning and how I structure frontend and backend code.",
+          principles: {
+            clarity: {
+              title: "Clarity first",
+              description:
+                "Every screen should make the next action and the current state obvious.",
+            },
+            reliability: {
+              title: "Reliable structure",
+              description:
+                "Reusable components, typed data, and consistent states keep the frontend scalable.",
+            },
+            data: {
+              title: "Data with context",
+              description:
+                "Metrics need labels, thresholds, units, and hierarchy to be useful.",
+            },
+          },
+          focus: {
+            eyebrow: "Focus areas",
+            title: "Where this portfolio is strongest",
+            items: [
+              "Clean portfolio and project pages",
+              "Full-stack TypeScript applications",
+              "Readable API-driven interfaces",
+              "Responsive pages and small tools",
+            ],
+          },
         },
-
         projects: {
-          title: "My projects",
+          eyebrow: "Selected work",
+          title: "Case studies",
           subtitle:
-            "Here you will find a list of my personal and professional projects. Every project is important to me, as it represents my skills, passion, and commitment to technological development. Feel free to check them out and contact me if you have any questions or want to collaborate!",
-          noProjects:
-            "I don't have any projects to show yet, but I'm working on them!",
-          returnToProjects: "Return to projects",
+            "A focused view of projects involving React, NestJS, API integration, and data presentation.",
+          noProjects: "No case studies are available yet.",
+          returnToProjects: "Return to case studies",
+          caseStudy: "Case study",
+          overview: "Overview",
+          statusLabel: "Status",
+          technologies: "Technologies",
+          started: "Started",
+          team: "Team",
+          viewCaseStudy: "View case study",
+          projectNotFound: "The selected case study could not be found.",
           statuses: {
             completed: "Completed",
-            inProgress: "Work in Progress",
+            inProgress: "In progress",
             planned: "Planned",
           },
           sourceCode: {
             available: "View source code",
             notAvailable: "Source code not available",
-            closed: "Closed source code",
+            closed: "Closed source",
           },
-          startedAt: "Started on {{date}}",
-          completedAt: "Completed on {{date}}",
         },
-
         glucose: {
-          title: "My Blood Glucose",
+          eyebrow: "Data feature",
+          title: "Glucose dashboard",
           subtitle:
-            "Browse blood glucose data from my CGM (continuous glucose monitor) in real-time. View current readings, analyze trends, and monitor time spent in target glucose range. Everything in one place, available for anyone interested.",
+            "A small dashboard for reading glucose data, trends, time in range, and chart history.",
           loading: "Loading glucose data...",
           subpages: {
             summary: {
               navigation: "Summary",
-              title: "Summary of glucose readings",
+              title: "Glucose summary",
             },
             timeInRange: {
-              navigation: "Time in Range",
-              title: "Time spent in target blood glucose range",
+              navigation: "Time in range",
+              title: "Time in target range",
             },
             graph: {
               navigation: "Graph",
-              title: "Visualization of glucose readings",
+              title: "Glucose trend graph",
             },
           },
           current: {
@@ -152,7 +206,7 @@ const en = {
             period: "Distribution from the last {{hours}} hours.",
           },
           graph: {
-            empty: "No glucose readings available for the graph.",
+            empty: "No glucose readings are available for the graph.",
             range: "Target range: {{low}}-{{high}} {{unit}}",
             value: "Glucose",
           },
@@ -172,18 +226,16 @@ const en = {
             insufficientData:
               "There is not enough data to calculate a reliable result yet.",
             module_unavailable:
-              "Moduł glukozy jest niedostępny z powodu wystąpienia błędu.",
+              "The glucose module is unavailable because of an internal error.",
             module_disabled:
-              "Moduł glukozy zotał wyłączony przez administratora strony.",
+              "The glucose module has been disabled by the site administrator.",
             module_no_provider:
-              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
+              "The glucose module is unavailable because no provider is configured.",
           },
         },
       },
-
       admin: {},
     },
-
     layouts: {
       user: {
         nav: {
@@ -193,19 +245,20 @@ const en = {
           changeTheme: "Change theme",
           pages: {
             home: "Home",
-            aboutme: "About me",
-            projects: "Projects",
-            glucose: "Blood sugar",
+            aboutme: "Profile",
+            projects: "Case studies",
+            glucose: "Glucose",
           },
         },
         footer: {
+          positioning:
+            "A minimal full-stack portfolio by a high school student learning React, TypeScript, and NestJS.",
           copyright: "© {{year}} Patryk Znamirowski. All rights reserved.",
-          contact: "Contact me",
-          termsOfService: "Terms of Service",
-          privacyPolicy: "Privacy Policy",
+          contact: "Profile",
+          caseStudies: "Case studies",
+          glucoseData: "Glucose data",
         },
       },
-
       admin: {},
     },
   },

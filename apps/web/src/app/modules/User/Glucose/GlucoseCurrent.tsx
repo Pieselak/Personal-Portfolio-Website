@@ -15,6 +15,8 @@ import {
   GlucoseErrorState,
   GlucoseLoadingState,
 } from "@/app/modules/User/Glucose/GlucoseStates.tsx";
+import { Badge, Card, MetricCard } from "@/app/components/ui.tsx";
+import { cn } from "@/app/components/cn.ts";
 
 type TrendIndicatorConfig = {
   arrowCount: 1 | 2;
@@ -88,7 +90,7 @@ export function GlucoseCurrent() {
   const trendConfig = getTrendIndicatorConfig(current.trend);
 
   return (
-    <section className="grid gap-6 rounded-2xl border border-border bg-card p-5 shadow-sm lg:grid-cols-[minmax(260px,360px)_1fr]">
+    <Card className="grid gap-6 p-5 shadow-md lg:grid-cols-[minmax(260px,360px)_1fr]">
       <div className="flex flex-col items-center justify-center gap-4">
         <motion.div
           className="relative flex aspect-square w-full max-w-72 items-center justify-center p-9"
@@ -121,9 +123,13 @@ export function GlucoseCurrent() {
           </div>
 
           <div
-            className={`flex aspect-square w-full flex-col items-center justify-center rounded-full border-[5px] ${colorClasses.border} ${colorClasses.bg} p-2 shadow-lg`}
+            className={cn(
+              "flex aspect-square w-full flex-col items-center justify-center rounded-full border-[5px] p-2 shadow-lg",
+              colorClasses.border,
+              colorClasses.bg,
+            )}
           >
-            <div className="flex size-full flex-col items-center justify-center rounded-full border-2 border-card/80">
+            <div className="flex size-full flex-col items-center justify-center rounded-full border border-card/90 bg-card/35">
               <p
                 className={`text-5xl font-bold uppercase leading-none md:text-6xl ${colorClasses.text}`}
               >
@@ -139,7 +145,7 @@ export function GlucoseCurrent() {
         </motion.div>
 
         <div className="text-center">
-          <p className="text-sm font-medium text-muted-foreground">
+          <p className="text-sm font-semibold text-foreground">
             {t(`pages.user.glucose.current.trends.${current.trend}`)}
           </p>
           <p className="text-xs text-muted-foreground">
@@ -149,37 +155,31 @@ export function GlucoseCurrent() {
       </div>
 
       <div className="grid content-center gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-border bg-muted/40 p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <Activity className="size-4" />
-            {t("pages.user.glucose.current.status")}
-          </div>
-          <p className="text-lg font-semibold text-primary">
-            {current.isCurrent
+        <MetricCard
+          icon={Activity}
+          tone={current.isCurrent ? "success" : "warning"}
+          label={t("pages.user.glucose.current.status")}
+          value={
+            current.isCurrent
               ? t("pages.user.glucose.current.current")
-              : t("pages.user.glucose.current.stale")}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {t("pages.user.glucose.current.readAt")}:{" "}
-            {formatGlucoseDate(current.timestamp, i18n.language)}
-          </p>
-        </div>
+              : t("pages.user.glucose.current.stale")
+          }
+          detail={`${t("pages.user.glucose.current.readAt")}: ${formatGlucoseDate(
+            current.timestamp,
+            i18n.language,
+          )}`}
+        />
 
-        <div className="rounded-xl border border-border bg-muted/40 p-4">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <RefreshCw className="size-4" />
-            {t("pages.user.glucose.current.refresh")}
-          </div>
-          <p className="text-lg font-semibold text-primary">
-            {formatGlucoseDuration(current.refreshIn, i18n.language)}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {formatGlucoseDate(current.refreshAt, i18n.language)}
-          </p>
-        </div>
+        <MetricCard
+          icon={RefreshCw}
+          tone="accent"
+          label={t("pages.user.glucose.current.refresh")}
+          value={formatGlucoseDuration(current.refreshIn, i18n.language)}
+          detail={formatGlucoseDate(current.refreshAt, i18n.language)}
+        />
 
-        <div className="rounded-xl border border-border bg-muted/40 p-4 md:col-span-2">
-          <div className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+        <Card className="p-4 md:col-span-2">
+          <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
             <Radio className="size-4" />
             {t("pages.user.glucose.current.sensor")}
           </div>
@@ -206,17 +206,11 @@ export function GlucoseCurrent() {
                   <p className="font-semibold text-primary">
                     {sensor.name ?? t("pages.user.glucose.current.noSensor")}
                   </p>
-                  <span
-                    className={`rounded-full border px-2.5 py-1 text-xs font-semibold ${
-                      sensor.isActive
-                        ? "border-green-border bg-green-bg text-green-text"
-                        : "border-gray-border bg-gray-bg text-gray-text"
-                    }`}
-                  >
+                  <Badge tone={sensor.isActive ? "success" : "neutral"}>
                     {sensor.isActive
                       ? t("pages.user.glucose.current.active")
                       : t("pages.user.glucose.current.inactive")}
-                  </span>
+                  </Badge>
                 </div>
                 <div className="mt-2 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2">
                   <span>
@@ -232,8 +226,8 @@ export function GlucoseCurrent() {
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
-    </section>
+    </Card>
   );
 }

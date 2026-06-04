@@ -7,115 +7,162 @@ const de = {
   },
   translation: {
     pages: {
-      loading: {
-        message:
-          "Die Hamster in den Server-Laufrädern brauchen einen Moment, um zu verschnaufen. Geduld...",
-      },
-
+      loading: { message: "Interface wird vorbereitet und Daten werden synchronisiert." },
       serverError: {
         title: "500 Serverfehler",
         message:
-          "Herzlichen Glückwunsch, du hast den Server kaputt gemacht! (Oder ich habe ein Semikolon im Code vergessen). Die Suche nach einem Feuerlöscher läuft.",
+          "Der Dienst ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut.",
       },
-
       notFound: {
         title: "404 Nicht gefunden",
         message:
-          "Seite im Einsatz vermisst. Vielleicht wurde sie von Aliens entführt, oder du hast dich einfach vertippt. Wie auch immer – hier gibt es nichts.",
+          "Die angeforderte Seite ist nicht verfügbar. Prüfen Sie die Adresse oder kehren Sie zum Portfolio zurück.",
       },
-
       forbidden: {
-        title: "403 Verboten",
-        message:
-          "Hey, hey, hey! Wo willst du mit diesen dreckigen Schuhen hin? Du hast hier keine Berechtigung. Dreh dich langsam um und verlasse diesen Bereich.",
+        title: "403 Kein Zugriff",
+        message: "Sie haben keine Berechtigung für diesen Bereich.",
       },
-
       maintenance: {
-        title: "Wartungsarbeiten",
+        title: "Wartung läuft",
         message:
-          "Wir wischen gerade Staub von den Kabeln und gießen die Datenbank. Wir sind zurück, sobald alles getrocknet ist.",
+          "Die Anwendung ist vorübergehend nicht verfügbar, während Wartungsarbeiten abgeschlossen werden.",
       },
-
       underConstruction: {
-        title: "Im Aufbau",
+        title: "Bereich in Vorbereitung",
         message:
-          "Wir gießen hier virtuellen Beton. Wir haben vergessen, diese Seite im letzten Sprint zu liefern, aber wir versprechen, sie irgendwann fertigzustellen.",
+          "Dieser Bereich wird vorbereitet und nach Prüfung verfügbar sein.",
       },
-
       selectLanguage: {
+        eyebrow: "Interface-Sprache",
         title: "Sprache auswählen",
-        subtitle: "Wählen Sie die bevorzugte Sprache für diese Seite aus.",
+        subtitle:
+          "Wählen Sie die Sprache für Navigation, Statusmeldungen und Portfolio-Inhalte.",
         noLanguages: "Derzeit sind keine Sprachen verfügbar.",
       },
-
       user: {
         home: {
-          title: "Willkommen auf meiner Website!",
+          eyebrow: "Portfolio eines Schülers",
+          title:
+            "Einfache, klare Projekte mit React und TypeScript.",
           subtitle:
-            "Ich freue mich, dass du hier bist! Ich bin Patryk, ein Technologie- und Programmier-Enthusiast. Auf dieser Website findest du Informationen über mich, meine Projekte und meine Blutzuckerdaten aus meinem CGM. Viel Spaß beim Entdecken und melde dich gerne bei mir!",
-          sections: {
-            aboutme: {
-              description: "Erfahre mehr über meinen Hintergrund, meine Erfahrung und meine Interessen.",
+            "Ich bin Schüler und lerne Full-Stack-Entwicklung, indem ich praktische Apps, klare Interfaces und kleine Datentools baue.",
+          primaryCta: "Glukose-Projekt ansehen",
+          secondaryCta: "Projekte ansehen",
+          proofPoints: ["React", "TypeScript", "NestJS"],
+          panel: {
+            badge: "Aktueller Fokus",
+            title: "Ein sauberes Portfolio, das leicht verständlich bleibt.",
+            description:
+              "Das Interface ist bewusst minimal: lesbare Seiten, wiederverwendbare Komponenten und einfache Navigation.",
+          },
+          capabilities: {
+            cleanInterfaces: {
+              title: "Klare Interfaces",
+              description:
+                "Einfache Layouts mit klarer Hierarchie und leichter Navigation.",
             },
-            projects: {
-              description: "Erkunde mein Portfolio mit persönlichen und beruflichen Projekten.",
+            dataVisualization: {
+              title: "Datenvisualisierung",
+              description:
+                "Diagramme und Kennzahlen für schnelle Interpretation statt Dekoration.",
             },
-            glucose: {
-              description: "Schau dir meine Echtzeit-Blutzuckerdaten von meinem CGM-Gerät an.",
+            secureArchitecture: {
+              title: "Zuverlässiger Full-Stack",
+              description:
+                "React, NestJS und typisierte API-Verträge in einer verständlichen Struktur.",
             },
           },
-          welcome: "Willkommen! 👋",
-          welcomeDescription:
-            "Ich bin leidenschaftlich an der Entwicklung innovativer digitaler Lösungen und einem gesunden Lebensstil interessiert. Diese Website zeigt meine Reise durch Technologie und Datentransparenz.",
-          skills: ["React & TypeScript", "Full-stack Development", "Datenvisualisierung"],
-          explore: "Entdecken",
+          sections: {
+            aboutme: {
+              description:
+                "Mehr über Patryk und seinen Ansatz beim Bauen von Projekten.",
+            },
+            projects: {
+              description:
+                "Ausgewählte Arbeiten in einer klaren Projektgalerie ansehen.",
+            },
+            glucose: {
+              description:
+                "Die Glukose-Datenfunktion und das einfache Dashboard ansehen.",
+            },
+          },
         },
-
         aboutme: {
+          eyebrow: "Profil",
           title: "Über mich",
           subtitle:
-            "Hallo! Mein Name ist Patryk Znamirowski und ich begeistere mich für Technologie, Programmierung und einen gesunden Lebensstil. Auf dieser Seite findest du Informationen zu meiner Karriere, meinen Interessen und den Projekten, an denen ich arbeite. Lerne mich besser kennen!",
+            "Ich bin Patryk Znamirowski, Schüler und lerne Full-Stack-Entwicklung durch echte Projekte.",
+          statement:
+            "Ich baue gerne nützliche Web-Apps, die lesbar, einfach zu bedienen und gut strukturiert sind.",
+          description:
+            "Mein aktueller Stack ist React, TypeScript, NestJS, Tailwind und typisierte API-Verträge. Dieses Portfolio zeigt, was ich lerne und wie ich Frontend- und Backend-Code strukturiere.",
+          principles: {
+            clarity: {
+              title: "Klarheit zuerst",
+              description:
+                "Jeder Screen sollte aktuellen Zustand und nächste Aktion eindeutig zeigen.",
+            },
+            reliability: {
+              title: "Zuverlässige Struktur",
+              description:
+                "Wiederverwendbare Komponenten, typisierte Daten und konsistente Zustände halten das Frontend skalierbar.",
+            },
+            data: {
+              title: "Daten mit Kontext",
+              description:
+                "Kennzahlen brauchen Labels, Schwellenwerte, Einheiten und Hierarchie.",
+            },
+          },
+          focus: {
+            eyebrow: "Schwerpunkte",
+            title: "Die stärksten Bereiche dieses Portfolios",
+            items: [
+              "Klare Portfolio- und Projektseiten",
+              "Full-Stack-Anwendungen mit TypeScript",
+              "Lesbare API-getriebene Interfaces",
+              "Responsive Seiten und kleine Tools",
+            ],
+          },
         },
-
         projects: {
-          title: "Meine Projekte",
+          eyebrow: "Ausgewählte Arbeit",
+          title: "Case Studies",
           subtitle:
-            "Hier findest du eine Liste meiner persönlichen und beruflichen Projekte. Jedes Projekt ist mir wichtig, da es meine Fähigkeiten, meine Leidenschaft und mein Engagement für die technologische Entwicklung repräsentiert. Schau sie dir gerne an und kontaktiere mich, wenn du Fragen hast oder zusammenarbeiten möchtest!",
-          noProjects:
-            "Ich habe noch keine Projekte zum Vorzeigen, aber ich arbeite daran!",
-          returnToProjects: "Zurück zu den Projekten",
+            "Ein fokussierter Blick auf Projekte mit React, NestJS, API-Integration und Datenpräsentation.",
+          noProjects: "Noch keine Case Studies verfügbar.",
+          returnToProjects: "Zurück zu den Case Studies",
+          caseStudy: "Case Study",
+          overview: "Überblick",
+          statusLabel: "Status",
+          technologies: "Technologien",
+          started: "Gestartet",
+          team: "Team",
+          viewCaseStudy: "Case Study ansehen",
+          projectNotFound: "Die ausgewählte Case Study wurde nicht gefunden.",
           statuses: {
             completed: "Abgeschlossen",
             inProgress: "In Arbeit",
             planned: "Geplant",
           },
           sourceCode: {
-            available: "Quellcode anzeigen",
+            available: "Quellcode ansehen",
             notAvailable: "Quellcode nicht verfügbar",
             closed: "Geschlossener Quellcode",
           },
-          startedAt: "Gestartet am {{date}}",
-          completedAt: "Abgeschlossen am {{date}}",
         },
-
         glucose: {
-          title: "Mein Blutzucker",
+          eyebrow: "Datenfunktion",
+          title: "Glukose-Dashboard",
           subtitle:
-            "Durchsuchen Sie Blutzuckerdaten von meinem CGM (kontinuierliches Glukosemessgerät) in Echtzeit. Sehen Sie aktuelle Messwerte, analysieren Sie Trends und überwachen Sie die im Zielbereich verbrachte Zeit. Alles an einem Ort, verfügbar für jeden Interessierten.",
+            "Ein kleines Dashboard für Glukosedaten, Trends, Zeit im Bereich und Diagrammhistorie.",
           loading: "Glukosedaten werden geladen...",
           subpages: {
-            summary: {
-              navigation: "Zusammenfassung",
-              title: "Zusammenfassung der Blutzuckermesswerte",
-            },
+            summary: { navigation: "Zusammenfassung", title: "Glukose-Zusammenfassung" },
             timeInRange: {
               navigation: "Zeit im Bereich",
-              title: "Zeit im Zielbereich des Blutzuckers",
+              title: "Zeit im Zielbereich",
             },
-            graph: {
-              navigation: "Diagramm",
-              title: "Visualisierung der Blutzuckermesswerte",
-            },
+            graph: { navigation: "Diagramm", title: "Glukose-Trenddiagramm" },
           },
           current: {
             title: "Aktueller Wert",
@@ -148,9 +195,7 @@ const de = {
             lowest: "Niedrigster Wert",
             timeInRange: "Zeit im Bereich",
           },
-          timeInRange: {
-            period: "Verteilung der letzten {{hours}} Stunden.",
-          },
+          timeInRange: { period: "Verteilung der letzten {{hours}} Stunden." },
           graph: {
             empty: "Keine Glukosewerte für das Diagramm verfügbar.",
             range: "Zielbereich: {{low}}-{{high}} {{unit}}",
@@ -172,18 +217,16 @@ const de = {
             insufficientData:
               "Es gibt noch nicht genug Daten für eine zuverlässige Berechnung.",
             module_unavailable:
-              "Moduł glukozy jest niedostępny z powodu wystąpienia błędu.",
+              "Das Glukosemodul ist wegen eines internen Fehlers nicht verfügbar.",
             module_disabled:
-              "Moduł glukozy zotał wyłączony przez administratora strony.",
+              "Das Glukosemodul wurde vom Administrator deaktiviert.",
             module_no_provider:
-              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
+              "Das Glukosemodul ist nicht verfügbar, weil kein Anbieter konfiguriert ist.",
           },
         },
       },
-
       admin: {},
     },
-
     layouts: {
       user: {
         nav: {
@@ -192,20 +235,21 @@ const de = {
           changeLanguage: "Sprache wechseln",
           changeTheme: "Thema wechseln",
           pages: {
-            home: "Startseite",
-            aboutme: "Über mich",
-            projects: "Projekte",
-            glucose: "Blutzucker",
+            home: "Start",
+            aboutme: "Profil",
+            projects: "Case Studies",
+            glucose: "Glukose",
           },
         },
         footer: {
+          positioning:
+            "Ein minimales Full-Stack-Portfolio eines Schülers, der React, TypeScript und NestJS lernt.",
           copyright: "© {{year}} Patryk Znamirowski. Alle Rechte vorbehalten.",
-          contact: "Kontaktiere mich",
-          termsOfService: "Nutzungsbedingungen",
-          privacyPolicy: "Datenschutzrichtlinie",
+          contact: "Profil",
+          caseStudies: "Case Studies",
+          glucoseData: "Glukosedaten",
         },
       },
-
       admin: {},
     },
   },

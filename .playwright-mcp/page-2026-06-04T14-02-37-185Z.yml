@@ -1,0 +1,72 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Patryk Znamirowski Student developer portfolio" [ref=e6] [cursor=pointer]:
+          - /url: /home
+          - paragraph [ref=e7]: Patryk Znamirowski
+          - paragraph [ref=e8]: Student developer portfolio
+        - navigation [ref=e9]:
+          - link "Start" [ref=e10] [cursor=pointer]:
+            - /url: /home
+            - img [ref=e11]
+            - text: Start
+          - link "Profil" [ref=e14] [cursor=pointer]:
+            - /url: /about
+            - img [ref=e15]
+            - text: Profil
+          - link "Case Studies" [ref=e18] [cursor=pointer]:
+            - /url: /projects
+            - img [ref=e19]
+            - text: Case Studies
+          - link "Glukose" [ref=e22] [cursor=pointer]:
+            - /url: /glucose
+            - img [ref=e23]
+            - text: Glukose
+        - generic [ref=e26]:
+          - link "Sprache wechseln" [ref=e27] [cursor=pointer]:
+            - /url: /language
+            - button "Sprache wechseln" [ref=e28]:
+              - img [ref=e29]
+          - button "Thema wechseln" [ref=e33]:
+            - img [ref=e34]
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e40]:
+          - paragraph [ref=e41]: Datenfunktion
+          - heading "Glukose-Dashboard" [level=1] [ref=e42]
+          - paragraph [ref=e43]: Ein kleines Dashboard für Glukosedaten, Trends, Zeit im Bereich und Diagrammhistorie.
+        - generic [ref=e44]:
+          - img [ref=e45]
+          - paragraph [ref=e47]: Glukosedaten werden geladen...
+        - navigation [ref=e48]:
+          - generic [ref=e49]:
+            - button "Diagramm" [ref=e50] [cursor=pointer]:
+              - img [ref=e51]
+              - generic [ref=e54]: Diagramm
+            - button "Zeit im Bereich" [ref=e55] [cursor=pointer]:
+              - img [ref=e56]
+              - generic [ref=e59]: Zeit im Bereich
+            - button "Zusammenfassung" [ref=e60] [cursor=pointer]:
+              - img [ref=e61]
+              - generic [ref=e63]: Zusammenfassung
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - paragraph [ref=e67]: Glukosedaten werden geladen...
+    - contentinfo [ref=e68]:
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - paragraph [ref=e71]: Patryk Znamirowski
+          - paragraph [ref=e72]: Ein minimales Full-Stack-Portfolio eines Schülers, der React, TypeScript und NestJS lernt.
+        - generic [ref=e73]:
+          - link "Profil" [ref=e74] [cursor=pointer]:
+            - /url: /about
+          - link "Case Studies" [ref=e75] [cursor=pointer]:
+            - /url: /projects
+          - link "Glukosedaten" [ref=e76] [cursor=pointer]:
+            - /url: /glucose
+        - paragraph [ref=e77]: © 2026 Patryk Znamirowski. Alle Rechte vorbehalten.
+  - generic [ref=e78]:
+    - img [ref=e80]
+    - button "Open Tanstack query devtools" [ref=e128] [cursor=pointer]:
+      - img [ref=e129]

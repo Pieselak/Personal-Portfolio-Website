@@ -22,6 +22,7 @@ import {
   GlucoseMessageState,
 } from "@/app/modules/User/Glucose/GlucoseStates.tsx";
 import { motion } from "framer-motion";
+import { Card } from "@/app/components/ui.tsx";
 
 export function GlucoseGraph() {
   const { t, i18n } = useTranslation();
@@ -55,13 +56,13 @@ export function GlucoseGraph() {
 
   return (
     <motion.section
-      className="bg-card border border-border rounded-2xl p-6 md:p-8 space-y-5"
+      className="space-y-5 rounded-lg border border-border bg-card p-6 shadow-sm md:p-8"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-primary">
+        <h2 className="text-3xl font-semibold text-foreground">
           {t("pages.user.glucose.subpages.graph.title")}
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -73,7 +74,7 @@ export function GlucoseGraph() {
         </p>
       </div>
 
-      <div className="h-80 w-full rounded-xl border border-border bg-muted/30 p-3">
+      <Card className="h-80 w-full p-3">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={points}
@@ -85,7 +86,7 @@ export function GlucoseGraph() {
                 <stop offset="95%" stopColor={lineColor} stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <CartesianGrid stroke="var(--border)" strokeDasharray="4 4" />
+            <CartesianGrid stroke="var(--border)" strokeDasharray="3 6" />
             <ReferenceArea
               y1={graph.targetLow}
               y2={graph.targetHigh}
@@ -121,7 +122,7 @@ export function GlucoseGraph() {
               contentStyle={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
-                borderRadius: 12,
+                borderRadius: 8,
                 color: "var(--foreground)",
               }}
               formatter={(value) => [
@@ -141,7 +142,7 @@ export function GlucoseGraph() {
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
     </motion.section>
   );
 }

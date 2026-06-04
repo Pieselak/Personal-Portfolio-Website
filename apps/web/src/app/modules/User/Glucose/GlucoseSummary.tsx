@@ -17,6 +17,7 @@ import {
   GlucoseMessageState,
 } from "@/app/modules/User/Glucose/GlucoseStates.tsx";
 import { motion } from "framer-motion";
+import { Card, MetricCard } from "@/app/components/ui.tsx";
 
 export function GlucoseSummary() {
   const { t, i18n } = useTranslation();
@@ -76,37 +77,37 @@ export function GlucoseSummary() {
     label: string;
     data: GetAverageGlucoseResponse;
     icon: typeof Gauge;
-    className: string;
+    tone: "accent" | "warning";
   }> = [
     {
       label: t("pages.user.glucose.summary.average"),
       data: average,
       icon: Gauge,
-      className: "border-blue-border bg-blue-bg text-blue-text",
+      tone: "accent" as const,
     },
     {
       label: t("pages.user.glucose.summary.highest"),
       data: highest,
       icon: ArrowUp,
-      className: "border-yellow-border bg-yellow-bg text-yellow-text",
+      tone: "warning" as const,
     },
     {
       label: t("pages.user.glucose.summary.lowest"),
       data: lowest,
       icon: ArrowDown,
-      className: "border-orange-border bg-orange-bg text-orange-text",
+      tone: "warning" as const,
     },
   ];
 
   return (
     <motion.section
-      className="bg-card border border-border rounded-2xl p-6 md:p-8 space-y-5"
+      className="space-y-5 rounded-lg border border-border bg-card p-6 shadow-sm md:p-8"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-primary">
+        <h2 className="text-3xl font-semibold text-foreground">
           {t("pages.user.glucose.subpages.summary.title")}
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -121,47 +122,34 @@ export function GlucoseSummary() {
           const Icon = metric.icon;
 
           return (
-            <div
+            <MetricCard
               key={metric.label}
-              className="rounded-xl border border-border bg-muted/40 p-4"
-            >
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {metric.label}
-                </p>
-                <span
-                  className={`flex size-10 items-center justify-center rounded-xl border ${metric.className}`}
-                >
-                  <Icon className="size-5" />
-                </span>
-              </div>
-              <p className="text-3xl font-bold text-primary">
-                {metric.data.value}
-              </p>
-              <p className="text-sm font-medium text-muted-foreground">
-                {metric.data.unit}
-              </p>
-            </div>
+              icon={Icon}
+              tone={metric.tone}
+              label={metric.label}
+              value={metric.data.value}
+              detail={metric.data.unit}
+            />
           );
         })}
       </div>
 
-      <div className="rounded-xl border border-border bg-muted/40 p-4">
+      <Card className="p-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-medium text-muted-foreground">
+            <p className="text-sm font-semibold text-muted-foreground">
               {t("pages.user.glucose.summary.timeInRange")}
             </p>
-            <p className="text-3xl font-bold text-primary">
+            <p className="text-3xl font-semibold text-foreground">
               {percentFormatter.format(timeInRange.percentageInRange)}%
             </p>
           </div>
-          <span className="flex size-10 items-center justify-center rounded-xl border border-green-border bg-green-bg text-green-text">
+          <span className="flex size-10 items-center justify-center rounded-md border border-green-border bg-green-bg text-green-text">
             <Clock className="size-5" />
           </span>
         </div>
 
-        <div className="flex h-3 overflow-hidden rounded-full bg-card">
+        <div className="flex h-3 overflow-hidden rounded-full bg-secondary">
           {rangeSegments.map((segment) => (
             <div
               key={segment.key}
@@ -178,7 +166,7 @@ export function GlucoseSummary() {
           {rangeSegments.map((segment) => (
             <div
               key={segment.key}
-              className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-card/60 px-3 py-2"
+              className="flex items-center justify-between gap-2 rounded-md border border-border/60 bg-secondary/45 px-3 py-2"
             >
               <div className="flex min-w-0 items-center gap-2">
                 <span
@@ -188,13 +176,13 @@ export function GlucoseSummary() {
                   {t(segment.labelKey)}
                 </span>
               </div>
-              <span className="text-xs font-semibold text-primary">
+              <span className="text-xs font-semibold text-foreground">
                 {percentFormatter.format(segment.value)}%
               </span>
             </div>
           ))}
         </div>
-      </div>
+      </Card>
     </motion.section>
   );
 }

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import { HomePage } from "@/app/modules/User/Home/Home.page.tsx";
-// import { AboutMePage } from "@/app/modules/User/AboutMe/AboutMe.page.tsx";
+import { AboutMePage } from "@/app/modules/User/AboutMe/AboutMe.page.tsx";
 import { MyProjectsListPage } from "@/app/modules/User/Projects/ProjectsList.tsx";
 import { MyProjectsDetailsPage } from "@/app/modules/User/Projects/ProjectsDetails.tsx";
 import { GlucosePage } from "@/app/modules/User/Glucose/Glucose.page.tsx";
@@ -31,12 +31,13 @@ function App() {
   const savedLanguage = getSavedLanguageCode();
 
   useEffect(() => {
-    !savedLanguage &&
+    if (!savedLanguage && location.pathname !== "/language") {
       navigate("/language", {
         state: { langRedirect: location.pathname },
       });
+    }
     i18n.changeLanguage(savedLanguage || getFirstLanguageCode());
-  }, []);
+  }, [location.pathname, navigate, savedLanguage]);
 
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -52,7 +53,7 @@ function App() {
           />
           <Route
             path="about"
-            element={<UnderConstructionPage /> /*<AboutMePage />*/}
+            element={<AboutMePage />}
           />
           <Route path="projects">
             <Route index element={<MyProjectsListPage />} />

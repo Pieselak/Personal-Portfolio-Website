@@ -1,0 +1,50 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Patryk Znamirowski Student developer portfolio" [ref=e6] [cursor=pointer]:
+          - /url: /home
+          - paragraph [ref=e7]: Patryk Znamirowski
+          - paragraph [ref=e8]: Student developer portfolio
+        - navigation [ref=e9]:
+          - link "Start" [ref=e10] [cursor=pointer]:
+            - /url: /home
+            - img [ref=e11]
+            - text: Start
+          - link "Profil" [ref=e14] [cursor=pointer]:
+            - /url: /about
+            - img [ref=e15]
+            - text: Profil
+          - link "Case Studies" [ref=e18] [cursor=pointer]:
+            - /url: /projects
+            - img [ref=e19]
+            - text: Case Studies
+          - link "Glukose" [ref=e22] [cursor=pointer]:
+            - /url: /glucose
+            - img [ref=e23]
+            - text: Glukose
+        - generic [ref=e26]:
+          - link "Sprache wechseln" [ref=e27] [cursor=pointer]:
+            - /url: /language
+            - button "Sprache wechseln" [ref=e28]:
+              - img [ref=e29]
+          - button "Thema wechseln" [ref=e33]:
+            - img [ref=e34]
+    - main [ref=e36]
+    - contentinfo [ref=e37]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: Patryk Znamirowski
+          - paragraph [ref=e41]: Ein minimales Full-Stack-Portfolio eines Schülers, der React, TypeScript und NestJS lernt.
+        - generic [ref=e42]:
+          - link "Profil" [ref=e43] [cursor=pointer]:
+            - /url: /about
+          - link "Case Studies" [ref=e44] [cursor=pointer]:
+            - /url: /projects
+          - link "Glukosedaten" [ref=e45] [cursor=pointer]:
+            - /url: /glucose
+        - paragraph [ref=e46]: © 2026 Patryk Znamirowski. Alle Rechte vorbehalten.
+  - generic [ref=e47]:
+    - img [ref=e49]
+    - button "Open Tanstack query devtools" [ref=e97] [cursor=pointer]:
+      - img [ref=e98]

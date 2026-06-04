@@ -9,8 +9,10 @@ import {
 import type { navigationItem } from "@/app/layouts/User/User.layout.tsx";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import useTheme from "@/app/hooks/useTheme.ts";
+import { IconButton } from "@/app/components/ui.tsx";
+import { cn } from "@/app/components/cn.ts";
 
 type UserMobileHeaderProps = {
   navigationItems: navigationItem[];
@@ -22,120 +24,98 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
   const { pathname } = useLocation();
   const { t } = useTranslation();
 
-  const menuVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 },
-  };
-
   return (
-    <header className="flex justify-start items-center w-full gap-2.5 mt-3 z-50">
-      <motion.div
-        initial="hidden"
-        animate={menuOpen ? "exit" : "visible"}
-        variants={menuVariants}
-        className="flex justify-between items-center gap-2.5 px-3"
-      >
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/88 backdrop-blur-xl">
+      <div className="flex h-18 items-center justify-between px-4">
+        <Link to="/home" className="min-w-0">
+          <p className="truncate text-xl font-semibold text-foreground">
+            Patryk Znamirowski
+          </p>
+          <p className="truncate text-xs font-medium text-muted-foreground">
+            Student developer portfolio
+          </p>
+        </Link>
+        <IconButton
+          label={t("layouts.user.nav.openMenu")}
           onClick={() => setMenuOpen(true)}
-          className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-          aria-label={t("layouts.user.nav.openMenu")}
         >
           <MenuIcon className="size-4.5" />
-        </motion.button>
-      </motion.div>
+        </IconButton>
+      </div>
 
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={menuVariants}
-            className="fixed flex flex-col justify-start items-center top-0 w-full min-h-dvh p-3 gap-2.5 bg-background/90 backdrop-blur-sm border-b border-border"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-background/96 px-4 py-4 backdrop-blur-xl"
           >
-            <div className="flex flex-row items-center justify-between w-full gap-2">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setMenuOpen(false);
-                }}
-                className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-                aria-label={t("layouts.user.nav.closeMenu")}
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-2xl font-semibold text-foreground">
+                  Navigation
+                </p>
+                <p className="text-xs font-medium text-muted-foreground">
+                  Portfolio sections
+                </p>
+              </div>
+              <IconButton
+                label={t("layouts.user.nav.closeMenu")}
+                onClick={() => setMenuOpen(false)}
               >
                 <XIcon className="size-4.5" />
-              </motion.button>
-              <div className="flex justify-between items-center gap-2.5">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-                >
-                  <Link
-                    to="/language"
-                    className="p-2.5"
-                    aria-label={t("layouts.user.nav.changeLanguage")}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <LanguagesIcon className="size-4.5" />
-                  </Link>
-                </motion.div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  aria-label={t("layouts.user.nav.changeTheme")}
-                >
-                  {theme === "light" ? (
-                    <MoonStarIcon className="size-4.5" />
-                  ) : (
-                    <SunIcon className="size-4.5" />
-                  )}
-                </motion.button>
-              </div>
+              </IconButton>
             </div>
 
-            <motion.nav
-              initial="hidden"
-              animate="visible"
-              transition={{ staggerChildren: 0.1 }}
-              className="flex w-full flex-col justify-center items-center gap-2"
-            >
-              {navigationItems.map((navigationItem, index) => (
-                <motion.div
-                  key={navigationItem.url}
-                  custom={index}
-                  variants={itemVariants}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  onClick={() => setMenuOpen(false)}
-                  className={`w-full`}
-                >
+            <nav className="mt-8 grid gap-2">
+              {navigationItems.map((navigationItem) => {
+                const isActive =
+                  pathname.split("/")[1] === navigationItem.url.substring(1);
+                const Icon = navigationItem.icon;
+
+                return (
                   <Link
+                    key={navigationItem.url}
                     to={navigationItem.url}
-                    className={`flex gap-3 items-center px-3 py-2 w-full border border-border rounded-md cursor-pointer transition-[border-color, background-color] duration-250 ${
-                      pathname.split("/")[1] === navigationItem.url.substring(1)
-                        ? "border-ring bg-muted text-accent-foreground"
-                        : "bg-card text-muted-foreground hover:border-ring hover:text-primary"
-                    }`}
-                  >
-                    {navigationItem.icon && (
-                      <navigationItem.icon className="size-4.5" />
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(
+                      "flex min-h-14 items-center gap-3 rounded-md border px-4 text-base font-semibold transition-colors",
+                      isActive
+                        ? "border-ring bg-secondary text-foreground"
+                        : "border-border bg-card text-muted-foreground hover:bg-secondary hover:text-foreground",
                     )}
+                  >
+                    {Icon && <Icon className="size-5" />}
                     {t(`layouts.user.nav.pages.${navigationItem.label}`)}
                   </Link>
-                </motion.div>
-              ))}
-            </motion.nav>
+                );
+              })}
+            </nav>
+
+            <div className="mt-6 flex gap-2">
+              <Link
+                to="/language"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1"
+              >
+                <button className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-border bg-card text-sm font-semibold text-foreground">
+                  <LanguagesIcon className="size-4.5" />
+                  {t("layouts.user.nav.changeLanguage")}
+                </button>
+              </Link>
+              <button
+                className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md border border-border bg-card text-sm font-semibold text-foreground"
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              >
+                {theme === "light" ? (
+                  <MoonStarIcon className="size-4.5" />
+                ) : (
+                  <SunIcon className="size-4.5" />
+                )}
+                {t("layouts.user.nav.changeTheme")}
+              </button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

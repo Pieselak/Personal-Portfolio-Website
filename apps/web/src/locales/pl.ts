@@ -8,121 +8,161 @@ const pl = {
   translation: {
     pages: {
       loading: {
-        message:
-          "Chomiki biegające w kołowrotkach serwera potrzebują chwili na złapanie oddechu. Cierpliwości...",
+        message: "Przygotowywanie interfejsu i synchronizacja danych.",
       },
-
       serverError: {
         title: "500 Błąd serwera",
         message:
-          "Gratulacje, udało Ci się zepsuć serwer! (Albo to ja zapomniałem średnika w kodzie). Trwają poszukiwania gaśnicy.",
+          "Usługa jest chwilowo niedostępna. Spróbuj ponownie za moment.",
       },
-
       notFound: {
         title: "404 Nie znaleziono",
         message:
-          "Strona zaginęła w akcji. Może porwali ją obcy, a może po prostu źle wpisałeś adres. Tak czy siak – tutaj nic nie ma.",
+          "Żądana strona nie jest dostępna. Sprawdź adres lub wróć do portfolio.",
       },
-
       forbidden: {
         title: "403 Brak dostępu",
-        message:
-          "Hej, hej, hej! Gdzie z tymi brudnymi buciorami? Nie masz tu uprawnień. Odwróć się powoli i opuść ten obszar.",
+        message: "Nie masz uprawnień do tej sekcji.",
       },
-
       maintenance: {
-        title: "W trakcie konserwacji",
+        title: "Trwa konserwacja",
         message:
-          "Właśnie przecieramy z kurzu kable i podlewamy bazę danych. Wrócimy, jak tylko wszystko wyschnie.",
+          "Aplikacja jest tymczasowo niedostępna z powodu prac utrzymaniowych.",
       },
-
       underConstruction: {
-        title: "W trakcie budowy",
+        title: "Sekcja w przygotowaniu",
         message:
-          "Lejemy tu wirtualny beton. Zapomnieliśmy dowieźć tę stronę w ostatnim sprincie, ale obiecujemy, że kiedyś ją skończymy.",
+          "Ta sekcja jest przygotowywana i będzie dostępna po weryfikacji.",
       },
-
       selectLanguage: {
+        eyebrow: "Język interfejsu",
         title: "Wybierz język",
-        subtitle: "Wybierz preferowany język dla zawartości strony.",
+        subtitle:
+          "Wybierz język używany w nawigacji, komunikatach i treści portfolio.",
         noLanguages: "Obecnie brak dostępnych języków.",
       },
-
       user: {
         home: {
-          title: "Witaj na mojej stronie!",
+          eyebrow: "Portfolio ucznia programisty",
+          title:
+            "Proste, czytelne projekty tworzone w React i TypeScript.",
           subtitle:
-            "Cieszę się, że tu jesteś! Jestem Patryk, pasjonat technologii i programowania. Na tej stronie znajdziesz informacje o mnie, moich projektach oraz moje dane dotyczące glukozy we krwi z mojego CGM. Zapraszam do eksploracji i kontaktu!",
+            "Jestem uczniem szkoły średniej i uczę się full-stack developmentu, budując praktyczne aplikacje, czyste interfejsy i małe narzędzia do danych.",
+          primaryCta: "Zobacz projekt glukozy",
+          secondaryCta: "Zobacz projekty",
+          proofPoints: ["React", "TypeScript", "NestJS"],
+          panel: {
+            badge: "Aktualny kierunek",
+            title: "Czyste portfolio, które łatwo zrozumieć.",
+            description:
+              "Interfejs jest celowo minimalistyczny: czytelne strony, komponenty wielokrotnego użytku i prosta nawigacja.",
+          },
+          capabilities: {
+            cleanInterfaces: {
+              title: "Czyste interfejsy",
+              description:
+                "Proste układy z czytelną hierarchią i łatwą nawigacją.",
+            },
+            dataVisualization: {
+              title: "Wizualizacja danych",
+              description:
+                "Wykresy i metryki zaprojektowane do szybkiej interpretacji.",
+            },
+            secureArchitecture: {
+              title: "Niezawodny full-stack",
+              description:
+                "React, NestJS i typowane kontrakty API utrzymywane w zrozumiałej strukturze.",
+            },
+          },
           sections: {
             aboutme: {
-              description:
-                "Poznaj moje doświadczenie, umiejętności i zainteresowania.",
+              description: "Poznaj Patryka i jego podejście do budowania projektów.",
             },
             projects: {
-              description:
-                "Przeglądaj moje portfolio projektów osobistych i zawodowych.",
+              description: "Przejrzyj wybrane prace w czystej galerii projektów.",
             },
             glucose: {
               description:
-                "Przeglądaj moje dane glukozy we krwi w czasie rzeczywistym.",
+                "Zobacz funkcję danych glukozy i prosty dashboard.",
             },
           },
-          welcome: "Witaj! 👋",
-          welcomeDescription:
-            "Pasjonuję się tworzeniem innowacyjnych rozwiązań cyfrowych i utrzymywaniem zdrowego stylu życia. Ta strona prezentuje moją podróż przez technologię i przejrzystość danych osobistych.",
-          skills: [
-            "React & TypeScript",
-            "Full-stack Development",
-            "Wizualizacja danych",
-          ],
-          explore: "Odkryj",
         },
-
         aboutme: {
+          eyebrow: "Profil",
           title: "O mnie",
           subtitle:
-            "Cześć! Nazywam się Patryk Znamirowski i jestem pasjonatem technologii, programowania oraz zdrowego stylu życia. Na tej stronie znajdziesz informacje o mojej karierze, zainteresowaniach oraz projektach, nad którymi pracuję. Zapraszam do poznania mnie bliżej!",
+            "Jestem Patryk Znamirowski, uczeń szkoły średniej uczący się full-stack developmentu przez realne projekty.",
+          statement:
+            "Lubię budować przydatne aplikacje webowe, które są czytelne, proste w użyciu i łatwe w utrzymaniu.",
+          description:
+            "Mój aktualny stack to React, TypeScript, NestJS, Tailwind i typowane kontrakty API. To portfolio pokazuje, czego się uczę i jak układam kod frontendowy oraz backendowy.",
+          principles: {
+            clarity: {
+              title: "Najpierw czytelność",
+              description:
+                "Każdy ekran powinien jasno pokazywać aktualny stan i następne działanie.",
+            },
+            reliability: {
+              title: "Niezawodna struktura",
+              description:
+                "Komponenty wielokrotnego użytku, typowane dane i spójne stany zwiększają skalowalność.",
+            },
+            data: {
+              title: "Dane z kontekstem",
+              description:
+                "Metryki potrzebują etykiet, progów, jednostek i hierarchii.",
+            },
+          },
+          focus: {
+            eyebrow: "Obszary specjalizacji",
+            title: "Najmocniejsze elementy portfolio",
+            items: [
+              "Czyste strony portfolio i projektów",
+              "Aplikacje full-stack w TypeScript",
+              "Czytelne interfejsy oparte o API",
+              "Responsywne strony i małe narzędzia",
+            ],
+          },
         },
-
         projects: {
-          title: "Moje projekty",
+          eyebrow: "Wybrane realizacje",
+          title: "Case studies",
           subtitle:
-            "Tutaj znajdziesz listę moich projektów osobistych i zawodowych. Każdy projekt jest dla mnie ważny, ponieważ reprezentuje moje umiejętności, pasję i zaangażowanie w rozwój technologii. Zapraszam do zapoznania się z moimi projektami i kontaktu, jeśli masz pytania lub chcesz współpracować!",
-          noProjects:
-            "Nie mam jeszcze żadnych projektów do pokazania, ale pracuję nad nimi!",
-          returnToProjects: "Powrót do listy projektów",
+            "Skoncentrowany przegląd projektów z React, NestJS, integracją API i prezentacją danych.",
+          noProjects: "Brak dostępnych case studies.",
+          returnToProjects: "Wróć do case studies",
+          caseStudy: "Case study",
+          overview: "Opis",
+          statusLabel: "Status",
+          technologies: "Technologie",
+          started: "Rozpoczęto",
+          team: "Zespół",
+          viewCaseStudy: "Zobacz case study",
+          projectNotFound: "Nie znaleziono wybranego case study.",
           statuses: {
             completed: "Ukończony",
-            inProgress: "W trakcie realizacji",
-            planned: "Zaplanowany",
+            inProgress: "W trakcie",
+            planned: "Planowany",
           },
           sourceCode: {
             available: "Zobacz kod źródłowy",
             notAvailable: "Kod źródłowy niedostępny",
-            closed: "Zamknięty kod źródłowy",
+            closed: "Kod zamknięty",
           },
-          startedAt: "Rozpoczęto {{date}}",
-          completedAt: "Zakończono {{date}}",
         },
-
         glucose: {
-          title: "Moja glukoza we krwi",
+          eyebrow: "Funkcja danych",
+          title: "Dashboard glukozy",
           subtitle:
-            "Przeglądaj dane dotyczące glukozy we krwi z mojego CGM (sensora glukozy we krwi) w czasie rzeczywistym. Przeglądaj aktualne odczyty, analizuj trendy i monitoruj czas spędzony w docelowym zakresie glukozy we krwi. Wszystko to w jednym miejscu, dostępne dla każdego zainteresowanego.",
+            "Mały dashboard do odczytu danych glukozy, trendu, czasu w zakresie i historii na wykresie.",
           loading: "Wczytywanie danych glukozy...",
           subpages: {
-            summary: {
-              navigation: "Podsumowanie",
-              title: "Podsumowanie danych z odczytów",
-            },
+            summary: { navigation: "Podsumowanie", title: "Podsumowanie glukozy" },
             timeInRange: {
               navigation: "Czas w zakresie",
-              title: "Czas spędzony w docelowym zakresie glukozy we krwi",
+              title: "Czas w zakresie docelowym",
             },
-            graph: {
-              navigation: "Wykres",
-              title: "Wizualizacja danych z odczytów",
-            },
+            graph: { navigation: "Wykres", title: "Wykres trendu glukozy" },
           },
           current: {
             title: "Aktualny odczyt",
@@ -138,7 +178,7 @@ const pl = {
             expiresIn: "Wygasa za",
             refresh: "Następne odświeżenie",
             trends: {
-              none: "Brak informacji o trendzie",
+              none: "Brak trendu",
               risingFast: "Szybko rośnie",
               rising: "Rośnie",
               risingSlow: "Powoli rośnie",
@@ -177,20 +217,18 @@ const pl = {
             timeInRange: "Nie udało się wczytać czasu w zakresie.",
             summary: "Nie udało się wczytać podsumowania glukozy.",
             insufficientData:
-              "Nie ma jeszcze wystarczającej ilości danych do wiarygodnego obliczenia.",
+              "Nie ma jeszcze wystarczającej ilości danych do wiarygodnego wyniku.",
             module_unavailable:
-              "Moduł glukozy jest niedostępny z powodu wystąpienia wewnętrznego błędu.",
+              "Moduł glukozy jest niedostępny z powodu błędu wewnętrznego.",
             module_disabled:
-              "Moduł glukozy zotał wyłączony przez administratora strony.",
+              "Moduł glukozy został wyłączony przez administratora strony.",
             module_no_provider:
-              "Moduł glukozy jest niedostępny ze względu na brak dostawcy danych glukozy.",
+              "Moduł glukozy jest niedostępny, ponieważ nie skonfigurowano dostawcy danych.",
           },
         },
       },
-
       admin: {},
     },
-
     layouts: {
       user: {
         nav: {
@@ -199,21 +237,22 @@ const pl = {
           changeLanguage: "Zmień język",
           changeTheme: "Zmień motyw",
           pages: {
-            home: "Strona główna",
-            aboutme: "O mnie",
-            projects: "Projekty",
-            glucose: "Cukier we krwi",
+            home: "Start",
+            aboutme: "Profil",
+            projects: "Case studies",
+            glucose: "Glukoza",
           },
         },
         footer: {
+          positioning:
+            "Minimalistyczne portfolio full-stack ucznia szkoły średniej uczącego się React, TypeScript i NestJS.",
           copyright:
             "© {{year}} Patryk Znamirowski. Wszelkie prawa zastrzeżone.",
-          contact: "Skontaktuj się ze mną",
-          termsOfService: "Zasady korzystania",
-          privacyPolicy: "Polityka prywatności",
+          contact: "Profil",
+          caseStudies: "Case studies",
+          glucoseData: "Dane glukozy",
         },
       },
-
       admin: {},
     },
   },

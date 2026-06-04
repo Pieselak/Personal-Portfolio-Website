@@ -1,56 +1,39 @@
 import { useTranslation } from "react-i18next";
-
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 export function UserFooter() {
   const { t } = useTranslation();
-  const footerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
   return (
-    <motion.footer
-      initial="hidden"
-      animate="visible"
-      variants={footerVariants}
-      className="w-full bg-background border-t border-border"
-    >
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Copyright - Top */}
-        <div className="flex justify-center items-center mb-6 pb-6 border-b border-border/50">
-          <p className="text-md font-bold text-primary">
-            {t("layouts.user.footer.copyright", {
-              year: new Date().getFullYear(),
-            })}
+    <footer className="w-full border-t border-border/70 bg-background/80">
+      <div className="mx-auto grid max-w-7xl gap-6 px-6 py-10 md:grid-cols-[1fr_auto] lg:px-8">
+        <div>
+          <p className="text-2xl font-semibold text-foreground">
+            Patryk Znamirowski
+          </p>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+            {t("layouts.user.footer.positioning")}
           </p>
         </div>
 
-        {/* Links - Bottom */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-sm text-muted-foreground">
-          <Link
-            to="contact"
-            className="hover:text-primary transition-colors duration-250"
-          >
+        <div className="flex flex-wrap items-center gap-4 text-sm font-semibold text-muted-foreground">
+          <Link to="/about" className="hover:text-foreground">
             {t("layouts.user.footer.contact")}
           </Link>
-          <span className="hidden sm:inline text-border/50">•</span>
-          <Link
-            to="terms"
-            className="hover:text-primary transition-colors duration-250"
-          >
-            {t("layouts.user.footer.termsOfService")}
+          <Link to="/projects" className="hover:text-foreground">
+            {t("layouts.user.footer.caseStudies")}
           </Link>
-          <span className="hidden sm:inline text-border/50">•</span>
-          <Link
-            to="privacy"
-            className="hover:text-primary transition-colors duration-250"
-          >
-            {t("layouts.user.footer.privacyPolicy")}
+          <Link to="/glucose" className="hover:text-foreground">
+            {t("layouts.user.footer.glucoseData")}
           </Link>
         </div>
+
+        <p className="text-xs font-medium text-muted-foreground md:col-span-2">
+          {t("layouts.user.footer.copyright", {
+            year: new Date().getFullYear(),
+          })}
+        </p>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

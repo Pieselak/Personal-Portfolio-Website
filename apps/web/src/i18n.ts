@@ -1,8 +1,19 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { BadgeQuestionMarkIcon } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
 
-const locales = import.meta.glob<{ default: any }>("./locales/*.ts", {
+type FlagComponent = ComponentType<SVGProps<SVGSVGElement>>;
+
+type LocaleResource = {
+  data: {
+    name?: string;
+    flag?: FlagComponent;
+  };
+  translation: Record<string, unknown>;
+};
+
+const locales = import.meta.glob<{ default: LocaleResource }>("./locales/*.ts", {
   eager: true,
 });
 
@@ -14,15 +25,15 @@ const resources = Object.entries(locales).reduce(
     }
     return acc;
   },
-  {} as Record<string, any>,
+  {} as Record<string, LocaleResource>,
 );
-let languages: languageItem[] = [];
+const languages: languageItem[] = [];
 
 type ResourceKey = keyof typeof resources;
 type languageItem = {
   code: string;
   name: string;
-  flag: any;
+  flag: FlagComponent;
 };
 
 i18next.use(initReactI18next).init(
@@ -55,7 +66,7 @@ export const getFirstLanguageCode = () =>
   languages.length > 0 ? languages[0].code : "unknown";
 export const getSavedLanguageCode = () => {
   const savedLanguage = localStorage.getItem("language");
-  if (savedLanguage && resources.hasOwnProperty(savedLanguage)) {
+  if (savedLanguage && Object.hasOwn(resources, savedLanguage)) {
     return savedLanguage;
   }
   return null;

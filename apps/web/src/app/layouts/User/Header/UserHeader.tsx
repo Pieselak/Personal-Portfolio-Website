@@ -1,4 +1,6 @@
 import useTheme from "@/app/hooks/useTheme.ts";
+import { IconButton } from "@/app/components/ui.tsx";
+import { cn } from "@/app/components/cn.ts";
 import { LanguagesIcon, MoonStarIcon, SunIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import type { navigationItem } from "@/app/layouts/User/User.layout.tsx";
@@ -14,62 +16,64 @@ export function UserHeader({ navigationItems }: userHeaderProps) {
   const { pathname } = useLocation();
   const { t } = useTranslation();
 
-  const headerVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
     <motion.header
-      initial="hidden"
-      animate="visible"
-      variants={headerVariants}
-      className="flex justify-center items-center gap-2.5 mt-3 overflow-x-hidden z-50 w-full"
+      initial={{ opacity: 0, y: -12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/86 backdrop-blur-xl"
     >
-      <motion.div
-        tabIndex={-1}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <Link
-          to="/language"
-          className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-          aria-label={t("layouts.user.nav.changeLanguage")}
-        >
-          <LanguagesIcon className="size-4.5" />
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6 lg:px-8">
+        <Link to="/home" className="group min-w-0">
+          <p className="text-2xl font-semibold leading-none text-foreground">
+            Patryk Znamirowski
+          </p>
+          <p className="mt-1 text-xs font-medium text-muted-foreground transition-colors group-hover:text-accent">
+            Student developer portfolio
+          </p>
         </Link>
-      </motion.div>
-      <nav className="flex bg-card backdrop-blur-sm border border-border rounded-xl p-1.5 gap-1">
-        {navigationItems.map((navigationItem) => (
-          <Link
-            key={navigationItem.url}
-            to={navigationItem.url}
-            className={`flex gap-1 items-center border px-2 py-1 rounded-md cursor-pointer transition-[border-color, background-color] duration-250 ${
-              pathname.split("/")[1] === navigationItem.url.substring(1)
-                ? "border-ring bg-muted text-accent-foreground"
-                : "border-transparent text-muted-foreground hover:border-ring hover:text-primary"
-            }`}
-          >
-            {navigationItem.icon && (
-              <navigationItem.icon className="size-4.5" />
-            )}
-            {t(`layouts.user.nav.pages.${navigationItem.label}`)}
+
+        <nav className="flex items-center gap-1 rounded-md border border-border bg-card/75 p-1 shadow-sm">
+          {navigationItems.map((navigationItem) => {
+            const isActive =
+              pathname.split("/")[1] === navigationItem.url.substring(1);
+            const Icon = navigationItem.icon;
+
+            return (
+              <Link
+                key={navigationItem.url}
+                to={navigationItem.url}
+                className={cn(
+                  "inline-flex h-10 items-center gap-2 rounded-sm border px-3 text-sm font-semibold transition-[background-color,border-color,color] duration-200",
+                  isActive
+                    ? "border-ring bg-secondary text-foreground"
+                    : "border-transparent text-muted-foreground hover:bg-secondary hover:text-foreground",
+                )}
+              >
+                {Icon && <Icon className="size-4" />}
+                {t(`layouts.user.nav.pages.${navigationItem.label}`)}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Link to="/language">
+            <IconButton label={t("layouts.user.nav.changeLanguage")}>
+              <LanguagesIcon className="size-4.5" />
+            </IconButton>
           </Link>
-        ))}
-      </nav>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="flex items-center p-2.5 bg-card rounded-xl border border-border hover:border-ring cursor-pointer transition-[border-color] duration-250"
-        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        aria-label={t("layouts.user.nav.changeTheme")}
-      >
-        {theme === "light" ? (
-          <MoonStarIcon className="size-4.5" />
-        ) : (
-          <SunIcon className="size-4.5" />
-        )}
-      </motion.button>
+          <IconButton
+            label={t("layouts.user.nav.changeTheme")}
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            {theme === "light" ? (
+              <MoonStarIcon className="size-4.5" />
+            ) : (
+              <SunIcon className="size-4.5" />
+            )}
+          </IconButton>
+        </div>
+      </div>
     </motion.header>
   );
 }

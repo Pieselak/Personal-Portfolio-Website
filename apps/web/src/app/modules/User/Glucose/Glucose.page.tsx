@@ -5,6 +5,7 @@ import { GlucoseNavigation } from "@/app/modules/User/Glucose/GlucoseNavigation.
 import { navigationItems } from "@/app/modules/User/Glucose/GlucoseNavigation.items.tsx";
 import { type ReactElement, useEffect } from "react";
 import { useSearchParams } from "react-router";
+import { SectionHeader } from "@/app/components/ui.tsx";
 
 export function GlucosePage() {
   const { t } = useTranslation();
@@ -47,20 +48,19 @@ export function GlucosePage() {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center">
+    <div className="w-full">
       <motion.div
-        className="space-y-6 w-full"
+        className="w-full space-y-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.div className="flex flex-col gap-1" variants={itemVariants}>
-          <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            {t("pages.user.glucose.title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("pages.user.glucose.subtitle")}
-          </p>
+        <motion.div variants={itemVariants}>
+          <SectionHeader
+            eyebrow={t("pages.user.glucose.eyebrow")}
+            title={t("pages.user.glucose.title")}
+            description={t("pages.user.glucose.subtitle")}
+          />
         </motion.div>
 
         <GlucoseCurrent />

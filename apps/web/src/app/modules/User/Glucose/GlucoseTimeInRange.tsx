@@ -10,6 +10,7 @@ import {
   GlucoseMessageState,
 } from "@/app/modules/User/Glucose/GlucoseStates.tsx";
 import { motion } from "framer-motion";
+import { Card } from "@/app/components/ui.tsx";
 
 export function GlucoseTimeInRange() {
   const { t, i18n } = useTranslation();
@@ -40,13 +41,13 @@ export function GlucoseTimeInRange() {
 
   return (
     <motion.section
-      className="bg-card border border-border rounded-2xl p-6 md:p-8 space-y-5"
+      className="space-y-5 rounded-lg border border-border bg-card p-6 shadow-sm md:p-8"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-primary">
+        <h2 className="text-3xl font-semibold text-foreground">
           {t("pages.user.glucose.subpages.timeInRange.title")}
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -56,9 +57,9 @@ export function GlucoseTimeInRange() {
         </p>
       </div>
 
-      <div className="grid gap-6 grid-cols-[80px_1fr]">
-        <div className="flex items-stretch justify-center rounded-xl border border-border bg-muted/30 p-2">
-          <div className="flex h-full w-full flex-col overflow-hidden rounded-md border border-border">
+      <div className="grid gap-6 sm:grid-cols-[88px_1fr]">
+        <Card className="flex min-h-72 items-stretch justify-center p-2">
+          <div className="flex h-full w-full flex-col overflow-hidden rounded-md border border-border bg-secondary">
             {segments.map((segment) => (
               <div
                 key={segment.key}
@@ -70,13 +71,13 @@ export function GlucoseTimeInRange() {
               />
             ))}
           </div>
-        </div>
+        </Card>
 
         <div className="flex flex-col justify-center gap-3 sm:grid-cols-2">
           {segments.map((segment) => (
             <div
               key={segment.key}
-              className="rounded-xl border border-border bg-muted/40 p-4"
+              className="rounded-md border border-border bg-secondary/45 p-4"
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center gap-2">
@@ -87,7 +88,7 @@ export function GlucoseTimeInRange() {
                     {t(segment.labelKey)}
                   </p>
                 </div>
-                <p className="text-lg font-bold text-primary">
+                <p className="text-lg font-semibold text-foreground">
                   {formatter.format(segment.value)}%
                 </p>
               </div>

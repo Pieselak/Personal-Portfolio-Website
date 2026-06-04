@@ -2,6 +2,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import i18n, { getAvailableLanguages } from "@/i18n.ts";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { Card, SectionHeader, StatePanel } from "@/app/components/ui.tsx";
+import { cn } from "@/app/components/cn.ts";
 
 export function SelectLanguagePage() {
   const { t } = useTranslation();
@@ -12,64 +14,56 @@ export function SelectLanguagePage() {
   const languages = getAvailableLanguages();
   const currentLanguage = i18n.language;
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
-  };
-
   return (
-    <div className="flex flex-col justify-start items-center min-w-full">
-      <div className="space-y-6 w-full">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            {t("pages.selectLanguage.title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("pages.selectLanguage.subtitle")}
-          </p>
-        </div>
+    <motion.div
+      className="w-full space-y-8"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      <SectionHeader
+        eyebrow={t("pages.selectLanguage.eyebrow")}
+        title={t("pages.selectLanguage.title")}
+        description={t("pages.selectLanguage.subtitle")}
+      />
 
-        {languages.length > 0 ? (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            transition={{ staggerChildren: 0.1 }}
-            className="flex flex-wrap justify-center items-center gap-2.5"
-          >
-            {languages.map((language, index) => (
-              <motion.button
-                key={language.code}
-                custom={index}
-                variants={itemVariants}
-                className={`grow min-w-26`}
-                onClick={() => {
-                  i18n.changeLanguage(language.code);
-                  if (langRedirect) {
-                    navigate(langRedirect);
-                  }
-                }}
+      {languages.length > 0 ? (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {languages.map((language) => (
+            <button
+              key={language.code}
+              className="text-left"
+              onClick={() => {
+                i18n.changeLanguage(language.code);
+                if (langRedirect) {
+                  navigate(langRedirect);
+                }
+              }}
+            >
+              <Card
+                className={cn(
+                  "flex min-h-28 items-center gap-4 p-5 transition-[border-color,background-color]",
+                  currentLanguage === language.code
+                    ? "border-ring bg-secondary"
+                    : "hover:border-ring",
+                )}
               >
-                <div
-                  className={`flex-1 flex flex-col items-center gap-2 w-full px-4 py-3 rounded-xl border transition-all duration-250 font-medium cursor-pointer ${
-                    currentLanguage === language.code
-                      ? "bg-accent/20 border-ring text-primary shadow-sm"
-                      : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  <language.flag className="size-10 rounded-full bg-secondary p-0.5" />
-                  <span>
-                    ({language.code.toUpperCase()}) {language.name}
-                  </span>
+                <language.flag className="size-11 shrink-0 rounded-full border border-border bg-card p-0.5" />
+                <div>
+                  <p className="text-2xl font-semibold text-foreground">
+                    {language.name}
+                  </p>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                    {language.code}
+                  </p>
                 </div>
-              </motion.button>
-            ))}
-          </motion.div>
-        ) : (
-          <p className="bg-card border-2 border-dashed border-border rounded-2xl p-12 text-center text-muted-foreground">
-            {t("pages.selectLanguage.noLanguages")}
-          </p>
-        )}
-      </div>
-    </div>
+              </Card>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <StatePanel message={t("pages.selectLanguage.noLanguages")} />
+      )}
+    </motion.div>
   );
 }

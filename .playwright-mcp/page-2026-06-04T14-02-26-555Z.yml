@@ -1,0 +1,81 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link "Patryk Znamirowski Student developer portfolio" [ref=e6] [cursor=pointer]:
+          - /url: /home
+          - paragraph [ref=e7]: Patryk Znamirowski
+          - paragraph [ref=e8]: Student developer portfolio
+        - navigation [ref=e9]:
+          - link "Start" [ref=e10] [cursor=pointer]:
+            - /url: /home
+            - img [ref=e11]
+            - text: Start
+          - link "Profil" [ref=e14] [cursor=pointer]:
+            - /url: /about
+            - img [ref=e15]
+            - text: Profil
+          - link "Case Studies" [ref=e18] [cursor=pointer]:
+            - /url: /projects
+            - img [ref=e19]
+            - text: Case Studies
+          - link "Glukose" [ref=e22] [cursor=pointer]:
+            - /url: /glucose
+            - img [ref=e23]
+            - text: Glukose
+        - generic [ref=e26]:
+          - link "Sprache wechseln" [ref=e27] [cursor=pointer]:
+            - /url: /language
+            - button "Sprache wechseln" [ref=e28]:
+              - img [ref=e29]
+          - button "Thema wechseln" [ref=e33]:
+            - img [ref=e34]
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - paragraph [ref=e40]: Profil
+            - heading "Über mich" [level=1] [ref=e41]
+            - paragraph [ref=e42]: Ich bin Patryk Znamirowski, Schüler und lerne Full-Stack-Entwicklung durch echte Projekte.
+          - generic [ref=e43]:
+            - paragraph [ref=e44]: Ich baue gerne nützliche Web-Apps, die lesbar, einfach zu bedienen und gut strukturiert sind.
+            - paragraph [ref=e45]: Mein aktueller Stack ist React, TypeScript, NestJS, Tailwind und typisierte API-Verträge. Dieses Portfolio zeigt, was ich lerne und wie ich Frontend- und Backend-Code strukturiere.
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - img [ref=e49]
+            - paragraph [ref=e52]: Klarheit zuerst
+            - paragraph [ref=e53]: Jeder Screen sollte aktuellen Zustand und nächste Aktion eindeutig zeigen.
+          - generic [ref=e54]:
+            - img [ref=e56]
+            - paragraph [ref=e59]: Zuverlässige Struktur
+            - paragraph [ref=e60]: Wiederverwendbare Komponenten, typisierte Daten und konsistente Zustände halten das Frontend skalierbar.
+          - generic [ref=e61]:
+            - img [ref=e63]
+            - paragraph [ref=e68]: Daten mit Kontext
+            - paragraph [ref=e69]: Kennzahlen brauchen Labels, Schwellenwerte, Einheiten und Hierarchie.
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: Schwerpunkte
+            - paragraph [ref=e73]: Die stärksten Bereiche dieses Portfolios
+          - generic [ref=e74]:
+            - generic [ref=e75]: Klare Portfolio- und Projektseiten
+            - generic [ref=e76]: Full-Stack-Anwendungen mit TypeScript
+            - generic [ref=e77]: Lesbare API-getriebene Interfaces
+            - generic [ref=e78]: Responsive Client-Produkte
+    - contentinfo [ref=e79]:
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - paragraph [ref=e82]: Patryk Znamirowski
+          - paragraph [ref=e83]: Ein minimales Full-Stack-Portfolio eines Schülers, der React, TypeScript und NestJS lernt.
+        - generic [ref=e84]:
+          - link "Profil" [ref=e85] [cursor=pointer]:
+            - /url: /about
+          - link "Case Studies" [ref=e86] [cursor=pointer]:
+            - /url: /projects
+          - link "Glukosedaten" [ref=e87] [cursor=pointer]:
+            - /url: /glucose
+        - paragraph [ref=e88]: © 2026 Patryk Znamirowski. Alle Rechte vorbehalten.
+  - generic [ref=e89]:
+    - img [ref=e91]
+    - button "Open Tanstack query devtools" [ref=e139] [cursor=pointer]:
+      - img [ref=e140]

@@ -1,167 +1,138 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { ArrowRight, FoldersIcon, CandyIcon, UserIcon } from "lucide-react";
+import {
+  ActivitySquare,
+  ArrowRight,
+  ChartNoAxesCombined,
+  FoldersIcon,
+  ShieldCheck,
+  UserIcon,
+} from "lucide-react";
+import { Badge, Card, SectionHeader } from "@/app/components/ui.tsx";
+
+const capabilities = [
+  { key: "cleanInterfaces", icon: ActivitySquare },
+  { key: "dataVisualization", icon: ChartNoAxesCombined },
+  { key: "secureArchitecture", icon: ShieldCheck },
+];
+
+const sections = [
+  { icon: UserIcon, key: "aboutme", link: "/about" },
+  { icon: FoldersIcon, key: "projects", link: "/projects" },
+  { icon: ActivitySquare, key: "glucose", link: "/glucose" },
+];
 
 export function HomePage() {
   const { t } = useTranslation();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.5 },
-    },
-    hover: {
-      y: -8,
-      transition: { duration: 0.3 },
-    },
-  };
-
-  const sections = [
-    {
-      icon: UserIcon,
-      key: "aboutme",
-      link: "/about",
-    },
-    {
-      icon: FoldersIcon,
-      key: "projects",
-      link: "/projects",
-    },
-    {
-      icon: CandyIcon,
-      key: "glucose",
-      link: "/glucose",
-    },
-  ];
-
   return (
-    <div className="flex flex-col justify-start items-center w-full">
-      <motion.div
-        className="space-y-8 w-full max-w-2xl"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Hero Section */}
-        <motion.div className="space-y-4" variants={itemVariants}>
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold text-primary leading-tight"
-            variants={itemVariants}
-          >
-            {t("pages.user.home.title")}
-          </motion.h1>
-          <motion.p
-            className="text-lg text-muted-foreground leading-relaxed"
-            variants={itemVariants}
-          >
-            {t("pages.user.home.subtitle")}
-          </motion.p>
-        </motion.div>
+    <motion.div
+      className="w-full space-y-12"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+    >
+      <section className="grid min-h-[calc(100dvh-13rem)] items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="space-y-8">
+          <SectionHeader
+            eyebrow={t("pages.user.home.eyebrow")}
+            title={t("pages.user.home.title")}
+            description={t("pages.user.home.subtitle")}
+          />
 
-        {/* Call to Action Cards */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4"
-          variants={containerVariants}
-        >
-          {sections.map((section, index) => {
-            const Icon = section.icon;
-            return (
-              <motion.div
-                key={section.link}
-                variants={cardVariants}
-                whileHover="hover"
-                custom={index}
-              >
-                <Link
-                  to={section.link}
-                  className="flex flex-col h-full p-5 bg-card border border-border rounded-xl hover:border-ring shadow-sm hover:shadow-md group transition-all duration-300 overflow-hidden relative"
-                >
-                  {/* Background gradient effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                  {/* Content */}
-                  <div className="relative z-10 flex flex-col items-start gap-3">
-                    <motion.div
-                      className="p-3 bg-accent/10 rounded-lg group-hover:bg-accent/20 transition-colors"
-                      whileHover={{ rotate: 5, scale: 1.1 }}
-                    >
-                      <Icon
-                        size={24}
-                        className="text-accent group-hover:text-accent transition-colors"
-                      />
-                    </motion.div>
-
-                    <div className="space-y-2">
-                      <h3 className="font-semibold text-primary group-hover:text-accent transition-colors">
-                        {t(`pages.user.${section.key}.title`)}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {t(`pages.user.home.sections.${section.key}.description`)}
-                      </p>
-                    </div>
-
-                    <motion.div
-                      className="mt-auto flex items-center gap-2 text-accent text-sm font-medium"
-                      whileHover={{ x: 4 }}
-                    >
-                      {t("pages.user.home.explore")}
-                      <ArrowRight size={16} />
-                    </motion.div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-
-        {/* Additional Info Section */}
-        <motion.div
-          className="bg-card border border-border rounded-xl p-6 md:p-8"
-          variants={itemVariants}
-        >
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-primary">
-              {t("pages.user.home.welcome")}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              {t("pages.user.home.welcomeDescription")}
-            </p>
-            <div className="flex flex-wrap gap-2 pt-4">
-              {(t("pages.user.home.skills", { returnObjects: true }) as string[]).map((skill: string) => (
-                <span
-                  key={skill}
-                  className="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-medium"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/glucose"
+              className="inline-flex min-h-10 items-center gap-2 rounded-md border border-primary bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              {t("pages.user.home.primaryCta")}
+              <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              to="/projects"
+              className="inline-flex min-h-10 items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-ring hover:bg-secondary"
+            >
+              {t("pages.user.home.secondaryCta")}
+            </Link>
           </div>
-        </motion.div>
-      </motion.div>
-    </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {(t("pages.user.home.proofPoints", {
+              returnObjects: true,
+            }) as string[]).map((point) => (
+              <Card key={point} className="p-4">
+                <p className="text-xs font-medium text-muted-foreground">
+                  {point}
+                </p>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        <Card className="overflow-hidden p-6">
+          <div className="border-b border-border pb-5">
+            <Badge tone="accent">{t("pages.user.home.panel.badge")}</Badge>
+            <p className="mt-5 text-3xl font-semibold tracking-[-0.01em] text-foreground">
+              {t("pages.user.home.panel.title")}
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              {t("pages.user.home.panel.description")}
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4">
+            {capabilities.map((capability) => {
+              const Icon = capability.icon;
+              return (
+                <div
+                  key={capability.key}
+                  className="grid grid-cols-[2.5rem_1fr] gap-4 rounded-md border border-border bg-secondary/45 p-4"
+                >
+                  <span className="flex size-10 items-center justify-center rounded-md border border-accent/35 bg-accent/10 text-accent">
+                    <Icon className="size-5" />
+                  </span>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      {t(`pages.user.home.capabilities.${capability.key}.title`)}
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      {t(
+                        `pages.user.home.capabilities.${capability.key}.description`,
+                      )}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Card>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-3">
+        {sections.map((section) => {
+          const Icon = section.icon;
+
+          return (
+            <Link key={section.link} to={section.link} className="group">
+              <Card className="h-full p-5 transition-[border-color,transform] duration-200 group-hover:-translate-y-1 group-hover:border-ring">
+                <div className="mb-8 flex items-center justify-between">
+                  <span className="flex size-10 items-center justify-center rounded-md border border-border bg-secondary text-muted-foreground">
+                    <Icon className="size-5" />
+                  </span>
+                  <ArrowRight className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-accent" />
+                </div>
+                <p className="text-2xl font-semibold text-foreground">
+                  {t(`pages.user.${section.key}.title`)}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {t(`pages.user.home.sections.${section.key}.description`)}
+                </p>
+              </Card>
+            </Link>
+          );
+        })}
+      </section>
+    </motion.div>
   );
 }
