@@ -1,21 +1,11 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import { BadgeQuestionMarkIcon } from "lucide-react";
+import en from "./locales/en.ts";
+import pl from "./locales/pl.ts";
+import de from "./locales/de.ts";
 
-const locales = import.meta.glob<{ default: any }>("./locales/*.ts", {
-  eager: true,
-});
-
-const resources = Object.entries(locales).reduce(
-  (acc, [path, module]) => {
-    const langCode = path.match(/\/locales\/(\w+)\.ts/)?.[1];
-    if (langCode) {
-      acc[langCode] = module.default;
-    }
-    return acc;
-  },
-  {} as Record<string, any>,
-);
+const resources = { en, pl, de } as const satisfies Record<string, any>;
 let languages: languageItem[] = [];
 
 type ResourceKey = keyof typeof resources;

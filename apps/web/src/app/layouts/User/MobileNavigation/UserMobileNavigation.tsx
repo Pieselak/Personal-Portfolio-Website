@@ -12,11 +12,13 @@ import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import useTheme from "@/app/hooks/useTheme.ts";
 
-type UserMobileHeaderProps = {
+type UserMobileNavigationProps = {
   navigationItems: navigationItem[];
 };
 
-export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
+export function UserMobileNavigation({
+  navigationItems,
+}: UserMobileNavigationProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useTheme();
   const { pathname } = useLocation();
@@ -24,8 +26,8 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
 
   const menuVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.5 } },
   };
 
   const itemVariants = {
@@ -122,7 +124,7 @@ export function UserMobileHeader({ navigationItems }: UserMobileHeaderProps) {
                 >
                   <Link
                     to={navigationItem.url}
-                    className={`flex gap-3 items-center px-3 py-2 w-full border border-border rounded-md cursor-pointer transition-[border-color, background-color] duration-250 ${
+                    className={`flex gap-3 items-center px-3 py-2 w-full border border-border rounded-md cursor-pointer font-semibold transition-[border-color, background-color] duration-250 ${
                       pathname.split("/")[1] === navigationItem.url.substring(1)
                         ? "border-ring bg-muted text-accent-foreground"
                         : "bg-card text-muted-foreground hover:border-ring hover:text-primary"

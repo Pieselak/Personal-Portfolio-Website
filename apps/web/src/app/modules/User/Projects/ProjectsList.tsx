@@ -6,16 +6,18 @@ import {
   type Project,
   projects,
 } from "@/app/modules/User/Projects/Projects.enums.ts";
+import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
 
 export function MyProjectsListPage() {
   const { t } = useTranslation();
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 20, scale: 0.9 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.25 },
+      scale: 1,
+      transition: { duration: 0.3 },
     },
   };
 
@@ -29,17 +31,12 @@ export function MyProjectsListPage() {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center">
-      <div className="space-y-6">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            {t("pages.user.projects.title")}
-          </h1>
-          <p className="text-muted-foreground">
-            {t("pages.user.projects.subtitle")}
-          </p>
-        </div>
-
+    <>
+      <UserHeader
+        title={t("pages.user.projects.title")}
+        subtitle={t("pages.user.projects.subtitle")}
+      />
+      <div className="space-y-6 w-full md:w-auto min-w-0 md:min-w-xl">
         {/* Projects Grid */}
         {projects.length > 0 ? (
           <motion.div
@@ -54,7 +51,7 @@ export function MyProjectsListPage() {
                 custom={index}
                 variants={itemVariants}
                 whileHover={{
-                  y: -4,
+                  y: -5,
                 }}
                 className="h-full"
               >
@@ -143,6 +140,6 @@ export function MyProjectsListPage() {
           </p>
         )}
       </div>
-    </div>
+    </>
   );
 }

@@ -16,13 +16,15 @@ import type {
   AxiosResponse,
   HeadersDefaults,
   ResponseType,
-} from "axios";
-import axios from "axios";
+} from 'axios';
+import axios from 'axios';
 
 export type QueryParamsType = Record<string | number, any>;
 
-export interface FullRequestParams
-  extends Omit<AxiosRequestConfig, "data" | "params" | "url" | "responseType"> {
+export interface FullRequestParams extends Omit<
+  AxiosRequestConfig,
+  'data' | 'params' | 'url' | 'responseType'
+> {
   /** set parameter to `true` for call `securityWorker` for this request */
   secure?: boolean;
   /** request path */
@@ -39,11 +41,13 @@ export interface FullRequestParams
 
 export type RequestParams = Omit<
   FullRequestParams,
-  "body" | "method" | "query" | "path"
+  'body' | 'method' | 'query' | 'path'
 >;
 
-export interface ApiConfig<SecurityDataType = unknown>
-  extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
+export interface ApiConfig<SecurityDataType = unknown> extends Omit<
+  AxiosRequestConfig,
+  'data' | 'cancelToken'
+> {
   securityWorker?: (
     securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
@@ -52,17 +56,17 @@ export interface ApiConfig<SecurityDataType = unknown>
 }
 
 export enum ContentType {
-  Json = "application/json",
-  JsonApi = "application/vnd.api+json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
+  Json = 'application/json',
+  JsonApi = 'application/vnd.api+json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
+  Text = 'text/plain',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
   public instance: AxiosInstance;
   private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
+  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker'];
   private secure?: boolean;
   private format?: ResponseType;
 
@@ -74,7 +78,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }: ApiConfig<SecurityDataType> = {}) {
     this.instance = axios.create({
       ...axiosConfig,
-      baseURL: axiosConfig.baseURL || "https://api.libreview.io",
+      baseURL: axiosConfig.baseURL || 'https://api.libreview.io',
     });
     this.secure = secure;
     this.format = format;
@@ -108,7 +112,7 @@ export class HttpClient<SecurityDataType = unknown> {
   }
 
   protected stringifyFormItem(formItem: unknown) {
-    if (typeof formItem === "object" && formItem !== null) {
+    if (typeof formItem === 'object' && formItem !== null) {
       return JSON.stringify(formItem);
     } else {
       return `${formItem}`;
@@ -146,7 +150,7 @@ export class HttpClient<SecurityDataType = unknown> {
     ...params
   }: FullRequestParams): Promise<AxiosResponse<T>> => {
     const secureParams =
-      ((typeof secure === "boolean" ? secure : this.secure) &&
+      ((typeof secure === 'boolean' ? secure : this.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
       {};
@@ -157,7 +161,7 @@ export class HttpClient<SecurityDataType = unknown> {
       type === ContentType.FormData &&
       body &&
       body !== null &&
-      typeof body === "object"
+      typeof body === 'object'
     ) {
       body = this.createFormData(body as Record<string, unknown>);
     }
@@ -166,7 +170,7 @@ export class HttpClient<SecurityDataType = unknown> {
       type === ContentType.Text &&
       body &&
       body !== null &&
-      typeof body !== "string"
+      typeof body !== 'string'
     ) {
       body = JSON.stringify(body);
     }
@@ -175,7 +179,7 @@ export class HttpClient<SecurityDataType = unknown> {
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
-        ...(type ? { "Content-Type": type } : {}),
+        ...(type ? { 'Content-Type': type } : {}),
       },
       params: query,
       responseType: responseFormat,
@@ -216,7 +220,7 @@ export class LibreAPI<
     ) =>
       this.request<User | LoginRedirect | LoginTerms, any>({
         path: `/llu/auth/login`,
-        method: "POST",
+        method: 'POST',
         body: data,
         type: ContentType.Json,
         ...params,
@@ -240,10 +244,10 @@ export class LibreAPI<
         any
       >({
         path: `/llu/connections`,
-        method: "GET",
+        method: 'GET',
         body: data,
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -272,9 +276,9 @@ export class LibreAPI<
         any
       >({
         path: `/llu/connections/${patientId}/graph`,
-        method: "GET",
+        method: 'GET',
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -299,9 +303,9 @@ export class LibreAPI<
         any
       >({
         path: `/llu/connections/${patientId}/logbook`,
-        method: "GET",
+        method: 'GET',
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -331,9 +335,9 @@ export class LibreAPI<
         any
       >({
         path: `/llu/notifications/settings/${connectionId}`,
-        method: "GET",
+        method: 'GET',
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -373,7 +377,7 @@ export class LibreAPI<
                 ValueMember?: string;
               }[];
             };
-            "LSL-ServiceURL"?: string;
+            'LSL-ServiceURL'?: string;
             LibreLinkResourceKey?: string;
             MinVersion?: string;
             PartnerApplicationKeys?: string[];
@@ -422,59 +426,59 @@ export class LibreAPI<
             lluAppIOS?: string;
             lluPrivacyPolicyHtml?: {
               ar?: string;
-              "ar-sa"?: string;
+              'ar-sa'?: string;
               cs?: string;
-              "cs-cz"?: string;
+              'cs-cz'?: string;
               da?: string;
-              "da-dk"?: string;
+              'da-dk'?: string;
               de?: string;
-              "de-de"?: string;
+              'de-de'?: string;
               default?: string;
               el?: string;
-              "el-gr"?: string;
+              'el-gr'?: string;
               en?: string;
-              "en-gb"?: string;
-              "en-us"?: string;
+              'en-gb'?: string;
+              'en-us'?: string;
               es?: string;
-              "es-cl"?: string;
-              "es-co"?: string;
-              "es-es"?: string;
-              "es-mx"?: string;
+              'es-cl'?: string;
+              'es-co'?: string;
+              'es-es'?: string;
+              'es-mx'?: string;
               fi?: string;
-              "fi-fi"?: string;
+              'fi-fi'?: string;
               fr?: string;
-              "fr-ca"?: string;
-              "fr-fr"?: string;
+              'fr-ca'?: string;
+              'fr-fr'?: string;
               he?: string;
-              "he-il"?: string;
+              'he-il'?: string;
               hr?: string;
-              "hr-hr"?: string;
+              'hr-hr'?: string;
               it?: string;
-              "it-it"?: string;
+              'it-it'?: string;
               ja?: string;
-              "ja-jp"?: string;
+              'ja-jp'?: string;
               nb?: string;
-              "nb-no"?: string;
+              'nb-no'?: string;
               nl?: string;
-              "nl-nl"?: string;
+              'nl-nl'?: string;
               pl?: string;
-              "pl-pl"?: string;
+              'pl-pl'?: string;
               pt?: string;
-              "pt-br"?: string;
-              "pt-pt"?: string;
+              'pt-br'?: string;
+              'pt-pt'?: string;
               ru?: string;
-              "ru-ru"?: string;
+              'ru-ru'?: string;
               sk?: string;
-              "sk-sk"?: string;
+              'sk-sk'?: string;
               sl?: string;
-              "sl-si"?: string;
+              'sl-si'?: string;
               sv?: string;
-              "sv-se"?: string;
+              'sv-se'?: string;
               tr?: string;
-              "tr-tr"?: string;
+              'tr-tr'?: string;
               zh?: string;
-              "zh-cn"?: string;
-              "zh-tw"?: string;
+              'zh-cn'?: string;
+              'zh-tw'?: string;
             };
             lluPrivacyPolicyVersions?: {
               default?: string;
@@ -484,59 +488,59 @@ export class LibreAPI<
             lluSupportMain?: string;
             lluToUHtml?: {
               ar?: string;
-              "ar-sa"?: string;
+              'ar-sa'?: string;
               cs?: string;
-              "cs-cz"?: string;
+              'cs-cz'?: string;
               da?: string;
-              "da-dk"?: string;
+              'da-dk'?: string;
               de?: string;
-              "de-de"?: string;
+              'de-de'?: string;
               default?: string;
               el?: string;
-              "el-gr"?: string;
+              'el-gr'?: string;
               en?: string;
-              "en-gb"?: string;
-              "en-us"?: string;
+              'en-gb'?: string;
+              'en-us'?: string;
               es?: string;
-              "es-cl"?: string;
-              "es-co"?: string;
-              "es-es"?: string;
-              "es-mx"?: string;
+              'es-cl'?: string;
+              'es-co'?: string;
+              'es-es'?: string;
+              'es-mx'?: string;
               fi?: string;
-              "fi-fi"?: string;
+              'fi-fi'?: string;
               fr?: string;
-              "fr-ca"?: string;
-              "fr-fr"?: string;
+              'fr-ca'?: string;
+              'fr-fr'?: string;
               he?: string;
-              "he-il"?: string;
+              'he-il'?: string;
               hr?: string;
-              "hr-hr"?: string;
+              'hr-hr'?: string;
               it?: string;
-              "it-it"?: string;
+              'it-it'?: string;
               ja?: string;
-              "ja-jp"?: string;
+              'ja-jp'?: string;
               nb?: string;
-              "nb-no"?: string;
+              'nb-no'?: string;
               nl?: string;
-              "nl-nl"?: string;
+              'nl-nl'?: string;
               pl?: string;
-              "pl-pl"?: string;
+              'pl-pl'?: string;
               pt?: string;
-              "pt-br"?: string;
-              "pt-pt"?: string;
+              'pt-br'?: string;
+              'pt-pt'?: string;
               ru?: string;
-              "ru-ru"?: string;
+              'ru-ru'?: string;
               sk?: string;
-              "sk-sk"?: string;
+              'sk-sk'?: string;
               sl?: string;
-              "sl-si"?: string;
+              'sl-si'?: string;
               sv?: string;
-              "sv-se"?: string;
+              'sv-se'?: string;
               tr?: string;
-              "tr-tr"?: string;
+              'tr-tr'?: string;
               zh?: string;
-              "zh-cn"?: string;
-              "zh-tw"?: string;
+              'zh-cn'?: string;
+              'zh-tw'?: string;
             };
             lluToUVersions?: {
               default?: string;
@@ -630,19 +634,19 @@ export class LibreAPI<
         any
       >({
         path: `/llu/config/country`,
-        method: "GET",
+        method: 'GET',
         query: query,
         body: data,
-        format: "json",
+        format: 'json',
         ...params,
       }),
   };
   auth = {
     /**
-     * @description Accept the Terms Of Use (TOU).
+     * @description Accept the TermsOfService Of Use (TOU).
      *
      * @name PostAuthContinueTou
-     * @summary Accept Terms
+     * @summary Accept TermsOfService
      * @request POST:/auth/continue/tou
      * @secure
      */
@@ -671,7 +675,7 @@ export class LibreAPI<
         any
       >({
         path: `/auth/continue/tou`,
-        method: "POST",
+        method: 'POST',
         secure: true,
         ...params,
       }),
@@ -710,7 +714,7 @@ export class LibreAPI<
         any
       >({
         path: `/user`,
-        method: "GET",
+        method: 'GET',
         body: data,
         secure: true,
         ...params,
@@ -738,10 +742,10 @@ export class LibreAPI<
         any
       >({
         path: `/account`,
-        method: "GET",
+        method: 'GET',
         body: data,
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
   };

@@ -22,7 +22,7 @@ export function MyProjectsDetailsPage() {
   const projectId = params.projectId ? parseInt(params.projectId) : null;
   const project = projects.find((p: Project) => p.id === projectId);
   if (!project) {
-    return <NotFoundPage message={t("user.myProjectsPage.projectNotFound")} />;
+    return <NotFoundPage message={t("pages.user.projects.projectNotFound")} />;
   }
 
   const statusStyles = {
@@ -47,7 +47,7 @@ export function MyProjectsDetailsPage() {
             className="inline-flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
           >
             <ArrowLeft size={18} />
-            <span>{t("user.myProjectsPage.returnToProjects")}</span>
+            <span>{t("pages.user.projects.returnToProjects")}</span>
           </Link>
         </motion.div>
 
@@ -76,7 +76,7 @@ export function MyProjectsDetailsPage() {
                 <span
                   className={`px-4 py-2 rounded-full text-sm font-semibold border ${statusStyles[project.status]}`}
                 >
-                  {t(`user.myProjectsPage.status.${project.status}`)}
+                  {t(`pages.user.projects.statuses.${project.status}`)}
                 </span>
               </div>
 
@@ -93,18 +93,18 @@ export function MyProjectsDetailsPage() {
                       className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-accent/20 border border-accent rounded-xl text-accent hover:bg-accent/30 font-medium transition-colors"
                     >
                       <LinkIcon size={18} />
-                      {t("user.myProjectsPage.sourceCodeAvailable")}
+                      {t("pages.user.projects.sourceCode.available")}
                     </motion.a>
                   ) : (
                     <div className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-muted border border-border rounded-xl text-muted-foreground font-medium">
                       <ExternalLink size={18} />
-                      {t("user.myProjectsPage.sourceCodeNotAvailable")}
+                      {t("pages.user.projects.sourceCode.notAvailable")}
                     </div>
                   )
                 ) : (
                   <div className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-muted border border-border rounded-xl text-muted-foreground font-medium">
                     <Lock size={18} />
-                    {t("user.myProjectsPage.sourceCodeClosed")}
+                    {t("pages.user.projects.sourceCode.closed")}
                   </div>
                 )}
               </div>
@@ -115,7 +115,7 @@ export function MyProjectsDetailsPage() {
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <Calendar size={16} />
                     <span className="font-medium uppercase tracking-wide">
-                      {t("user.myProjectsPage.started")}
+                      {t("pages.user.projects.startedAt")}
                     </span>
                   </div>
                   <p className="text-primary font-semibold">
@@ -144,7 +144,7 @@ export function MyProjectsDetailsPage() {
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Users size={16} />
                     <span className="font-medium uppercase tracking-wide text-sm">
-                      Zespół
+                      {t("pages.user.projects.team")}
                     </span>
                   </div>
                   <div className="space-y-2">
@@ -209,16 +209,16 @@ export function MyProjectsDetailsPage() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                    Status
+                    {t("pages.user.projects.status")}
                   </p>
                   <p className="text-sm font-semibold text-primary">
-                    {t(`user.myProjectsPage.status.${project.status}`)}
+                    {t(`pages.user.projects.statuses.${project.status}`)}
                   </p>
                 </div>
                 {project.tags && (
                   <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
                     <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                      Technologie
+                      {t("pages.user.projects.technologies")}
                     </p>
                     <p className="text-sm font-semibold text-primary">
                       {project.tags.length}

@@ -1,8 +1,15 @@
-import { BarChart3, LineChart, Clock, type LucideIcon } from "lucide-react";
+import {
+  BarChart3,
+  LineChart,
+  Clock,
+  type LucideIcon,
+  Syringe,
+} from "lucide-react";
 import type { ReactElement } from "react";
 import { GlucoseGraph } from "@/app/modules/User/Glucose/GlucoseGraph.tsx";
 import { GlucoseTimeInRange } from "@/app/modules/User/Glucose/GlucoseTimeInRange.tsx";
 import { GlucoseSummary } from "@/app/modules/User/Glucose/GlucoseSummary.tsx";
+import { GlucoseAboutDiabetes } from "@/app/modules/User/Glucose/GlucoseAboutDiabetes.tsx";
 
 export const navigationItems: Array<{
   label: string;
@@ -27,5 +34,11 @@ export const navigationItems: Array<{
     param: "summary",
     icon: BarChart3,
     element: <GlucoseSummary />,
+  },
+  {
+    label: "aboutDiabetes",
+    param: "about-diabetes",
+    icon: Syringe,
+    element: <GlucoseAboutDiabetes />,
   },
 ];

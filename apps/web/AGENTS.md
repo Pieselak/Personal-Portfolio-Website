@@ -422,7 +422,7 @@ export const MyComponent: React.FC<Props> = ({ prop1, prop2 }) => {
 ### Error Pages
 - **404 Not Found:** `NotFoundPage` - caught by wildcard route
 - **403 Forbidden:** `ForbiddenPage` - manual navigation to `/f`
-- **Maintenance:** `MaintenancePage` - manual navigation to `/m`
+- **Maintenance:** `ServerErrorPage` - manual navigation to `/m`
 - **Loading:** `LoadingPage` - Suspense fallback and loading states
 
 ### Error Handling Patterns

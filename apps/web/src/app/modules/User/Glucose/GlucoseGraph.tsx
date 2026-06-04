@@ -58,7 +58,7 @@ export function GlucoseGraph() {
       className="bg-card border border-border rounded-2xl p-6 md:p-8 space-y-5"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="flex flex-col gap-1">
         <h2 className="text-xl font-bold text-primary">
@@ -74,7 +74,12 @@ export function GlucoseGraph() {
       </div>
 
       <div className="h-80 w-full rounded-xl border border-border bg-muted/30 p-3">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minHeight="100px"
+          minWidth="100px"
+        >
           <AreaChart
             data={points}
             margin={{ top: 16, right: 12, left: -8, bottom: 8 }}

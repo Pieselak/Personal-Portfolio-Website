@@ -10,8 +10,8 @@ import {
 
 import useIsMobile from "@/app/hooks/useIsMobile.ts";
 import { UserFooter } from "@/app/layouts/User/Footer/UserFooter.tsx";
-import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
-import { UserMobileHeader } from "@/app/layouts/User/MobileHeader/UserMobileHeader.tsx";
+import { UserNavigation } from "@/app/layouts/User/Navigation/UserNavigation.tsx";
+import { UserMobileNavigation } from "@/app/layouts/User/MobileNavigation/UserMobileNavigation.tsx";
 
 export type navigationItem = {
   label: string;
@@ -33,11 +33,11 @@ export function UserLayout() {
 
   return (
     <MotionConfig transition={{ duration: 0.25, ease: "easeInOut" }}>
-      <div className="flex flex-col justify-start items-center min-h-dvh">
+      <div className="flex flex-col justify-start items-center min-h-dvh overflow-x-hidden">
         {isMobile ? (
-          <UserMobileHeader navigationItems={navigationItems} />
+          <UserMobileNavigation navigationItems={navigationItems} />
         ) : (
-          <UserHeader navigationItems={navigationItems} />
+          <UserNavigation navigationItems={navigationItems} />
         )}
 
         <AnimatePresence
@@ -47,10 +47,16 @@ export function UserLayout() {
           <motion.main
             key={location.pathname}
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            animate={{
+              opacity: 1,
+              x: 0,
+            }}
+            exit={{
+              opacity: 0,
+              x: 20,
+            }}
             transition={{ ease: "easeInOut" }}
-            className="flex flex-1 justify-center items-start overflow-hidden p-3 max-w-6xl w-full"
+            className="flex flex-col flex-1 justify-start items-center overflow-hidden gap-3 md:gap-6 p-3 md:p-6 max-w-6xl w-full"
           >
             {element}
           </motion.main>

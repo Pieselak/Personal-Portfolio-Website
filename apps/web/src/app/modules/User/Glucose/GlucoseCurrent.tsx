@@ -1,5 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { Activity, Clock, Radio, RefreshCw } from "lucide-react";
+import {
+  Activity,
+  Battery,
+  BatteryWarning,
+  ClockIcon,
+  CloudSync,
+  RadioIcon,
+  RefreshCw,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import {
   useGlucoseCurrent,
@@ -80,6 +88,11 @@ export function GlucoseCurrent() {
     return (
       <GlucoseErrorState message={t("pages.user.glucose.errors.current")} />
     );
+  }
+
+  function getBarSize(activatedAt: number, expireAt: number, expireIn: number) {
+    const maxTime = expireAt - activatedAt;
+    return `${Math.round((expireIn / maxTime) * 100)}%`;
   }
 
   const current = currentQuery.data;
@@ -180,7 +193,7 @@ export function GlucoseCurrent() {
 
         <div className="rounded-xl border border-border bg-muted/40 p-4 md:col-span-2">
           <div className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-wide text-muted-foreground">
-            <Radio className="size-4" />
+            <RadioIcon className="size-4" />
             {t("pages.user.glucose.current.sensor")}
           </div>
 
@@ -201,7 +214,7 @@ export function GlucoseCurrent() {
                   className="h-20 w-20 rounded-xl border border-border bg-card object-contain p-2"
                 />
               )}
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex flex-col gap-2 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="font-semibold text-primary">
                     {sensor.name ?? t("pages.user.glucose.current.noSensor")}
@@ -218,16 +231,50 @@ export function GlucoseCurrent() {
                       : t("pages.user.glucose.current.inactive")}
                   </span>
                 </div>
-                <div className="mt-2 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2">
-                  <span>
-                    {t("pages.user.glucose.current.lastUpload")}:{" "}
-                    {formatGlucoseDate(sensor.lastUploadAt, i18n.language)}
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <Clock className="size-3.5" />
-                    {t("pages.user.glucose.current.expiresIn")}:{" "}
-                    {formatGlucoseDuration(sensor.expireIn, i18n.language)}
-                  </span>
+                <div className="grid gap-1 text-sm text-muted-foreground sm:grid-cols-3">
+                  <div className="flex max-sm:gap-1 sm:block">
+                    <p className="flex gap-1 items-center">
+                      <CloudSync size={18} />
+                      {t("pages.user.glucose.current.lastUpload")}
+                    </p>
+                    <p>
+                      {formatGlucoseDate(sensor.lastUploadAt, i18n.language)}
+                    </p>
+                  </div>
+                  <div className="flex max-sm:gap-1 sm:block">
+                    <p className="flex gap-1 items-center">
+                      <ClockIcon size={18} />
+                      {t("pages.user.glucose.current.activatedAt")}
+                    </p>
+                    <p>
+                      {formatGlucoseDate(sensor.activatedAt, i18n.language)}
+                    </p>
+                  </div>
+                  <div className="flex max-sm:gap-1 sm:block">
+                    <p className="flex gap-1 items-center">
+                      {(sensor.expireIn ?? 0) > 86400000 ? (
+                        <Battery size={18} />
+                      ) : (
+                        <BatteryWarning size={18} />
+                      )}
+                      {t("pages.user.glucose.current.expiresIn")}
+                    </p>
+                    <p>
+                      {formatGlucoseDuration(sensor.expireIn, i18n.language)}
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-card border border-border w-full h-3 rounded-xl overflow-hidden transition-width ">
+                  <div
+                    className={`${(sensor.expireIn ?? 0) > 86400000 ? "bg-primary" : "bg-red-glucose"} h-full`}
+                    style={{
+                      width: getBarSize(
+                        sensor.activatedAt ?? 0,
+                        sensor.expireAt ?? 0,
+                        sensor.expireIn ?? 0,
+                      ),
+                    }}
+                  ></div>
                 </div>
               </div>
             </div>

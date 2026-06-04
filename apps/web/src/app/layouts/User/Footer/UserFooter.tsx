@@ -7,7 +7,7 @@ export function UserFooter() {
   const { t } = useTranslation();
   const footerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
   };
 
   return (
@@ -15,7 +15,7 @@ export function UserFooter() {
       initial="hidden"
       animate="visible"
       variants={footerVariants}
-      className="w-full bg-background border-t border-border"
+      className="w-full bg-background border-t border-border z-50"
     >
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Copyright - Top */}
@@ -30,19 +30,19 @@ export function UserFooter() {
         {/* Links - Bottom */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-sm text-muted-foreground">
           <Link
-            to="contact"
+            to={`mailto:${import.meta.env.VITE_CONTACT_EMAIL}`}
             className="hover:text-primary transition-colors duration-250"
           >
             {t("layouts.user.footer.contact")}
           </Link>
-          <span className="hidden sm:inline text-border/50">•</span>
+          <span className="hidden sm:inline text-border">•</span>
           <Link
             to="terms"
             className="hover:text-primary transition-colors duration-250"
           >
             {t("layouts.user.footer.termsOfService")}
           </Link>
-          <span className="hidden sm:inline text-border/50">•</span>
+          <span className="hidden sm:inline text-border">•</span>
           <Link
             to="privacy"
             className="hover:text-primary transition-colors duration-250"

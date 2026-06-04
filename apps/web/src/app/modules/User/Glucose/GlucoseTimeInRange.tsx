@@ -43,7 +43,7 @@ export function GlucoseTimeInRange() {
       className="bg-card border border-border rounded-2xl p-6 md:p-8 space-y-5"
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="flex flex-col gap-1">
         <h2 className="text-xl font-bold text-primary">
