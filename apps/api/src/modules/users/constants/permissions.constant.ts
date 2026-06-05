@@ -15,4 +15,5 @@ export const PERMISSIONS = [
 export type PermissionCode = (typeof PERMISSIONS)[number];
 
 export const DEFAULT_USER_ROLE = 'USER';
+export const DEFAULT_CONTRIBUTOR_ROLE = 'CONTRIBUTOR';
 export const DEFAULT_ADMIN_ROLE = 'ADMIN';

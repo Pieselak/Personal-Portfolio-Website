@@ -8,6 +8,7 @@ const de = {
   translation: {
     roles: {
       administrator: "Administrator",
+      contributor: "Mitwirkender",
       user: "Benutzer",
     },
 

@@ -11,6 +11,7 @@ import { UserEntity } from '../entities/user.entity';
 import { UserResponse } from '../dto/response/user.dto';
 import {
   DEFAULT_ADMIN_ROLE,
+  DEFAULT_CONTRIBUTOR_ROLE,
   DEFAULT_USER_ROLE,
   PERMISSIONS,
 } from '../constants/permissions.constant';
@@ -31,6 +32,11 @@ export class UsersService implements OnModuleInit {
     );
 
     await this.repository.upsertRole(DEFAULT_USER_ROLE, 'user', []);
+    await this.repository.upsertRole(
+      DEFAULT_CONTRIBUTOR_ROLE,
+      'contributor',
+      [],
+    );
     await this.repository.upsertRole(
       DEFAULT_ADMIN_ROLE,
       'administrator',
