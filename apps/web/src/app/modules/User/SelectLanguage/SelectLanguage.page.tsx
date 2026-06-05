@@ -1,8 +1,11 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import i18n, { getAvailableLanguages } from "@/i18n.ts";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
+import { Reveal } from "@/app/components/motion/Reveal.tsx";
+import { PageShell } from "@/app/components/ui/PageShell.tsx";
 import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
+import { LanguageEmptyState } from "@/app/modules/User/SelectLanguage/components/LanguageEmptyState.tsx";
+import { LanguageList } from "@/app/modules/User/SelectLanguage/components/LanguageList.tsx";
 
 export function SelectLanguagePage() {
   const { t } = useTranslation();
@@ -13,58 +16,32 @@ export function SelectLanguagePage() {
   const languages = getAvailableLanguages();
   const currentLanguage = i18n.language;
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 },
-  };
+  function handleSelectLanguage(code: string) {
+    i18n.changeLanguage(code);
+
+    if (langRedirect) {
+      navigate(langRedirect);
+    }
+  }
 
   return (
-    <div className="space-y-6 w-full md:w-auto min-w-0 md:min-w-xl">
+    <PageShell>
       <UserHeader
         title={t("pages.selectLanguage.title")}
         subtitle={t("pages.selectLanguage.subtitle")}
       />
 
-      {languages.length > 0 ? (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          transition={{ staggerChildren: 0.1 }}
-          className="flex flex-wrap justify-center items-center gap-2.5"
-        >
-          {languages.map((language, index) => (
-            <motion.button
-              key={language.code}
-              custom={index}
-              variants={itemVariants}
-              className={`grow min-w-26`}
-              onClick={() => {
-                i18n.changeLanguage(language.code);
-                if (langRedirect) {
-                  navigate(langRedirect);
-                }
-              }}
-            >
-              <div
-                className={`flex-1 flex flex-col items-center gap-2 w-full px-4 py-3 rounded-xl border transition-all duration-250 font-medium cursor-pointer ${
-                  currentLanguage === language.code
-                    ? "bg-accent/20 border-ring text-primary"
-                    : "bg-muted/50 border-border text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                <language.flag className="size-10 rounded-full bg-secondary p-0.5" />
-                <span>
-                  ({language.code.toUpperCase()}) {language.name}
-                </span>
-              </div>
-            </motion.button>
-          ))}
-        </motion.div>
-      ) : (
-        <p className="bg-card border-2 border-dashed border-border rounded-2xl p-12 text-center text-muted-foreground">
-          {t("pages.selectLanguage.noLanguages")}
-        </p>
-      )}
-    </div>
+      <Reveal>
+        {languages.length > 0 ? (
+          <LanguageList
+            languages={languages}
+            currentLanguage={currentLanguage}
+            onSelectLanguage={handleSelectLanguage}
+          />
+        ) : (
+          <LanguageEmptyState message={t("pages.selectLanguage.noLanguages")} />
+        )}
+      </Reveal>
+    </PageShell>
   );
 }

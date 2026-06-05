@@ -49,7 +49,85 @@ const de = {
         noLanguages: "Derzeit sind keine Sprachen verfügbar.",
       },
 
+      auth: {
+        fields: {
+          name: "Vollständiger Name",
+          email: "E-Mail-Adresse",
+          password: "Passwort",
+          confirmPassword: "Passwort wiederholen",
+        },
+        placeholders: {
+          name: "Max Mustermann",
+          email: "max@example.com",
+          password: "Mindestens 8 Zeichen",
+          confirmPassword: "Passwort wiederholen",
+        },
+        actions: {
+          showPassword: "Passwort anzeigen",
+          hidePassword: "Passwort ausblenden",
+        },
+        errors: {
+          name: "Gib deinen vollständigen Namen ein.",
+          email: "Gib eine gültige E-Mail-Adresse ein.",
+          passwordRequired: "Gib dein Passwort ein.",
+          passwordLength: "Das Passwort muss mindestens 8 Zeichen haben.",
+          passwordMatch: "Die Passwörter müssen übereinstimmen.",
+          terms: "Akzeptiere die Nutzungsbedingungen.",
+        },
+        login: {
+          title: "Anmelden",
+          subtitle:
+            "Öffne den Nutzerbereich und kehre ohne unnötigen Lärm zu deinen Einstellungen zurück.",
+          eyebrow: "Zugang",
+          formTitle: "Einloggen",
+          description:
+            "Ein kurzes, klares Formular im Stil der restlichen App und bereit für die API-Anbindung.",
+          remember: "Angemeldet bleiben",
+          forgotPassword: "Passwort vergessen?",
+          submit: "Einloggen",
+          noAccount: "Noch kein Konto?",
+          createAccount: "Konto erstellen",
+          demoNotice:
+            "Dies ist eine Frontend-Ansicht. Nach gültiger Eingabe wird der lokale Login-Status gesetzt.",
+        },
+        register: {
+          title: "Registrieren",
+          subtitle:
+            "Erstelle ein Konto in einem ruhigen, geordneten Formular, das zum Stil der Seite passt.",
+          eyebrow: "Neues Konto",
+          formTitle: "Konto erstellen",
+          description:
+            "Die Daten werden im Client validiert und das Formular ist für eine spätere Backend-Integration vorbereitet.",
+          accept: "Ich akzeptiere die",
+          terms: "Nutzungsbedingungen",
+          submit: "Registrieren",
+          hasAccount: "Du hast schon ein Konto?",
+          signIn: "Zur Anmeldung",
+          demoNotice:
+            "Die Registrierung nutzt derzeit den lokalen App-Status, bis der API-Endpunkt verbunden ist.",
+        },
+        reset: {
+          title: "Passwort zurücksetzen",
+          subtitle:
+            "Gib deine E-Mail-Adresse ein und die Oberfläche führt dich zurück zum Zugriff.",
+          eyebrow: "Wiederherstellung",
+          formTitle: "Passwort zurücksetzen",
+          description:
+            "Ein minimales Formular zum Senden eines Reset-Links, bereit für die Integration eines Maildienstes.",
+          submit: "Reset-Link senden",
+          remembered: "Passwort wieder eingefallen?",
+          backToLogin: "Zurück zur Anmeldung",
+          createAccount: "Neues Konto erstellen",
+          hint: "Nach der API-Integration erhält der Nutzer eine E-Mail mit einem sicheren Link zum Ändern des Passworts.",
+          sentTitle: "Link vorbereitet",
+          sentMessage:
+            "Wenn das Konto existiert, werden Anweisungen zum Zurücksetzen des Passworts an die angegebene Adresse gesendet.",
+        },
+      },
+
+
       user: {
+
         termsOfService: {
           title: "Nutzungsbedingungen",
           subtitle:
@@ -132,202 +210,9 @@ const de = {
           },
         },
 
-        home: {
-          title: "Willkommen auf meiner Website!",
-          subtitle:
-            "Ich freue mich, dass du hier bist! Ich bin Patryk, ein Technologie- und Programmier-Enthusiast. Auf dieser Website findest du Informationen über mich, meine Projekte und meine Blutzuckerdaten aus meinem CGM. Viel Spaß beim Entdecken und melde dich gerne bei mir!",
-          sections: {
-            aboutme: {
-              description:
-                "Erfahre mehr über meinen Hintergrund, meine Erfahrung und meine Interessen.",
-            },
-            projects: {
-              description:
-                "Erkunde mein Portfolio mit persönlichen und beruflichen Projekten.",
-            },
-            glucose: {
-              description:
-                "Schau dir meine Echtzeit-Blutzuckerdaten von meinem CGM-Gerät an.",
-            },
-          },
-          welcome: "Willkommen! 👋",
-          welcomeDescription:
-            "Ich bin leidenschaftlich an der Entwicklung innovativer digitaler Lösungen und einem gesunden Lebensstil interessiert. Diese Website zeigt meine Reise durch Technologie und Datentransparenz.",
-          skills: [
-            "React & TypeScript",
-            "Full-stack Development",
-            "Datenvisualisierung",
-          ],
-          explore: "Entdecken",
-        },
+        home: {},
 
-        aboutme: {
-          title: "Über mich",
-          subtitle:
-            "Hallo! Mein Name ist Patryk Znamirowski und ich begeistere mich für Technologie, Programmierung und einen gesunden Lebensstil. Auf dieser Seite findest du Informationen zu meiner Karriere, meinen Interessen und den Projekten, an denen ich arbeite. Lerne mich besser kennen!",
-          profile: {
-            eyebrow: "Autor",
-            title: "Autor und Portfolio-Kontext",
-            description:
-              "Ein SchĂĽler, der ein Full-Stack-Portfolio und ein Glukosedatenmodul als praktischen Teil des Lernens entwickelt.",
-            longDescription:
-              "Das Portfolio zeigt Lernen durch Praxis: Projekte, Technologien und das Glukosemodul sind Teil einer gemeinsamen OberflĂ¤che statt einzelner zufĂ¤lliger Bereiche.",
-          },
-          status: {
-            eyebrow: "Status",
-            title: "Portfolio in aktiver Entwicklung",
-            description:
-              "Die Seite verbindet Informationen zum Autor, Projekte und eine lesbare Darstellung von Gesundheitsdaten.",
-            inProgress: "In Arbeit",
-          },
-          metrics: {
-            age: "Alter",
-            diabetes: "Diabetestyp",
-            birthYear: "Geburtsjahr",
-            frontend: "Frontend",
-            backend: "Backend",
-          },
-          badges: {
-            student: "SchĂĽler / Student",
-          },
-          navigationLabel: "Bereiche der Ăśber-mich-Seite",
-          sections: {
-            profile: "Profil",
-            stack: "Stack",
-            path: "Weg",
-          },
-          stackItems: {
-            react: "Komponenten, Routing und BenutzeroberflĂ¤che.",
-            nest: "API, Serverlogik und Datenintegrationen.",
-            tailwind: "Theme-Tokens, Layout und responsives UI-System.",
-          },
-          pathItems: {
-            now: {
-              label: "Jetzt",
-              title: "Lernen und Praxis",
-              description:
-                "Entwicklung der Webanwendung, Komponenten und Architektur.",
-            },
-            data: {
-              label: "Daten",
-              title: "Glukose und MODY2",
-              description:
-                "Arbeit mit Gesundheitsinformationen in einer lesbaren, ruhigen Form.",
-            },
-            next: {
-              label: "Weiter",
-              title: "Bessere Produkte",
-              description:
-                "Weitere Entwicklung von UI, Backend und prĂ¤sentierbaren Projekten.",
-            },
-          },
-          intro: {
-            eyebrow: "Persönliches Profil",
-            title: "Ein Platz für die Geschichte hinter dem Code",
-            description:
-              "Nutze diesen Abschnitt als kurze Biografie: wer du bist, was du baust, welche Probleme dich interessieren und welche Arbeit dir Energie gibt. Die Ansicht wirkt persönlich und passt trotzdem zu einem Entwicklerportfolio.",
-          },
-          techStack: {
-            items: [
-              "React",
-              "TypeScript",
-              "Node.js",
-              "Express",
-              "Vite",
-              "Datenvisualisierung",
-            ],
-          },
-          facts: {
-            items: [
-              {
-                title: "Standort",
-                description:
-                  "Ergänze deine Stadt, Arbeitsweise oder Verfügbarkeit für Remote-Zusammenarbeit.",
-              },
-              {
-                title: "Hauptrolle",
-                description:
-                  "Beschreibe deine aktuelle Rolle, Spezialisierung oder die Richtung, in die du dich entwickeln möchtest.",
-              },
-              {
-                title: "Neben dem Code",
-                description:
-                  "Lass Raum für Interessen, Gesundheit, Lernen, Community oder etwas, das der Seite einen menschlichen Rhythmus gibt.",
-              },
-            ],
-          },
-          focusAreas: {
-            items: [
-              {
-                title: "Frontend Engineering",
-                description:
-                  "Oberflächen mit Fokus auf Nutzbarkeit, Barrierefreiheit, Animationen und stabile Komponentenstruktur.",
-              },
-              {
-                title: "Full-Stack-Denken",
-                description:
-                  "UI, API, Daten und Deployment zu Produkten verbinden, die verständlich und wartbar bleiben.",
-              },
-              {
-                title: "Persönliche Daten und Gesundheit",
-                description:
-                  "Ein Raum für transparente Experimente wie Glukosedaten, Gewohnheiten und sinnvolles Self-Tracking.",
-              },
-            ],
-          },
-          values: {
-            eyebrow: "Arbeitsweise",
-            title: "Was die Arbeit leitet",
-            items: [
-              {
-                title: "Klarheit zuerst",
-                description:
-                  "Gute Software sollte sich durch Struktur, Namen und vorhersehbares Verhalten selbst erklären.",
-              },
-              {
-                title: "Lernen in Projekten",
-                description:
-                  "Projekte sind ein sichtbarer Nachweis von Entwicklung, Neugier und praktischem Experimentieren.",
-              },
-              {
-                title: "Nützliche Details",
-                description:
-                  "Kleine Entscheidungen zu Interaktion, Barrierefreiheit und Performance zählen, weil Nutzer sie spüren.",
-              },
-            ],
-          },
-          timeline: {
-            eyebrow: "Weg",
-            title: "Meilensteine zum Ausfüllen",
-            items: [
-              {
-                period: "Jetzt",
-                title: "Aktueller Fokus",
-                description:
-                  "Ergänze, was du gerade lernst, baust oder verbesserst.",
-              },
-              {
-                period: "Kürzlich",
-                title: "Neueste Erfahrung",
-                description:
-                  "Beschreibe ein Projekt, eine Rolle, einen Kurs oder eine Herausforderung, die deine Fähigkeiten geprägt hat.",
-              },
-              {
-                period: "Weiter",
-                title: "Was als Nächstes kommt",
-                description:
-                  "Teile deine Ziele, bevorzugte Zusammenarbeit oder die Art von Problemen, die du lösen möchtest.",
-              },
-            ],
-          },
-          contact: {
-            title: "Lass uns den nächsten Abschnitt gemeinsam bauen",
-            description:
-              "Nutze diesen Bereich als direkte Einladung: Zusammenarbeit, Fragen, Feedback oder einfach ein Hallo.",
-            action: "Schreib mir",
-            email: "znamirowskipatryk@gmail.com",
-          },
-        },
+        aboutme: {},
 
         projects: {
           title: "Meine Projekte",
@@ -383,10 +268,6 @@ const de = {
             "Durchsuchen Sie Blutzuckerdaten von meinem CGM (kontinuierliches Glukosemessgerät) in Echtzeit. Sehen Sie aktuelle Messwerte, analysieren Sie Trends und überwachen Sie die im Zielbereich verbrachte Zeit. Alles an einem Ort, verfügbar für jeden Interessierten.",
           loading: "Glukosedaten werden geladen...",
           subpages: {
-            aboutDiabetes: {
-              navigation: "Über Diabetes",
-              title: "Informationen zu MODY-2-Diabetes",
-            },
             summary: {
               navigation: "Zusammenfassung",
               title: "Zusammenfassung der Blutzuckermesswerte",
@@ -401,7 +282,7 @@ const de = {
             },
           },
           current: {
-            title: "Aktueller Wert",
+            title: "Letzter Wert",
             sensor: "Sensor",
             noSensor: "Keine Sensordaten",
             active: "Aktiv",
@@ -424,128 +305,6 @@ const de = {
               fallingSlow: "Fällt langsam",
               falling: "Fällt",
               fallingFast: "Fällt schnell",
-            },
-          },
-          aboutDiabetes: {
-            subtitle:
-              "Ein kurzer Überblick über MODY2 und die Unterschiede zu den häufigsten Diabetesformen.",
-            sections: {
-              overview: {
-                title: "Was MODY2 bedeutet",
-                content:
-                  "MODY2 ist eine monogene Diabetesform, meist durch eine GCK-Mutation verursacht. Sie führt häufig zu milder, stabiler Nüchternhyperglykämie seit Kindheit oder jungem Erwachsenenalter.",
-              },
-              pathophysiology: {
-                title: "Pathophysiologie und Ursachen",
-                content:
-                  "Die Krankheit ist das Ergebnis einer Mutation im GCK-Gen. Glukokinase ist ein Enzym, das als spezifischer 'Glukosesensor' in den Betazellen der Bauchspeicheldrüse fungiert. Bei Menschen mit MODY 2 ist dieser Sensor 'verstellt' – er erkennt Zucker erst bei einer höheren Konzentration. Die Bauchspeicheldrüse produziert Insulin richtig und in angemessenen Mengen, setzt es jedoch erst frei, wenn der Blutzuckerspiegel höher ist als bei einem gesunden Menschen (nüchtern meist um die 100-140 mg/dl).",
-              },
-              diagnosisAndSymptoms: {
-                title: "Symptome und Diagnose",
-                content:
-                  "MODY-2-Diabetes verläuft meist völlig asymptomatisch. Patienten leiden selten an übermäßigem Durst oder Polyurie. Aus diesem Grund wird er meist zufällig diagnostiziert – bei Vorsorgeuntersuchungen, arbeitsmedizinischen Checks, Infektionen oder bei Frauen bei routinemäßigen oralen Glukosetoleranztests (oGTT) in der Schwangerschaft. Eine endgültige und sichere Diagnose kann nur durch Gentests gestellt werden.",
-              },
-              treatment: {
-                title: "Management und Behandlung",
-                content:
-                  "Die wichtigste Information für Patienten ist, dass MODY 2 in den allermeisten Fällen keine medikamentöse Behandlung erfordert – weder mit oralen Medikamenten noch mit Insulin. Versuche, den Blutzuckerspiegel mit Medikamenten zu senken, sind oft wirkungslos, da der Körper ohnehin nach seinem neuen, erhöhten Gleichgewichtspunkt strebt. Die Grundlage bilden ein gesunder Lebensstil, eine ausgewogene Ernährung und körperliche Aktivität. Eine Ausnahme bildet die Schwangerschaft, in der aufgrund der Wachstumsrate des Fötus vorübergehend eine Insulintherapie erforderlich sein kann.",
-              },
-              inheritance: {
-                title: "Vererbung und Genetik",
-                content:
-                  "MODY 2 wird autosomal-dominant vererbt. Das bedeutet, dass die Mutation keine Generationen überspringt und die Familienanamnese (Diabetes bei einem Eltern- oder Großelternteil) stark belastet ist. Wenn ein Elternteil MODY-2-Diabetes hat, beträgt das Risiko, die Mutation an das Kind weiterzugeben, bei jeder Schwangerschaft genau 50 %.",
-              },
-              management: {
-                title: "Klinisches Muster",
-                content:
-                  "Der verschobene Glukostat verursacht meist stabile Glukosewerte und ein geringes Risiko klassischer Diabeteskomplikationen. Die Behandlung ist meist lebensstilbasiert, mit besonderem Vorgehen in der Schwangerschaft.",
-              },
-            },
-            comparisonTable: {
-              title: "Vergleich der Diabetestypen",
-              header: {
-                feature: "Charakteristisches Merkmal",
-                mody2: "MODY 2 (GCK)",
-                type1: "Typ 1 (Autoimmun)",
-                type2: "Typ 2 (Metabolisch)",
-              },
-              etiology: {
-                feature: "Ätiologie",
-                type1: "Autoimmune Zerstörung der Betazellen.",
-                type2: "Insulinresistenz mit zunehmender Betazellbelastung.",
-                mody2: "Einzelne GCK-Genmutation mit verschobenem Glukose-Sollwert.",
-              },
-              ageOfOnset: {
-                feature: "Beginnalter",
-                type1: "Oft Kindheit, Jugend oder junges Erwachsenenalter.",
-                type2: "Meist Erwachsene, zunehmend auch jüngere Menschen.",
-                mody2: "Meist seit Geburt vorhanden und jung oder zufällig entdeckt.",
-              },
-              primaryTreatment: {
-                feature: "Primäre Behandlung",
-                type1: "Lebenslange Insulintherapie.",
-                type2: "Lebensstil, orale oder injizierbare Medikamente, manchmal Insulin.",
-                mody2: "Meist keine Medikamente außer in ausgewählten Schwangerschaftssituationen.",
-              },
-              ketoacidosisRisk: {
-                feature: "Ketoazidose-Risiko",
-                type1: "Hoch ohne Insulin.",
-                type2: "Niedrig bis moderat, höher bei schwerer Krankheit.",
-                mody2: "Sehr niedrig, da die Insulinsekretion erhalten bleibt.",
-              },
-              age: {
-                feature: "Erkrankungs- / Diagnosealter",
-                mody2: "Meist vor dem 25. Lebensjahr (oft in der Kindheit)",
-                type1: "Meist Kinder, Jugendliche und junge Erwachsene",
-                type2:
-                  "Traditionell nach dem 40. Lebensjahr (heute zunehmend jünger)",
-              },
-              genetics: {
-                feature: "Genetischer Hintergrund / Vererbung",
-                mody2:
-                  "Monogen (ein mutiertes Gen). Autosomal-dominante Vererbung, sehr starke Familienanamnese.",
-                type1:
-                  "Polygen. Schwache Familienanamnese (eher Prädisposition).",
-                type2:
-                  "Polygen. Sehr starke Familienanamnese in Verbindung mit dem Lebensstil.",
-              },
-              bodyWeight: {
-                feature: "Körpergewicht",
-                mody2: "Meist normal",
-                type1:
-                  "Meist normal oder Untergewicht (Gewichtsverlust vor der Diagnose)",
-                type2: "Meist Übergewicht oder Adipositas (abdominal)",
-              },
-              insulinResistance: {
-                feature: "Insulinresistenz",
-                mody2: "Keine",
-                type1: "Keine",
-                type2: "Sehr hoch (Hauptursache der Krankheit)",
-              },
-              antibodies: {
-                feature: "Antikörper (Anti-GAD, ICA, ZnT8)",
-                mody2: "Nicht vorhanden",
-                type1: "Im Blut vorhanden (zerstören Betazellen)",
-                type2: "Nicht vorhanden",
-              },
-              insulinSecretion: {
-                feature: "Insulinsekretion (C-Peptid-Spiegel)",
-                mody2:
-                  "Erhalten. Insulin wird richtig ausgeschüttet, jedoch bei einer höheren Zuckerschwelle.",
-                type1:
-                  "Vollständiger Verlust (sehr niedriges oder kein C-Peptid).",
-                type2:
-                  "Anfangs erhöht (Hyperinsulinämie), sinkt im Laufe der Jahre.",
-              },
-              treatment: {
-                feature: "Behandlung der Wahl",
-                mody2:
-                  "Nur Ernährung und Bewegung. Medikamente und Insulin meist unnötig (Ausnahme: Schwangerschaft).",
-                type1:
-                  "Absolute, lebenslange Insulintherapie ab dem 1. Tag der Diagnose.",
-                type2:
-                  "Ernährung, Bewegung, orale Medikamente (z. B. Metformin), Inkretine, im späteren Stadium Insulin.",
-              },
             },
           },
           summary: {
@@ -582,7 +341,8 @@ const de = {
             range: "Zielbereich: {{low}}-{{high}} {{unit}}",
             value: "Glukose",
             targetZone: "Zielbereich",
-            inRangeSummary: "{{value}}% der sichtbaren Messwerte liegen im Zielbereich.",
+            inRangeSummary:
+              "{{value}}% der sichtbaren Messwerte liegen im Zielbereich.",
             referencePoints: "Referenzpunkte",
           },
           ranges: {
@@ -618,6 +378,7 @@ const de = {
         nav: {
           openMenu: "Navigationsmenü öffnen",
           closeMenu: "Navigationsmenü schließen",
+          mobileNavigation: "Mobile Navigation",
           changeLanguage: "Sprache wechseln",
           changeTheme: "Thema wechseln",
           themes: {

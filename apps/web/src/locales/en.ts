@@ -48,7 +48,85 @@ const en = {
         noLanguages: "No languages available at the moment.",
       },
 
+      auth: {
+        fields: {
+          name: "Full name",
+          email: "Email address",
+          password: "Password",
+          confirmPassword: "Confirm password",
+        },
+        placeholders: {
+          name: "Jane Doe",
+          email: "jane@example.com",
+          password: "At least 8 characters",
+          confirmPassword: "Repeat password",
+        },
+        actions: {
+          showPassword: "Show password",
+          hidePassword: "Hide password",
+        },
+        errors: {
+          name: "Enter your full name.",
+          email: "Enter a valid email address.",
+          passwordRequired: "Enter your password.",
+          passwordLength: "Password must be at least 8 characters.",
+          passwordMatch: "Passwords must match.",
+          terms: "Accept the terms of service.",
+        },
+        login: {
+          title: "Login",
+          subtitle:
+            "Enter the user panel and return to your settings without unnecessary noise.",
+          eyebrow: "Access",
+          formTitle: "Sign in",
+          description:
+            "A short, readable form aligned with the rest of the app and ready for API wiring.",
+          remember: "Remember me",
+          forgotPassword: "Forgot password?",
+          submit: "Sign in",
+          noAccount: "Do not have an account yet?",
+          createAccount: "Create account",
+          demoNotice:
+            "This is a frontend view. After valid input, it sets the local logged-in state.",
+        },
+        register: {
+          title: "Register",
+          subtitle:
+            "Create an account in a calm, structured form that matches the site style.",
+          eyebrow: "New account",
+          formTitle: "Create account",
+          description:
+            "Data is validated on the client and the form is prepared for later backend integration.",
+          accept: "I accept the",
+          terms: "terms of service",
+          submit: "Register",
+          hasAccount: "Already have an account?",
+          signIn: "Go to login",
+          demoNotice:
+            "Registration currently uses local app state until the API endpoint is connected.",
+        },
+        reset: {
+          title: "Reset password",
+          subtitle:
+            "Enter your email address and the interface will guide you back to access.",
+          eyebrow: "Recovery",
+          formTitle: "Reset your password",
+          description:
+            "A minimal form for sending a reset link, ready for email service integration.",
+          submit: "Send reset link",
+          remembered: "Password came back?",
+          backToLogin: "Back to login",
+          createAccount: "Create a new account",
+          hint: "After API integration, the user will receive an email with a secure password reset link.",
+          sentTitle: "Link prepared",
+          sentMessage:
+            "If the account exists, password reset instructions will be sent to the provided address.",
+        },
+      },
+
+
       user: {
+
         termsOfService: {
           title: "Terms of Service",
           subtitle:
@@ -130,202 +208,9 @@ const en = {
           },
         },
 
-        home: {
-          title: "Welcome to my website!",
-          subtitle:
-            "I'm glad you're here! I'm Patryk, a technology and programming enthusiast. On this website, you'll find information about me, my projects, and my blood glucose data from my CGM. Feel free to explore and get in touch!",
-          sections: {
-            aboutme: {
-              description:
-                "Learn about my background, experience, and interests.",
-            },
-            projects: {
-              description:
-                "Explore my portfolio of personal and professional projects.",
-            },
-            glucose: {
-              description:
-                "View my real-time blood glucose data from my CGM device.",
-            },
-          },
-          welcome: "Welcome! 👋",
-          welcomeDescription:
-            "I'm passionate about building innovative digital solutions and maintaining a healthy lifestyle. This site showcases my journey through technology and personal data transparency.",
-          skills: [
-            "React & TypeScript",
-            "Full-stack Development",
-            "Data Visualization",
-          ],
-          explore: "Explore",
-        },
+        home: {},
 
-        aboutme: {
-          title: "About me",
-          subtitle:
-            "Hello! My name is Patryk Znamirowski and I am passionate about technology, programming, and a healthy lifestyle. On this page, you will find information about my career, interests, and the projects I am currently working on. Get to know me better!",
-          profile: {
-            eyebrow: "Author",
-            title: "Author and portfolio context",
-            description:
-              "A student developing a full-stack portfolio and glucose data module as a practical part of learning.",
-            longDescription:
-              "The portfolio shows learning through practice: projects, technologies, and the glucose module are part of one interface instead of separate, random sections.",
-          },
-          status: {
-            eyebrow: "Status",
-            title: "Portfolio in active development",
-            description:
-              "The site combines author information, projects, and a readable presentation of health data.",
-            inProgress: "In progress",
-          },
-          metrics: {
-            age: "Age",
-            diabetes: "Diabetes type",
-            birthYear: "birth year",
-            frontend: "Frontend",
-            backend: "Backend",
-          },
-          badges: {
-            student: "Student",
-          },
-          navigationLabel: "About page sections",
-          sections: {
-            profile: "Profile",
-            stack: "Stack",
-            path: "Path",
-          },
-          stackItems: {
-            react: "Components, routing, and user interface.",
-            nest: "API, server logic, and data integrations.",
-            tailwind: "Theme tokens, layout, and responsive UI system.",
-          },
-          pathItems: {
-            now: {
-              label: "Now",
-              title: "Learning and practice",
-              description:
-                "Developing the web application, components, and architecture.",
-            },
-            data: {
-              label: "Data",
-              title: "Glucose and MODY2",
-              description:
-                "Working with health information in a readable, calm form.",
-            },
-            next: {
-              label: "Next",
-              title: "Better products",
-              description:
-                "Further development of UI, backend, and projects ready to show.",
-            },
-          },
-          intro: {
-            eyebrow: "Personal profile",
-            title: "A place for the story behind the code",
-            description:
-              "Use this section as a concise biography: who you are, what you build, what problems interest you, and what kind of work gives you energy. It is designed to feel personal while still fitting a developer portfolio.",
-          },
-          techStack: {
-            items: [
-              "React",
-              "TypeScript",
-              "Node.js",
-              "Express",
-              "Vite",
-              "Data visualization",
-            ],
-          },
-          facts: {
-            items: [
-              {
-                title: "Location",
-                description:
-                  "Add your city, work mode, or availability for remote collaboration.",
-              },
-              {
-                title: "Main role",
-                description:
-                  "Describe your current role, specialization, or the direction you are developing toward.",
-              },
-              {
-                title: "Beyond code",
-                description:
-                  "Leave space for interests, health, learning, community, or anything that gives the page a human pulse.",
-              },
-            ],
-          },
-          focusAreas: {
-            items: [
-              {
-                title: "Frontend engineering",
-                description:
-                  "Interfaces built with attention to usability, accessibility, motion, and reliable component structure.",
-              },
-              {
-                title: "Full-stack thinking",
-                description:
-                  "Connecting UI, API, persistence, and deployment into products that are easy to understand and maintain.",
-              },
-              {
-                title: "Personal data and health",
-                description:
-                  "A space for transparent experiments, such as glucose data, habits, and meaningful self-tracking.",
-              },
-            ],
-          },
-          values: {
-            eyebrow: "Working style",
-            title: "What guides the work",
-            items: [
-              {
-                title: "Clarity first",
-                description:
-                  "Good software should explain itself through structure, naming, and predictable behavior.",
-              },
-              {
-                title: "Learning in public",
-                description:
-                  "Projects are treated as a record of growth, curiosity, and practical experimentation.",
-              },
-              {
-                title: "Useful details",
-                description:
-                  "Small interaction, accessibility, and performance choices matter because people feel them.",
-              },
-            ],
-          },
-          timeline: {
-            eyebrow: "Path",
-            title: "Milestones to fill in",
-            items: [
-              {
-                period: "Now",
-                title: "Current focus",
-                description:
-                  "Add what you are learning, building, or improving right now.",
-              },
-              {
-                period: "Recently",
-                title: "Recent experience",
-                description:
-                  "Describe a project, role, course, or challenge that shaped your skills.",
-              },
-              {
-                period: "Next",
-                title: "What comes next",
-                description:
-                  "Share your goals, preferred collaborations, or the kind of problems you want to solve.",
-              },
-            ],
-          },
-          contact: {
-            title: "Let's build the next section together",
-            description:
-              "Use this space for a direct invitation: collaboration, questions, feedback, or a simple hello.",
-            action: "Write to me",
-            email: "znamirowskipatryk@gmail.com",
-          },
-        },
+        aboutme: {},
 
         projects: {
           title: "My projects",
@@ -381,10 +266,6 @@ const en = {
             "Browse blood glucose data from my CGM (continuous glucose monitor) in real-time. View current readings, analyze trends, and monitor time spent in target glucose range. Everything in one place, available for anyone interested.",
           loading: "Loading glucose data...",
           subpages: {
-            aboutDiabetes: {
-              navigation: "About diabetes",
-              title: "Information about MODY 2 diabetes",
-            },
             summary: {
               navigation: "Summary",
               title: "Summary of glucose readings",
@@ -399,7 +280,7 @@ const en = {
             },
           },
           current: {
-            title: "Current reading",
+            title: "Last reading",
             sensor: "Sensor",
             noSensor: "No sensor data",
             active: "Active",
@@ -422,127 +303,6 @@ const en = {
               fallingSlow: "Falling slowly",
               falling: "Falling",
               fallingFast: "Falling fast",
-            },
-          },
-          aboutDiabetes: {
-            subtitle:
-              "A concise educational overview of MODY2 and how it differs from the most common diabetes types.",
-            sections: {
-              overview: {
-                title: "What MODY2 means",
-                content:
-                  "MODY2 is a monogenic form of diabetes most often caused by a GCK mutation. It usually produces mild, stable fasting hyperglycemia from childhood or early adulthood.",
-              },
-              pathophysiology: {
-                title: "Pathophysiology and causes",
-                content:
-                  "The disease is caused by a mutation in the GCK gene. Glucokinase is an enzyme that acts as a specific 'glucose sensor' in pancreatic beta cells. In people with MODY 2, this sensor is 'deregulated' – it detects sugar only at a higher concentration. The pancreas produces insulin correctly and in appropriate amounts, but releases it only when the blood glucose level is higher than in a healthy person (usually fasting around 100-140 mg/dL).",
-              },
-              diagnosisAndSymptoms: {
-                title: "Symptoms and diagnosis",
-                content:
-                  "MODY 2 diabetes is most often completely asymptomatic. Patients rarely experience excessive thirst or polyuria. For this reason, it is diagnosed mainly by accident – during preventive examinations, occupational health checks, infections, or in women during routine oral glucose tolerance tests (OGTT) in pregnancy. A final and definitive diagnosis can only be made based on genetic testing.",
-              },
-              treatment: {
-                title: "Management and treatment",
-                content:
-                  "The most important information for patients is that MODY 2, in the vast majority of cases, does not require pharmacological treatment – neither oral medications nor insulin. Attempts to lower sugar levels with drugs are often ineffective because the body strives for its new, elevated equilibrium point anyway. The foundation is a healthy lifestyle, a balanced diet, and physical activity. The exception is pregnancy, when temporary insulin therapy may be necessary due to the fetal growth rate.",
-              },
-              inheritance: {
-                title: "Inheritance and genetics",
-                content:
-                  "MODY 2 is inherited in an autosomal dominant manner. This means that the mutation does not skip generations, and the family history (diabetes in one of the parents or grandparents) is heavily burdened. If one parent has MODY 2 diabetes, the risk of passing the mutation to the child is exactly 50% in each pregnancy.",
-              },
-              management: {
-                title: "Clinical pattern",
-                content:
-                  "The shifted glucostat typically causes stable glucose values and a low risk of classic diabetes complications. Treatment is usually lifestyle-focused, with special handling during pregnancy.",
-              },
-            },
-            comparisonTable: {
-              title: "Comparison of diabetes types",
-              header: {
-                feature: "Characteristic feature",
-                mody2: "MODY 2 (GCK)",
-                type1: "Type 1 (Autoimmune)",
-                type2: "Type 2 (Metabolic)",
-              },
-              etiology: {
-                feature: "Etiology",
-                type1: "Autoimmune beta-cell destruction.",
-                type2: "Insulin resistance with progressive beta-cell strain.",
-                mody2: "Single-gene GCK mutation shifting the glucose set point.",
-              },
-              ageOfOnset: {
-                feature: "Age of onset",
-                type1: "Often childhood, adolescence, or young adulthood.",
-                type2: "Most common in adults, increasingly seen earlier.",
-                mody2: "Usually present from birth and found young or incidentally.",
-              },
-              primaryTreatment: {
-                feature: "Primary treatment",
-                type1: "Lifelong insulin therapy.",
-                type2: "Lifestyle, oral or injectable medication, sometimes insulin.",
-                mody2: "Usually no medication outside selected pregnancy scenarios.",
-              },
-              ketoacidosisRisk: {
-                feature: "Risk of ketoacidosis",
-                type1: "High without insulin.",
-                type2: "Low to moderate, higher during severe illness or insulin lack.",
-                mody2: "Very low because insulin secretion is preserved.",
-              },
-              age: {
-                feature: "Age of onset / diagnosis",
-                mody2: "Usually before age 25 (often in childhood)",
-                type1: "Most often children, adolescents, and young adults",
-                type2:
-                  "Traditionally after age 40 (nowadays increasingly younger)",
-              },
-              genetics: {
-                feature: "Genetic background / Inheritance",
-                mody2:
-                  "Monogenic (one mutated gene). Autosomal dominant inheritance, very strong family history.",
-                type1:
-                  "Polygenic. Weak family history (more of a predisposition).",
-                type2:
-                  "Polygenic. Very strong family history linked to lifestyle.",
-              },
-              bodyWeight: {
-                feature: "Body weight",
-                mody2: "Usually normal",
-                type1:
-                  "Usually normal or underweight (weight loss before diagnosis)",
-                type2: "Most often overweight or obese (abdominal)",
-              },
-              insulinResistance: {
-                feature: "Insulin resistance",
-                mody2: "None",
-                type1: "None",
-                type2: "Very high (main cause of the disease)",
-              },
-              antibodies: {
-                feature: "Antibodies (anti-GAD, ICA, ZnT8)",
-                mody2: "Absent",
-                type1: "Present in the blood (destroying beta cells)",
-                type2: "Absent",
-              },
-              insulinSecretion: {
-                feature: "Insulin secretion (C-peptide level)",
-                mody2:
-                  "Preserved. Insulin secreted correctly, but at a higher sugar threshold.",
-                type1: "Complete loss (very low or zero C-peptide).",
-                type2:
-                  "Initially elevated (hyperinsulinemia), decreases over the years.",
-              },
-              treatment: {
-                feature: "Treatment of choice",
-                mody2:
-                  "Only diet and exercise. Medications and insulin usually unnecessary (exception: pregnancy).",
-                type1:
-                  "Absolute, lifelong insulin therapy from day 1 of diagnosis.",
-                type2:
-                  "Diet, exercise, oral medications (e.g., metformin), incretins, later stage insulin.",
-              },
             },
           },
           summary: {
@@ -579,7 +339,8 @@ const en = {
             range: "Target range: {{low}}-{{high}} {{unit}}",
             value: "Glucose",
             targetZone: "Target zone",
-            inRangeSummary: "{{value}}% of visible readings are inside the target zone.",
+            inRangeSummary:
+              "{{value}}% of visible readings are inside the target zone.",
             referencePoints: "Reference points",
           },
           ranges: {
@@ -615,6 +376,7 @@ const en = {
         nav: {
           openMenu: "Open navigation menu",
           closeMenu: "Close navigation menu",
+          mobileNavigation: "Mobile navigation",
           changeLanguage: "Change language",
           changeTheme: "Change theme",
           themes: {

@@ -23,6 +23,9 @@ import { NotFoundPage } from "@/app/modules/Common/NotFound/NotFound.page.tsx";
 import { ForbiddenPage } from "@/app/modules/Common/Forbidden/Forbidden.page.tsx";
 import { MaintenancePage } from "@/app/modules/Common/Maintenance/Maintenance.page.tsx";
 import { UnderConstructionPage } from "@/app/modules/Common/UnderConstruction/UnderConstruction.page.tsx";
+import { LoginPage } from "@/app/modules/Auth/Login.page.tsx";
+import { RegisterPage } from "@/app/modules/Auth/Register.page.tsx";
+import { ResetPasswordPage } from "@/app/modules/Auth/ResetPassword.page.tsx";
 
 import { UserLayout } from "@/app/layouts/User/User.layout.tsx";
 import { Suspense, useEffect } from "react";
@@ -60,8 +63,9 @@ function App() {
           </Route>
           <Route path="glucose/:section?" element={<GlucosePage />} />
           <Route path="language" element={<SelectLanguagePage />} />
-          <Route path="register" />
-          <Route path="login" />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="logout" />
           <Route path="terms" element={<TermsOfServicePage />} />
           <Route path="privacy" element={<PrivacyPolicyPage />} />
