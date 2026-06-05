@@ -35,6 +35,9 @@ export interface LibreApiResponse {
       l: {
         th: number;
       };
+      f: {
+        th: number;
+      };
     };
     glucoseMeasurement: LibreApiGlucoseMeasurementRecord;
     patientDevice: {

@@ -1,6 +1,269 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/users": {
+      "get": {
+        "description": "Returns all user accounts. Requires permission: users:read",
+        "operationId": "UsersController_getUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List users",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/{uuid}": {
+      "get": {
+        "description": "Returns a user by UUID. Requires permission: users:read",
+        "operationId": "UsersController_getUser",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get user",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/{uuid}/role": {
+      "patch": {
+        "description": "Replaces the user role. A user can have only one role. Requires permission: users.roles:update",
+        "operationId": "UsersController_updateUserRole",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
+          "404": {
+            "description": "User or role not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update user role",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "description": "Creates a user account. The first registered account receives the ADMIN role; later users receive USER.",
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Register user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Authenticates by email or username and returns a JWT access token.",
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        },
+        "summary": "Log in",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "description": "Revokes the current JWT by adding its token id to the Redis blacklist.",
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Log out",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get current user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
     "/status": {
       "get": {
         "description": "Checks the current operational status of the service.",
@@ -398,6 +661,12 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          },
           "500": {
             "description": "Internal server error"
           },
@@ -455,6 +724,12 @@
           },
           "400": {
             "description": "Bad request, possibly due to OAuth error"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
           },
           "500": {
             "description": "Internal server error"
@@ -721,6 +996,47 @@
           "Glucose Statistics"
         ]
       }
+    },
+    "/glucose/statistics/gmi": {
+      "get": {
+        "description": "Retrieves the Glucose Management Indicator.",
+        "operationId": "GlucoseStatisticsController_getGlucoseManagementIndicator",
+        "parameters": [
+          {
+            "name": "hours",
+            "required": false,
+            "in": "query",
+            "description": "Number of hours to calculate glucose reading, minimum 7 days",
+            "schema": {
+              "minimum": 168,
+              "example": 672,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved Glucose Management Indicator data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGlucoseManagementIndicatorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          },
+          "503": {
+            "description": "Service is unavailable"
+          }
+        },
+        "summary": "Get GMI",
+        "tags": [
+          "Glucose Statistics"
+        ]
+      }
     }
   },
   "info": {
@@ -733,6 +1049,147 @@
   "servers": [],
   "components": {
     "schemas": {
+      "UserRoleResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "ADMIN"
+          },
+          "label": {
+            "type": "string",
+            "example": "Administrator"
+          },
+          "permissions": {
+            "example": [
+              "projects:create",
+              "projects:update"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "label",
+          "permissions"
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "example": "e2718142-3c3f-4a5f-9038-f53ea9f15b47"
+          },
+          "email": {
+            "type": "string",
+            "example": "admin@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "admin"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRoleResponse"
+          }
+        },
+        "required": [
+          "uuid",
+          "email",
+          "username",
+          "isActive",
+          "role"
+        ]
+      },
+      "UpdateUserRoleBody": {
+        "type": "object",
+        "properties": {
+          "roleCode": {
+            "type": "string",
+            "example": "ADMIN"
+          }
+        },
+        "required": [
+          "roleCode"
+        ]
+      },
+      "RegisterBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "admin@example.com"
+          },
+          "username": {
+            "type": "string",
+            "example": "admin"
+          },
+          "password": {
+            "type": "string",
+            "example": "VeryStrongPassword123!"
+          }
+        },
+        "required": [
+          "email",
+          "username",
+          "password"
+        ]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "tokenType": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserResponse"
+          }
+        },
+        "required": [
+          "accessToken",
+          "tokenType",
+          "user"
+        ]
+      },
+      "LoginBody": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "example": "admin@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "VeryStrongPassword123!"
+          }
+        },
+        "required": [
+          "identifier",
+          "password"
+        ]
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "properties": {
+          "revoked": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "revoked"
+        ]
+      },
       "ServiceStatus": {
         "type": "string",
         "enum": [
@@ -804,7 +1261,16 @@
       },
       "GetProjectResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Unique identifier for the project",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          }
+        },
+        "required": [
+          "uuid"
+        ]
       },
       "CreateProjectBody": {
         "type": "object",
@@ -1353,6 +1819,30 @@
           "isDataSufficient",
           "value",
           "unit"
+        ]
+      },
+      "GetGlucoseManagementIndicatorResponse": {
+        "type": "object",
+        "properties": {
+          "isDataSufficient": {
+            "type": "boolean",
+            "description": "Indicates whether sufficient data is available for calculation",
+            "example": true
+          },
+          "value": {
+            "type": "number",
+            "description": "Value of the Glucose Management Indicator calculated based on the glucose readings in the specified period",
+            "example": 55
+          },
+          "hours": {
+            "type": "number",
+            "description": "Number of hours included in the calculation period",
+            "example": 168
+          }
+        },
+        "required": [
+          "isDataSufficient",
+          "value"
         ]
       }
     }

@@ -5,7 +5,7 @@ export function ForbiddenPage() {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2.5 sm:flex-row">
+    <div className="flex flex-col justify-center items-center gap-2.5 my-auto sm:flex-row">
       <ShieldBanIcon className="text-primary size-16 max-md:size-25" />
       <div className="border border-border max-md:w-full md:h-16"></div>
       <div>

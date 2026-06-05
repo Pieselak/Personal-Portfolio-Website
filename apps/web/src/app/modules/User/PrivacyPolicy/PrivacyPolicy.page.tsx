@@ -1,37 +1,32 @@
 import { useTranslation } from "react-i18next";
+import { Reveal } from "@/app/components/motion/Reveal.tsx";
+import { PageShell } from "@/app/components/ui/PageShell.tsx";
 import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
+import { LegalDocumentSectionPanel } from "@/app/modules/User/LegalDocuments/components/LegalDocumentSectionPanel.tsx";
+import { PRIVACY_POLICY_SECTIONS } from "@/app/modules/User/PrivacyPolicy/constants/privacyPolicySections.ts";
 
 export function PrivacyPolicyPage() {
   const { t } = useTranslation();
-  const sections: string[] = [
-    "controller",
-    "dataCollection",
-    "dataSharing",
-    "retention",
-    "userRights",
-    "cookies",
-    "security",
-  ];
 
   return (
-    <>
+    <PageShell>
       <UserHeader
         title={t("pages.user.privacyPolicy.title")}
         subtitle={t("pages.user.privacyPolicy.subtitle")}
       />
-      {sections.map((section) => (
-        <section
-          key={section}
-          className="w-full rounded-xl border border-border bg-muted/30 p-3"
-        >
-          <h3 className={"mb-1 text-lg font-bold text-primary"}>
-            {t(`pages.user.privacyPolicy.sections.${section}.title`)}
-          </h3>
-          <p className={"text-sm text-muted-foreground"}>
-            {t(`pages.user.privacyPolicy.sections.${section}.content`)}
-          </p>
-        </section>
-      ))}
-    </>
+
+      <div className="grid gap-4">
+        {PRIVACY_POLICY_SECTIONS.map((section) => (
+          <Reveal key={section}>
+            <LegalDocumentSectionPanel
+              title={t(`pages.user.privacyPolicy.sections.${section}.title`)}
+              content={t(
+                `pages.user.privacyPolicy.sections.${section}.content`,
+              )}
+            />
+          </Reveal>
+        ))}
+      </div>
+    </PageShell>
   );
 }

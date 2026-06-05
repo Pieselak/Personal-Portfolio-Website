@@ -1,18 +1,30 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
-import { BadgeQuestionMarkIcon } from "lucide-react";
 import en from "./locales/en.ts";
 import pl from "./locales/pl.ts";
 import de from "./locales/de.ts";
 
-const resources = { en, pl, de } as const satisfies Record<string, any>;
-let languages: languageItem[] = [];
+type FlagComponent = typeof en.data.flag;
+
+type LanguageResource = {
+  data: {
+    name: string;
+    flag: FlagComponent;
+  };
+  translation: unknown;
+};
+
+const resources = { en, pl, de } as const satisfies Record<
+  string,
+  LanguageResource
+>;
+const languages: languageItem[] = [];
 
 type ResourceKey = keyof typeof resources;
 type languageItem = {
   code: string;
   name: string;
-  flag: any;
+  flag: FlagComponent;
 };
 
 i18next.use(initReactI18next).init(
@@ -28,7 +40,7 @@ i18next.use(initReactI18next).init(
       languages.push({
         code: lang as string,
         name: resources[lang].data.name ?? "unknown",
-        flag: resources[lang].data.flag ?? BadgeQuestionMarkIcon,
+        flag: resources[lang].data.flag,
       });
     }
   },
@@ -45,7 +57,7 @@ export const getFirstLanguageCode = () =>
   languages.length > 0 ? languages[0].code : "unknown";
 export const getSavedLanguageCode = () => {
   const savedLanguage = localStorage.getItem("language");
-  if (savedLanguage && resources.hasOwnProperty(savedLanguage)) {
+  if (savedLanguage && Object.hasOwn(resources, savedLanguage)) {
     return savedLanguage;
   }
   return null;

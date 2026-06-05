@@ -1,6 +1,5 @@
 import { API } from "./generated-api";
 import { useAuthStore } from "@/app/modules/Auth/authStore.ts";
-import { authService } from "@/app/modules/Auth/authService.ts";
 
 export const requestManager = {
   controller: new AbortController(),
@@ -20,11 +19,16 @@ export const ApiClient = new API({
 });
 
 ApiClient.instance.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
   const isAuthEndpoint =
     config.url?.includes("/login") ||
     config.url?.includes("/refresh") ||
     config.url?.includes("/forgot-password") ||
     config.url?.includes("/register");
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
 
   if (!isAuthEndpoint && !useAuthStore.getState().isLoggedIn) {
     config.signal = requestManager.controller.signal;
@@ -47,7 +51,7 @@ ApiClient.instance.interceptors.response.use(
     ) {
       error.config._retry = true;
       try {
-        authService.logout();
+        useAuthStore.getState().clearSession();
         return ApiClient.instance(error.config);
       } catch {
         requestManager.abortAll();

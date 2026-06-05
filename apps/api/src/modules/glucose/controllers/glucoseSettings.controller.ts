@@ -1,6 +1,5 @@
-import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiOperation,
@@ -11,6 +10,7 @@ import { GlucoseService } from '../services/glucose.service';
 import { SetProviderModeBody } from '../dto/input/setProviderMode.dto';
 import { SetProviderModeResponse } from '../dto/response/setProviderMode.dto';
 import { GetProviderModesResponse } from '../dto/response/getProviderModes.dto';
+import { AuthPermissions } from '../../auth/decorators/auth-permissions.decorator';
 
 @Controller('glucose/settings')
 @ApiTags('Glucose Settings')
@@ -18,7 +18,7 @@ export class GlucoseSettingsController {
   constructor(private readonly glucoseService: GlucoseService) {}
 
   @Get('providers')
-  @ApiBearerAuth()
+  @AuthPermissions('glucose.settings:read')
   @ApiOperation({
     summary: 'Get available glucose data providers',
     description:
@@ -39,7 +39,7 @@ export class GlucoseSettingsController {
   }
 
   @Patch('provider')
-  @ApiBearerAuth()
+  @AuthPermissions('glucose.settings:update')
   @ApiOperation({
     summary: 'Update glucose data provider mode',
     description:

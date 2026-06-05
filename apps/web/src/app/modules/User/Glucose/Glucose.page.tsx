@@ -1,61 +1,80 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
-import { GlucoseCurrent } from "@/app/modules/User/Glucose/GlucoseCurrent.tsx";
-import { GlucoseNavigation } from "@/app/modules/User/Glucose/GlucoseNavigation.tsx";
-import { navigationItems } from "@/app/modules/User/Glucose/GlucoseNavigation.items.tsx";
-import { type ReactElement, useEffect } from "react";
 import { useSearchParams } from "react-router";
+import { PageShell } from "@/app/components/ui/PageShell.tsx";
+import { Reveal } from "@/app/components/motion/Reveal.tsx";
 import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
+import { GlucoseStatusHeader } from "@/app/modules/User/Glucose/components/GlucoseStatusHeader.tsx";
+import {
+  GlucoseSectionTabs,
+  type GlucoseSection,
+} from "@/app/modules/User/Glucose/components/GlucoseSectionTabs.tsx";
+import { GlucoseChartPanel } from "@/app/modules/User/Glucose/components/GlucoseChartPanel.tsx";
+import { TimeInRangePanel } from "@/app/modules/User/Glucose/components/TimeInRangePanel.tsx";
+import { SummaryPanel } from "@/app/modules/User/Glucose/components/SummaryPanel.tsx";
+import { TimeRangeSelector } from "@/app/modules/User/Glucose/components/TimeRangeSelector.tsx";
+import type { GlucoseTimeRange } from "@/app/modules/User/Glucose/constants/glucoseTimeRanges.ts";
+
+const GLUCOSE_SECTIONS: GlucoseSection[] = ["graph", "timeinrange", "summary"];
+
+function getSection(value: string | null): GlucoseSection {
+  return GLUCOSE_SECTIONS.find((section) => section === value) ?? "graph";
+}
 
 export function GlucosePage() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const sections = navigationItems;
+  const activeSection = getSection(searchParams.get("section"));
+  const [selectedRange, setSelectedRange] = useState<GlucoseTimeRange>("7d");
 
   useEffect(() => {
-    const section = searchParams.get("section");
-    const selected = sections.find((s) => s.param === section);
-    if (!selected) {
-      setSearchParams({ section: sections[0].param });
+    if (searchParams.get("section") !== activeSection) {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.set("section", activeSection);
+      setSearchParams(nextParams, { replace: true });
     }
-  }, []);
+  }, [activeSection, searchParams, setSearchParams]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const renderSection = (): ReactElement | null => {
-    if (!navigationItems || navigationItems.length === 0) return null;
-    const section = searchParams.get("section");
-    const selected = sections.find((s) => s.param === section);
-    return selected ? selected.element : navigationItems[0].element;
-  };
+  function handleSectionChange(section: GlucoseSection) {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set("section", section);
+    setSearchParams(nextParams);
+  }
 
   return (
-    <>
+    <PageShell>
       <UserHeader
         title={t("pages.user.glucose.title")}
         subtitle={t("pages.user.glucose.subtitle")}
       />
-      <motion.div
-        className="space-y-6 w-full"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <GlucoseCurrent />
 
-        <GlucoseNavigation />
+      <Reveal>
+        <GlucoseStatusHeader />
+      </Reveal>
 
-        {renderSection()}
-      </motion.div>
-    </>
+      <div className="sticky top-3 z-20 grid w-full gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
+        <GlucoseSectionTabs
+          value={activeSection}
+          onChange={handleSectionChange}
+        />
+          <TimeRangeSelector
+            value={selectedRange}
+            onChange={setSelectedRange}
+            includeAll
+          />
+      </div>
+
+      <Reveal key={activeSection}>
+        {activeSection === "graph" && (
+          <GlucoseChartPanel selectedRange={selectedRange} />
+        )}
+        {activeSection === "timeinrange" && (
+          <TimeInRangePanel selectedRange={selectedRange} />
+        )}
+        {activeSection === "summary" && (
+          <SummaryPanel selectedRange={selectedRange} />
+        )}
+      </Reveal>
+    </PageShell>
   );
 }

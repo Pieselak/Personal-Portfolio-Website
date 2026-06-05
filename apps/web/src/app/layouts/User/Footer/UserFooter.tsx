@@ -15,12 +15,12 @@ export function UserFooter() {
       initial="hidden"
       animate="visible"
       variants={footerVariants}
-      className="w-full bg-background border-t border-border z-50"
+      className="w-full bg-background border-t border-border z-40"
     >
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Copyright - Top */}
         <div className="flex justify-center items-center mb-6 pb-6 border-b border-border/50">
-          <p className="text-md font-bold text-primary">
+          <p className="text-md font-bold text-primary text-center">
             {t("layouts.user.footer.copyright", {
               year: new Date().getFullYear(),
             })}
