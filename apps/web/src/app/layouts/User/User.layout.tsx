@@ -46,14 +46,12 @@ export function UserLayout() {
         >
           <motion.main
             key={location.pathname}
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0 }}
             animate={{
               opacity: 1,
-              x: 0,
             }}
             exit={{
               opacity: 0,
-              x: 20,
             }}
             transition={{ ease: "easeInOut" }}
             className="flex flex-col flex-1 justify-start items-center overflow-hidden gap-3 md:gap-6 p-3 md:p-6 max-w-6xl w-full"

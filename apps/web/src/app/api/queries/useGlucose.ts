@@ -8,6 +8,7 @@ import type {
   GetLowestGlucoseResponse,
   GetSensorDataResponse,
   GetTimeInRangeResponse,
+  GetGlucoseManagementIndicatorResponse,
 } from "@/app/api/generated-api.ts";
 
 export const useGlucoseCurrent = () => {
@@ -15,18 +16,29 @@ export const useGlucoseCurrent = () => {
     queryKey: ["glucose", "current"],
     queryFn: () => ApiClient.glucose.glucoseControllerGetCurrentGlucose(),
     select: (response): GetCurrentGlucoseResponse => response.data,
-    staleTime: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
-    refetchInterval: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
+    staleTime: 60 * 1000,
+    refetchInterval: 60 * 1000,
   });
 };
 
-export const useGlucoseGraph = () => {
+export const useGlucoseGraph = (hours?: number) => {
   return useQuery({
-    queryKey: ["glucose", "graph"],
+    queryKey: ["glucose", "graph", hours],
     queryFn: () => ApiClient.glucose.glucoseControllerGetGraphData(),
-    select: (response): GetGraphDataResponse => response.data,
-    staleTime: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
-    refetchInterval: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
+    select: (response): GetGraphDataResponse => {
+      if (!hours) return response.data;
+
+      const minTimestamp = Date.now() - hours * 60 * 60 * 1000;
+      return {
+        ...response.data,
+        data: response.data.data.filter(
+          (point) => Number(point.timestamp) >= minTimestamp,
+        ),
+      };
+    },
+    staleTime: 60 * 1000,
+    refetchInterval: 60 * 1000,
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -46,6 +58,7 @@ export const useGlucoseTimeInRange = (hours?: number) => {
         hours,
       }),
     select: (response): GetTimeInRangeResponse => response.data,
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -57,6 +70,7 @@ export const useGlucoseAverage = (hours?: number) => {
         hours,
       }),
     select: (response): GetAverageGlucoseResponse => response.data,
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -68,6 +82,7 @@ export const useGlucoseLowest = (hours?: number) => {
         hours,
       }),
     select: (response): GetLowestGlucoseResponse => response.data,
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -79,6 +94,21 @@ export const useGlucoseHighest = (hours?: number) => {
         hours,
       }),
     select: (response): GetHighestGlucoseResponse => response.data,
+    placeholderData: (previousData) => previousData,
+  });
+};
+
+export const useGlucoseManagementIndicator = (hours?: number) => {
+  return useQuery({
+    queryKey: ["glucose", "gmi", hours],
+    queryFn: () =>
+      ApiClient.glucose.glucoseStatisticsControllerGetGlucoseManagementIndicator(
+        {
+          hours,
+        },
+      ),
+    select: (response): GetGlucoseManagementIndicatorResponse => response.data,
+    placeholderData: (previousData) => previousData,
   });
 };
 

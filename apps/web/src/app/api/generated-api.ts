@@ -58,6 +58,59 @@ export enum ServiceStatus {
   Maintenance = "maintenance",
 }
 
+export interface UserRoleResponse {
+  /** @example "ADMIN" */
+  code: string;
+  /** @example "Administrator" */
+  label: string;
+  /** @example ["projects:create","projects:update"] */
+  permissions: string[];
+}
+
+export interface UserResponse {
+  /** @example "e2718142-3c3f-4a5f-9038-f53ea9f15b47" */
+  uuid: string;
+  /** @example "admin@example.com" */
+  email: string;
+  /** @example "admin" */
+  username: string;
+  isActive: boolean;
+  role: UserRoleResponse;
+}
+
+export interface UpdateUserRoleBody {
+  /** @example "ADMIN" */
+  roleCode: string;
+}
+
+export interface RegisterBody {
+  /** @example "admin@example.com" */
+  email: string;
+  /** @example "admin" */
+  username: string;
+  /** @example "VeryStrongPassword123!" */
+  password: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  /** @example "Bearer" */
+  tokenType: string;
+  user: UserResponse;
+}
+
+export interface LoginBody {
+  /** @example "admin@example.com" */
+  identifier: string;
+  /** @example "VeryStrongPassword123!" */
+  password: string;
+}
+
+export interface LogoutResponse {
+  /** @example true */
+  revoked: boolean;
+}
+
 export interface StatusCheckResponse {
   /**
    * Service operational status
@@ -97,7 +150,13 @@ export interface MaintenanceModeResponse {
   message: string;
 }
 
-export type GetProjectResponse = object;
+export interface GetProjectResponse {
+  /**
+   * Unique identifier for the project
+   * @example "123e4567-e89b-12d3-a456-426614174000"
+   */
+  uuid: string;
+}
 
 export type CreateProjectBody = object;
 
@@ -409,6 +468,24 @@ export interface GetLowestGlucoseResponse {
   hours?: number;
 }
 
+export interface GetGlucoseManagementIndicatorResponse {
+  /**
+   * Indicates whether sufficient data is available for calculation
+   * @example true
+   */
+  isDataSufficient: boolean;
+  /**
+   * Value of the Glucose Management Indicator calculated based on the glucose readings in the specified period
+   * @example 55
+   */
+  value: number;
+  /**
+   * Number of hours included in the calculation period
+   * @example 168
+   */
+  hours?: number;
+}
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -594,6 +671,140 @@ export class HttpClient<SecurityDataType = unknown> {
 export class API<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
+  users = {
+    /**
+     * @description Returns all user accounts. Requires permission: users:read
+     *
+     * @tags Users
+     * @name UsersControllerGetUsers
+     * @summary List users
+     * @request GET:/users
+     * @secure
+     */
+    usersControllerGetUsers: (params: RequestParams = {}) =>
+      this.request<UserResponse[], void>({
+        path: `/users`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Returns a user by UUID. Requires permission: users:read
+     *
+     * @tags Users
+     * @name UsersControllerGetUser
+     * @summary Get user
+     * @request GET:/users/{uuid}
+     * @secure
+     */
+    usersControllerGetUser: (uuid: string, params: RequestParams = {}) =>
+      this.request<UserResponse, void>({
+        path: `/users/${uuid}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Replaces the user role. A user can have only one role. Requires permission: users.roles:update
+     *
+     * @tags Users
+     * @name UsersControllerUpdateUserRole
+     * @summary Update user role
+     * @request PATCH:/users/{uuid}/role
+     * @secure
+     */
+    usersControllerUpdateUserRole: (
+      uuid: string,
+      data: UpdateUserRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<UserResponse, void>({
+        path: `/users/${uuid}/role`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  auth = {
+    /**
+     * @description Creates a user account. The first registered account receives the ADMIN role; later users receive USER.
+     *
+     * @tags Authentication
+     * @name AuthControllerRegister
+     * @summary Register user
+     * @request POST:/auth/register
+     */
+    authControllerRegister: (data: RegisterBody, params: RequestParams = {}) =>
+      this.request<AuthResponse, any>({
+        path: `/auth/register`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Authenticates by email or username and returns a JWT access token.
+     *
+     * @tags Authentication
+     * @name AuthControllerLogin
+     * @summary Log in
+     * @request POST:/auth/login
+     */
+    authControllerLogin: (data: LoginBody, params: RequestParams = {}) =>
+      this.request<AuthResponse, void>({
+        path: `/auth/login`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Revokes the current JWT by adding its token id to the Redis blacklist.
+     *
+     * @tags Authentication
+     * @name AuthControllerLogout
+     * @summary Log out
+     * @request POST:/auth/logout
+     * @secure
+     */
+    authControllerLogout: (params: RequestParams = {}) =>
+      this.request<LogoutResponse, any>({
+        path: `/auth/logout`,
+        method: "POST",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Authentication
+     * @name AuthControllerMe
+     * @summary Get current user
+     * @request GET:/auth/me
+     * @secure
+     */
+    authControllerMe: (params: RequestParams = {}) =>
+      this.request<UserResponse, any>({
+        path: `/auth/me`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
   status = {
     /**
      * @description Checks the current operational status of the service.
@@ -980,6 +1191,33 @@ export class API<
     ) =>
       this.request<GetLowestGlucoseResponse, void>({
         path: `/glucose/statistics/lowest`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * @description Retrieves the Glucose Management Indicator.
+     *
+     * @tags Glucose Statistics
+     * @name GlucoseStatisticsControllerGetGlucoseManagementIndicator
+     * @summary Get GMI
+     * @request GET:/glucose/statistics/gmi
+     */
+    glucoseStatisticsControllerGetGlucoseManagementIndicator: (
+      query?: {
+        /**
+         * Number of hours to calculate glucose reading, minimum 7 days
+         * @min 168
+         * @example 672
+         */
+        hours?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<GetGlucoseManagementIndicatorResponse, void>({
+        path: `/glucose/statistics/gmi`,
         method: "GET",
         query: query,
         format: "json",

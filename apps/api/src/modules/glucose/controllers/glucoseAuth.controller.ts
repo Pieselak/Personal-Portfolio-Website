@@ -2,7 +2,6 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { GlucoseDexcomAuthService } from '../services/dexcom/dexcomAuth.service';
 import {
   ApiBadRequestResponse,
-  ApiBearerAuth,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
@@ -13,8 +12,8 @@ import { HandleDexcomOAuthQuery } from '../dto/input/handleDexcomOAuth.dto';
 import { BuildDexcomOAuthURLResponse } from '../dto/response/buildDexcomOAuthURL.dto';
 import { HandleDexcomOAuthResponse } from '../dto/response/handleDexcomOAuth.dto';
 import { Throttle } from '@nestjs/throttler';
-import { GlucoseLibreAuthService } from '../services/libre/libreAuth.service';
 import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
+import { AuthPermissions } from '../../auth/decorators/auth-permissions.decorator';
 
 @Controller('glucose/auth')
 @ApiTags('Glucose Authentication')
@@ -23,7 +22,7 @@ export class GlucoseAuthController {
 
   @CheckMaintenance()
   @Get('dexcom/url')
-  @ApiBearerAuth()
+  @AuthPermissions('glucose.auth:read')
   @ApiOperation({
     summary: 'Get Dexcom OAuth URL',
     description:
@@ -45,7 +44,7 @@ export class GlucoseAuthController {
 
   @CheckMaintenance()
   @Get('dexcom/callback')
-  @ApiBearerAuth()
+  @AuthPermissions('glucose.auth:authorize')
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({
     summary: 'Dexcom OAuth endpoint',

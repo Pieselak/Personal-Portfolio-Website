@@ -6,6 +6,11 @@ const en = {
     flag: GB,
   },
   translation: {
+    roles: {
+      admin: "Administrator",
+      user: "User",
+    },
+
     pages: {
       loading: {
         title: "Loading",
@@ -46,6 +51,94 @@ const en = {
         title: "Select language",
         subtitle: "Select the preferred language for this website.",
         noLanguages: "No languages available at the moment.",
+      },
+
+      auth: {
+        fields: {
+          name: "Full name",
+          username: "Username",
+          identifier: "Email or username",
+          email: "Email address",
+          password: "Password",
+          confirmPassword: "Confirm password",
+        },
+        placeholders: {
+          name: "Jane Doe",
+          username: "jane",
+          identifier: "jane or jane@example.com",
+          email: "jane@example.com",
+          password: "At least 8 characters",
+          confirmPassword: "Repeat password",
+        },
+        actions: {
+          showPassword: "Show password",
+          hidePassword: "Hide password",
+        },
+        errors: {
+          name: "Enter your full name.",
+          username: "Enter a username with at least 3 characters.",
+          identifierRequired: "Enter your email address or username.",
+          email: "Enter a valid email address.",
+          passwordRequired: "Enter your password.",
+          passwordLength: "Password must be at least 8 characters.",
+          passwordMatch: "Passwords must match.",
+          terms: "Accept the terms of service.",
+          invalidCredentials: "Email, username, or password is incorrect.",
+          accountExists:
+            "An account with this email or username already exists.",
+          server: "The request could not be completed. Try again in a moment.",
+        },
+        login: {
+          title: "Login",
+          subtitle:
+            "Enter the user panel and return to your settings without unnecessary noise.",
+          eyebrow: "Access",
+          formTitle: "Sign in",
+          description:
+            "A short, readable form aligned with the rest of the app and ready for API wiring.",
+          remember: "Remember me",
+          forgotPassword: "Forgot password?",
+          submit: "Sign in",
+          submitting: "Signing in",
+          noAccount: "Do not have an account yet?",
+          createAccount: "Create account",
+          apiNotice:
+            "Your session will be stored locally and attached to protected API requests.",
+        },
+        register: {
+          title: "Register",
+          subtitle:
+            "Create an account in a calm, structured form that matches the site style.",
+          eyebrow: "New account",
+          formTitle: "Create account",
+          description:
+            "Data is validated on the client and the form is prepared for later backend integration.",
+          accept: "I accept the",
+          terms: "terms of service",
+          submit: "Register",
+          submitting: "Creating account",
+          hasAccount: "Already have an account?",
+          signIn: "Go to login",
+          apiNotice:
+            "The first created account receives administrator permissions from the API.",
+        },
+        reset: {
+          title: "Reset password",
+          subtitle:
+            "Enter your email address and the interface will guide you back to access.",
+          eyebrow: "Recovery",
+          formTitle: "Reset your password",
+          description:
+            "A minimal form for sending a reset link, ready for email service integration.",
+          submit: "Send reset link",
+          remembered: "Password came back?",
+          backToLogin: "Back to login",
+          createAccount: "Create a new account",
+          hint: "After API integration, the user will receive an email with a secure password reset link.",
+          sentTitle: "Link prepared",
+          sentMessage:
+            "If the account exists, password reset instructions will be sent to the provided address.",
+        },
       },
 
       user: {
@@ -131,143 +224,127 @@ const en = {
         },
 
         home: {
-          title: "Welcome to my website!",
-          subtitle:
-            "I'm glad you're here! I'm Patryk, a technology and programming enthusiast. On this website, you'll find information about me, my projects, and my blood glucose data from my CGM. Feel free to explore and get in touch!",
-          sections: {
-            aboutme: {
-              description:
-                "Learn about my background, experience, and interests.",
+          hero: {
+            eyebrow: "Full-stack developer in progress",
+            name: "Patryk Znamirowski",
+            headline:
+              "An ambitious young programmer who turns ideas into working web applications with passion.",
+            description:
+              "Every day I develop my programming skills by combining school theory with practical coding. I create modern websites and applications while experimenting with new technologies. I am actively looking for opportunities to gain my first experience and enter the professional IT world.",
+            primaryAction: "View my projects",
+            secondaryAction: "Contact me",
+            imageAlt: "Patryk Znamirowski - profile photo",
+          },
+          links: {
+            github: "Patryk's GitHub profile",
+            linkedin: "Patryk's LinkedIn profile",
+            email: "Send Patryk an email",
+          },
+          profileCard: {
+            eyebrow: "Bielsko-Biala / technical school",
+            title: "Programming technician student",
+            description:
+              "I build personal projects, grow my React and NestJS stack, and look for my first real challenges in the IT industry.",
+          },
+          metrics: {
+            education: {
+              value: "3 years",
+              label:
+                "Of active learning at technical school in the programming technician track.",
             },
-            projects: {
-              description:
-                "Explore my portfolio of personal and professional projects.",
+            practice: {
+              value: "Hundreds of hours",
+              label: "Spent independently exploring code after school.",
             },
-            glucose: {
-              description:
-                "View my real-time blood glucose data from my CGM device.",
+            motivation: {
+              value: "100%",
+              label:
+                "Motivation to grow and gain my first commercial experience.",
             },
           },
-          welcome: "Welcome! 👋",
-          welcomeDescription:
-            "I'm passionate about building innovative digital solutions and maintaining a healthy lifestyle. This site showcases my journey through technology and personal data transparency.",
-          skills: [
-            "React & TypeScript",
-            "Full-stack Development",
-            "Data Visualization",
-          ],
-          explore: "Explore",
+          focus: {
+            title: "What you will find here",
+            description:
+              "This portfolio presents my projects, current learning stage, and practical experiments with web applications.",
+            items: {
+              projects: {
+                title: "Web projects",
+                description:
+                  "Real applications and experiments where I practice frontend, backend, and API integrations.",
+              },
+              learning: {
+                title: "Learning path",
+                description:
+                  "A short story of how curiosity about Roblox games led me toward building web applications.",
+              },
+              glucose: {
+                title: "CGM integration",
+                description:
+                  "A glucose data module showing how I connect the frontend to a real data source.",
+              },
+            },
+          },
         },
 
         aboutme: {
           title: "About me",
           subtitle:
-            "Hello! My name is Patryk Znamirowski and I am passionate about technology, programming, and a healthy lifestyle. On this page, you will find information about my career, interests, and the projects I am currently working on. Get to know me better!",
-          intro: {
-            eyebrow: "Personal profile",
-            title: "A place for the story behind the code",
+            "Get to know my learning stage, working style, and what I am looking for in my first professional challenges.",
+          story: {
+            eyebrow: "Story",
+            title: "From curiosity to my own applications",
             description:
-              "Use this section as a concise biography: who you are, what you build, what problems interest you, and what kind of work gives you energy. It is designed to feel personal while still fitting a developer portfolio.",
+              "I treat programming as a craft best learned through real projects, documentation, and consistent code improvement.",
+            start:
+              "Hi! I am 17 and I study at a technical school in Bielsko-Biala in the programming technician track. My programming journey started with simple curiosity through creating Roblox games, and today it has grown into regularly building my own, increasingly advanced projects.",
+            learning:
+              "In my free time, I try to go far beyond the school curriculum. I independently explore modern frameworks, learn good practices for writing clean code, and try to understand how to build applications that are both efficient and user-friendly.",
+            goal: "My main goal now is to test my skills against business reality. I would gladly take on an internship, traineeship, or junior-level challenge to learn from more experienced developers in a real working environment.",
           },
-          techStack: {
-            items: [
-              "React",
-              "TypeScript",
-              "Node.js",
-              "Express",
-              "Vite",
-              "Data visualization",
-            ],
+          experience: {
+            eyebrow: "Current stage",
+            title: "Learning and first practice",
+            items: {
+              school: {
+                title: "Technical school student",
+                description:
+                  "I study in Bielsko-Biala in the programming technician track and develop my own projects beyond the school curriculum.",
+              },
+              practice: {
+                title: "1 month of Laravel practice",
+                description:
+                  "I completed practical training where I worked with the Laravel framework and learned a more realistic rhythm of application development.",
+              },
+            },
           },
-          facts: {
-            items: [
-              {
-                title: "Location",
-                description:
-                  "Add your city, work mode, or availability for remote collaboration.",
-              },
-              {
-                title: "Main role",
-                description:
-                  "Describe your current role, specialization, or the direction you are developing toward.",
-              },
-              {
-                title: "Beyond code",
-                description:
-                  "Leave space for interests, health, learning, community, or anything that gives the page a human pulse.",
-              },
-            ],
-          },
-          focusAreas: {
-            items: [
-              {
-                title: "Frontend engineering",
-                description:
-                  "Interfaces built with attention to usability, accessibility, motion, and reliable component structure.",
-              },
-              {
-                title: "Full-stack thinking",
-                description:
-                  "Connecting UI, API, persistence, and deployment into products that are easy to understand and maintain.",
-              },
-              {
-                title: "Personal data and health",
-                description:
-                  "A space for transparent experiments, such as glucose data, habits, and meaningful self-tracking.",
-              },
-            ],
-          },
-          values: {
-            eyebrow: "Working style",
-            title: "What guides the work",
-            items: [
-              {
-                title: "Clarity first",
-                description:
-                  "Good software should explain itself through structure, naming, and predictable behavior.",
-              },
-              {
-                title: "Learning in public",
-                description:
-                  "Projects are treated as a record of growth, curiosity, and practical experimentation.",
-              },
-              {
-                title: "Useful details",
-                description:
-                  "Small interaction, accessibility, and performance choices matter because people feel them.",
-              },
-            ],
-          },
-          timeline: {
-            eyebrow: "Path",
-            title: "Milestones to fill in",
-            items: [
-              {
-                period: "Now",
-                title: "Current focus",
-                description:
-                  "Add what you are learning, building, or improving right now.",
-              },
-              {
-                period: "Recently",
-                title: "Recent experience",
-                description:
-                  "Describe a project, role, course, or challenge that shaped your skills.",
-              },
-              {
-                period: "Next",
-                title: "What comes next",
-                description:
-                  "Share your goals, preferred collaborations, or the kind of problems you want to solve.",
-              },
-            ],
-          },
-          contact: {
-            title: "Let's build the next section together",
+          tech: {
+            eyebrow: "Stack",
+            title: "Technologies I am developing now",
             description:
-              "Use this space for a direct invitation: collaboration, questions, feedback, or a simple hello.",
-            action: "Write to me",
-            email: "znamirowskipatryk@gmail.com",
+              "My strongest focus is building web applications in the React, NestJS, and TailwindCSS ecosystem.",
+          },
+          strengths: {
+            eyebrow: "Strengths",
+            title: "How I approach learning and problems",
+            description:
+              "I am at the beginning of my path, and that is exactly why I value flexibility, independence, and consistency.",
+            items: {
+              curiosity: {
+                title: "A strong hunger for knowledge",
+                description:
+                  "I do not limit myself to what I need for school assignments. I read documentation, watch tutorials, and test current market technologies to stay close to trends.",
+              },
+              flexibility: {
+                title: "No bad habits and high flexibility",
+                description:
+                  "I am at the beginning of my journey, which means I absorb knowledge quickly and adapt fast to new standards, tools, and team methodologies.",
+              },
+              determination: {
+                title: "Determination in solving problems",
+                description:
+                  "When I encounter a bug, I do not give up until I understand its cause. I can search for solutions independently, which strengthens my technical independence.",
+              },
+            },
           },
         },
 
@@ -287,6 +364,9 @@ const en = {
           },
           sourceCode: {
             available: "View source code",
+            openAction: "View source code",
+            stateOpen: "Open source code",
+            stateClosed: "Closed source code",
             notAvailable: "Source code not available",
             closed: "Closed source code",
           },
@@ -295,6 +375,25 @@ const en = {
           status: "Status",
           team: "Team",
           technologies: "Technologies",
+          technologyCountOne: "{{count}} technology",
+          technologyCountMany: "{{count}} technologies",
+          filterLabel: "Project filter",
+          filters: {
+            all: "All",
+            completed: "Completed",
+            inProgress: "In progress",
+            planned: "Planned",
+          },
+          details: {
+            project: "Project",
+            description: "Description",
+            whatItDoes: "What this project shows",
+            meta: "Metadata",
+            timeline: "Time and availability",
+            team: "Team",
+            contributors: "Authors and roles",
+            noContributors: "No team data.",
+          },
         },
 
         glucose: {
@@ -303,10 +402,6 @@ const en = {
             "Browse blood glucose data from my CGM (continuous glucose monitor) in real-time. View current readings, analyze trends, and monitor time spent in target glucose range. Everything in one place, available for anyone interested.",
           loading: "Loading glucose data...",
           subpages: {
-            aboutDiabetes: {
-              navigation: "About diabetes",
-              title: "Information about MODY 2 diabetes",
-            },
             summary: {
               navigation: "Summary",
               title: "Summary of glucose readings",
@@ -321,7 +416,7 @@ const en = {
             },
           },
           current: {
-            title: "Current reading",
+            title: "Last reading",
             sensor: "Sensor",
             noSensor: "No sensor data",
             active: "Active",
@@ -334,6 +429,7 @@ const en = {
             activatedAt: "Activated at",
             expiresIn: "Expires in",
             refresh: "Next refresh",
+            sensorLife: "Sensor life",
             trends: {
               none: "No trend available",
               risingFast: "Rising fast",
@@ -345,97 +441,31 @@ const en = {
               fallingFast: "Falling fast",
             },
           },
-          aboutDiabetes: {
-            sections: {
-              pathophysiology: {
-                title: "Pathophysiology and causes",
-                content:
-                  "The disease is caused by a mutation in the GCK gene. Glucokinase is an enzyme that acts as a specific 'glucose sensor' in pancreatic beta cells. In people with MODY 2, this sensor is 'deregulated' – it detects sugar only at a higher concentration. The pancreas produces insulin correctly and in appropriate amounts, but releases it only when the blood glucose level is higher than in a healthy person (usually fasting around 100-140 mg/dL).",
-              },
-              diagnosisAndSymptoms: {
-                title: "Symptoms and diagnosis",
-                content:
-                  "MODY 2 diabetes is most often completely asymptomatic. Patients rarely experience excessive thirst or polyuria. For this reason, it is diagnosed mainly by accident – during preventive examinations, occupational health checks, infections, or in women during routine oral glucose tolerance tests (OGTT) in pregnancy. A final and definitive diagnosis can only be made based on genetic testing.",
-              },
-              treatment: {
-                title: "Management and treatment",
-                content:
-                  "The most important information for patients is that MODY 2, in the vast majority of cases, does not require pharmacological treatment – neither oral medications nor insulin. Attempts to lower sugar levels with drugs are often ineffective because the body strives for its new, elevated equilibrium point anyway. The foundation is a healthy lifestyle, a balanced diet, and physical activity. The exception is pregnancy, when temporary insulin therapy may be necessary due to the fetal growth rate.",
-              },
-              inheritance: {
-                title: "Inheritance and genetics",
-                content:
-                  "MODY 2 is inherited in an autosomal dominant manner. This means that the mutation does not skip generations, and the family history (diabetes in one of the parents or grandparents) is heavily burdened. If one parent has MODY 2 diabetes, the risk of passing the mutation to the child is exactly 50% in each pregnancy.",
-              },
-            },
-            comparisonTable: {
-              title: "Comparison of diabetes types",
-              header: {
-                feature: "Characteristic feature",
-                mody2: "MODY 2 (GCK)",
-                type1: "Type 1 (Autoimmune)",
-                type2: "Type 2 (Metabolic)",
-              },
-              age: {
-                feature: "Age of onset / diagnosis",
-                mody2: "Usually before age 25 (often in childhood)",
-                type1: "Most often children, adolescents, and young adults",
-                type2:
-                  "Traditionally after age 40 (nowadays increasingly younger)",
-              },
-              genetics: {
-                feature: "Genetic background / Inheritance",
-                mody2:
-                  "Monogenic (one mutated gene). Autosomal dominant inheritance, very strong family history.",
-                type1:
-                  "Polygenic. Weak family history (more of a predisposition).",
-                type2:
-                  "Polygenic. Very strong family history linked to lifestyle.",
-              },
-              bodyWeight: {
-                feature: "Body weight",
-                mody2: "Usually normal",
-                type1:
-                  "Usually normal or underweight (weight loss before diagnosis)",
-                type2: "Most often overweight or obese (abdominal)",
-              },
-              insulinResistance: {
-                feature: "Insulin resistance",
-                mody2: "None",
-                type1: "None",
-                type2: "Very high (main cause of the disease)",
-              },
-              antibodies: {
-                feature: "Antibodies (anti-GAD, ICA, ZnT8)",
-                mody2: "Absent",
-                type1: "Present in the blood (destroying beta cells)",
-                type2: "Absent",
-              },
-              insulinSecretion: {
-                feature: "Insulin secretion (C-peptide level)",
-                mody2:
-                  "Preserved. Insulin secreted correctly, but at a higher sugar threshold.",
-                type1: "Complete loss (very low or zero C-peptide).",
-                type2:
-                  "Initially elevated (hyperinsulinemia), decreases over the years.",
-              },
-              treatment: {
-                feature: "Treatment of choice",
-                mody2:
-                  "Only diet and exercise. Medications and insulin usually unnecessary (exception: pregnancy).",
-                type1:
-                  "Absolute, lifelong insulin therapy from day 1 of diagnosis.",
-                type2:
-                  "Diet, exercise, oral medications (e.g., metformin), incretins, later stage insulin.",
-              },
-            },
-          },
           summary: {
             period: "Statistics from the last {{hours}} hours.",
             average: "Average",
             highest: "Highest",
             lowest: "Lowest",
             timeInRange: "Time in range",
+            gmi: {
+              eyebrow: "GMI",
+              title: "Glycemic Management Indicator",
+              insufficient:
+                "GMI needs at least 7 days of glucose data. Choose a longer range to show this estimate.",
+              insufficientDatabase:
+                "The selected range is long enough, but there is not enough glucose data in the database to calculate GMI yet.",
+              context:
+                "GMI estimates the A1C-like trend from continuous glucose data and is most useful when interpreted together with time in range.",
+            },
+          },
+          timeRange: {
+            label: "Glucose time range",
+            "1d": "1d",
+            "7d": "7d",
+            "14d": "14d",
+            "30d": "30d",
+            "90d": "90d",
+            all: "All time",
           },
           timeInRange: {
             period: "Distribution from the last {{hours}} hours.",
@@ -444,6 +474,10 @@ const en = {
             empty: "No glucose readings available for the graph.",
             range: "Target range: {{low}}-{{high}} {{unit}}",
             value: "Glucose",
+            targetZone: "Target zone",
+            inRangeSummary:
+              "{{value}}% of visible readings are inside the target zone.",
+            referencePoints: "Reference points",
           },
           ranges: {
             high: "Critically high",
@@ -478,13 +512,26 @@ const en = {
         nav: {
           openMenu: "Open navigation menu",
           closeMenu: "Close navigation menu",
+          mobileNavigation: "Mobile navigation",
           changeLanguage: "Change language",
           changeTheme: "Change theme",
+          themes: {
+            light: "Light",
+            dark: "Dark",
+            contrast: "Contrast",
+          },
           pages: {
             home: "Home",
             aboutme: "About me",
             projects: "Projects",
             glucose: "Blood sugar",
+          },
+          account: {
+            login: "Sign in",
+            logout: "Log out",
+            expand: "Open account menu",
+            profile: "Profile",
+            settings: "Settings",
           },
         },
         footer: {

@@ -17,6 +17,8 @@ import { GetAverageGlucoseQuery } from '../dto/input/getAverageGlucose.dto';
 import { GetHighestGlucoseQuery } from '../dto/input/getHighestGlucose.dto';
 import { GetLowestGlucoseQuery } from '../dto/input/getLowestGlucose.dto';
 import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
+import { GetGlucoseManagementIndicatorQuery } from '../dto/input/getGlucoseManagementIndicator';
+import { GetGlucoseManagementIndicatorResponse } from '../dto/response/getGlucoseManagementIndicator';
 
 @Controller('glucose/statistics')
 @ApiTags('Glucose Statistics')
@@ -115,5 +117,27 @@ export class GlucoseStatisticsController {
     @Query() query: GetLowestGlucoseQuery,
   ): Promise<GetLowestGlucoseResponse> {
     return await this.glucoseService.getLowestGlucose(query);
+  }
+
+  @CheckMaintenance()
+  @Get('gmi')
+  @ApiOperation({
+    summary: 'Get GMI',
+    description: 'Retrieves the Glucose Management Indicator.',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved Glucose Management Indicator data',
+    type: GetGlucoseManagementIndicatorResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Internal server error',
+  })
+  @ApiServiceUnavailableResponse({
+    description: 'Service is unavailable',
+  })
+  async getGlucoseManagementIndicator(
+    @Query() query: GetGlucoseManagementIndicatorQuery,
+  ): Promise<GetGlucoseManagementIndicatorResponse> {
+    return await this.glucoseService.getGlucoseManagementIndicator(query);
   }
 }

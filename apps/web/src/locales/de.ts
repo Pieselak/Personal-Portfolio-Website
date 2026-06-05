@@ -6,6 +6,11 @@ const de = {
     flag: DE,
   },
   translation: {
+    roles: {
+      admin: "Administrator",
+      user: "Benutzer",
+    },
+
     pages: {
       loading: {
         title: "Laden",
@@ -47,6 +52,96 @@ const de = {
         title: "Sprache auswählen",
         subtitle: "Wählen Sie die bevorzugte Sprache für diese Seite aus.",
         noLanguages: "Derzeit sind keine Sprachen verfügbar.",
+      },
+
+      auth: {
+        fields: {
+          name: "Vollständiger Name",
+          username: "Benutzername",
+          identifier: "E-Mail oder Benutzername",
+          email: "E-Mail-Adresse",
+          password: "Passwort",
+          confirmPassword: "Passwort wiederholen",
+        },
+        placeholders: {
+          name: "Max Mustermann",
+          username: "max",
+          identifier: "max oder max@example.com",
+          email: "max@example.com",
+          password: "Mindestens 8 Zeichen",
+          confirmPassword: "Passwort wiederholen",
+        },
+        actions: {
+          showPassword: "Passwort anzeigen",
+          hidePassword: "Passwort ausblenden",
+        },
+        errors: {
+          name: "Gib deinen vollständigen Namen ein.",
+          username: "Gib einen Benutzernamen mit mindestens 3 Zeichen ein.",
+          identifierRequired:
+            "Gib deine E-Mail-Adresse oder deinen Benutzernamen ein.",
+          email: "Gib eine gültige E-Mail-Adresse ein.",
+          passwordRequired: "Gib dein Passwort ein.",
+          passwordLength: "Das Passwort muss mindestens 8 Zeichen haben.",
+          passwordMatch: "Die Passwörter müssen übereinstimmen.",
+          terms: "Akzeptiere die Nutzungsbedingungen.",
+          invalidCredentials: "E-Mail, Benutzername oder Passwort ist falsch.",
+          accountExists:
+            "Ein Konto mit dieser E-Mail oder diesem Benutzernamen existiert bereits.",
+          server:
+            "Die Anfrage konnte nicht abgeschlossen werden. Versuche es gleich erneut.",
+        },
+        login: {
+          title: "Anmelden",
+          subtitle:
+            "Öffne den Nutzerbereich und kehre ohne unnötigen Lärm zu deinen Einstellungen zurück.",
+          eyebrow: "Zugang",
+          formTitle: "Einloggen",
+          description:
+            "Ein kurzes, klares Formular im Stil der restlichen App und bereit für die API-Anbindung.",
+          remember: "Angemeldet bleiben",
+          forgotPassword: "Passwort vergessen?",
+          submit: "Einloggen",
+          submitting: "Einloggen",
+          noAccount: "Noch kein Konto?",
+          createAccount: "Konto erstellen",
+          apiNotice:
+            "Deine Sitzung wird lokal gespeichert und an geschützte API-Anfragen angehängt.",
+        },
+        register: {
+          title: "Registrieren",
+          subtitle:
+            "Erstelle ein Konto in einem ruhigen, geordneten Formular, das zum Stil der Seite passt.",
+          eyebrow: "Neues Konto",
+          formTitle: "Konto erstellen",
+          description:
+            "Die Daten werden im Client validiert und das Formular ist für eine spätere Backend-Integration vorbereitet.",
+          accept: "Ich akzeptiere die",
+          terms: "Nutzungsbedingungen",
+          submit: "Registrieren",
+          submitting: "Konto erstellen",
+          hasAccount: "Du hast schon ein Konto?",
+          signIn: "Zur Anmeldung",
+          apiNotice:
+            "Das erste erstellte Konto erhält Administratorrechte aus der API.",
+        },
+        reset: {
+          title: "Passwort zurücksetzen",
+          subtitle:
+            "Gib deine E-Mail-Adresse ein und die Oberfläche führt dich zurück zum Zugriff.",
+          eyebrow: "Wiederherstellung",
+          formTitle: "Passwort zurücksetzen",
+          description:
+            "Ein minimales Formular zum Senden eines Reset-Links, bereit für die Integration eines Maildienstes.",
+          submit: "Reset-Link senden",
+          remembered: "Passwort wieder eingefallen?",
+          backToLogin: "Zurück zur Anmeldung",
+          createAccount: "Neues Konto erstellen",
+          hint: "Nach der API-Integration erhält der Nutzer eine E-Mail mit einem sicheren Link zum Ändern des Passworts.",
+          sentTitle: "Link vorbereitet",
+          sentMessage:
+            "Wenn das Konto existiert, werden Anweisungen zum Zurücksetzen des Passworts an die angegebene Adresse gesendet.",
+        },
       },
 
       user: {
@@ -133,143 +228,127 @@ const de = {
         },
 
         home: {
-          title: "Willkommen auf meiner Website!",
-          subtitle:
-            "Ich freue mich, dass du hier bist! Ich bin Patryk, ein Technologie- und Programmier-Enthusiast. Auf dieser Website findest du Informationen über mich, meine Projekte und meine Blutzuckerdaten aus meinem CGM. Viel Spaß beim Entdecken und melde dich gerne bei mir!",
-          sections: {
-            aboutme: {
-              description:
-                "Erfahre mehr über meinen Hintergrund, meine Erfahrung und meine Interessen.",
+          hero: {
+            eyebrow: "Full-stack-Entwickler im Aufbau",
+            name: "Patryk Znamirowski",
+            headline:
+              "Ein ambitionierter junger Programmierer, der Ideen mit Leidenschaft in funktionierende Webanwendungen verwandelt.",
+            description:
+              "Jeden Tag entwickle ich meine Programmierkenntnisse weiter, indem ich schulische Theorie mit praktischem Coding verbinde. Ich erstelle moderne Websites und Anwendungen und experimentiere mit neuen Technologien. Aktiv suche ich nach Möglichkeiten, erste Erfahrungen zu sammeln und in die professionelle IT-Welt einzusteigen.",
+            primaryAction: "Meine Projekte ansehen",
+            secondaryAction: "Kontakt aufnehmen",
+            imageAlt: "Patryk Znamirowski - Profilfoto",
+          },
+          links: {
+            github: "Patryks GitHub-Profil",
+            linkedin: "Patryks LinkedIn-Profil",
+            email: "Patryk eine E-Mail senden",
+          },
+          profileCard: {
+            eyebrow: "Bielsko-Biala / Technikum",
+            title: "Schüler im Bereich Programmierung",
+            description:
+              "Ich baue eigene Projekte, entwickle meinen React- und NestJS-Stack weiter und suche meine ersten echten Herausforderungen in der IT-Branche.",
+          },
+          metrics: {
+            education: {
+              value: "3 Jahre",
+              label: "Aktives Lernen am Technikum im Bereich Programmierung.",
             },
-            projects: {
-              description:
-                "Erkunde mein Portfolio mit persönlichen und beruflichen Projekten.",
+            practice: {
+              value: "Hunderte Stunden",
+              label:
+                "Eigenständiges Vertiefen von Programmierwissen nach dem Unterricht.",
             },
-            glucose: {
-              description:
-                "Schau dir meine Echtzeit-Blutzuckerdaten von meinem CGM-Gerät an.",
+            motivation: {
+              value: "100%",
+              label:
+                "Motivation, mich weiterzuentwickeln und erste kommerzielle Erfahrung zu sammeln.",
             },
           },
-          welcome: "Willkommen! 👋",
-          welcomeDescription:
-            "Ich bin leidenschaftlich an der Entwicklung innovativer digitaler Lösungen und einem gesunden Lebensstil interessiert. Diese Website zeigt meine Reise durch Technologie und Datentransparenz.",
-          skills: [
-            "React & TypeScript",
-            "Full-stack Development",
-            "Datenvisualisierung",
-          ],
-          explore: "Entdecken",
+          focus: {
+            title: "Was du auf dieser Seite findest",
+            description:
+              "Dieses Portfolio zeigt meine Projekte, meinen aktuellen Lernstand und praktische Experimente mit Webanwendungen.",
+            items: {
+              projects: {
+                title: "Webprojekte",
+                description:
+                  "Reale Anwendungen und Experimente, in denen ich Frontend, Backend und API-Integrationen übe.",
+              },
+              learning: {
+                title: "Entwicklungsweg",
+                description:
+                  "Eine kurze Geschichte darüber, wie aus Neugier für Roblox-Spiele das Bauen von Webanwendungen wurde.",
+              },
+              glucose: {
+                title: "CGM-Integration",
+                description:
+                  "Ein Glukosemodul, das zeigt, wie ich das Frontend mit einer realen Datenquelle verbinde.",
+              },
+            },
+          },
         },
 
         aboutme: {
           title: "Über mich",
           subtitle:
-            "Hallo! Mein Name ist Patryk Znamirowski und ich begeistere mich für Technologie, Programmierung und einen gesunden Lebensstil. Auf dieser Seite findest du Informationen zu meiner Karriere, meinen Interessen und den Projekten, an denen ich arbeite. Lerne mich besser kennen!",
-          intro: {
-            eyebrow: "Persönliches Profil",
-            title: "Ein Platz für die Geschichte hinter dem Code",
+            "Lerne meinen aktuellen Lernstand, meine Arbeitsweise und meine Ziele für die ersten beruflichen Herausforderungen kennen.",
+          story: {
+            eyebrow: "Geschichte",
+            title: "Von Neugier zu eigenen Anwendungen",
             description:
-              "Nutze diesen Abschnitt als kurze Biografie: wer du bist, was du baust, welche Probleme dich interessieren und welche Arbeit dir Energie gibt. Die Ansicht wirkt persönlich und passt trotzdem zu einem Entwicklerportfolio.",
+              "Ich sehe Programmieren als Handwerk, das man am besten durch reale Projekte, Dokumentation und konsequente Verbesserung des Codes lernt.",
+            start:
+              "Hallo! Ich bin 17 Jahre alt und besuche ein Technikum in Bielsko-Biala im Bereich Programmierung. Meine Programmierlaufbahn begann mit einfacher Neugier beim Erstellen von Roblox-Spielen und führt heute zum regelmäßigen Bau eigener, immer anspruchsvollerer Projekte.",
+            learning:
+              "In meiner Freizeit versuche ich, weit über den Schulstoff hinauszugehen. Ich erkunde selbstständig moderne Frameworks, lerne gute Praktiken für sauberen Code und möchte verstehen, wie man Anwendungen baut, die sowohl performant als auch nutzerfreundlich sind.",
+            goal: "Mein aktuelles Hauptziel ist es, meine Fähigkeiten mit der geschäftlichen Realität zu konfrontieren. Sehr gerne würde ich ein Praktikum, eine Trainee-Stelle oder Junior-Aufgaben übernehmen, um von erfahreneren Entwicklern in einer echten Arbeitsumgebung zu lernen.",
           },
-          techStack: {
-            items: [
-              "React",
-              "TypeScript",
-              "Node.js",
-              "Express",
-              "Vite",
-              "Datenvisualisierung",
-            ],
+          experience: {
+            eyebrow: "Aktueller Stand",
+            title: "Lernen und erste Praxis",
+            items: {
+              school: {
+                title: "Schüler am Technikum",
+                description:
+                  "Ich lerne in Bielsko-Biala im Bereich Programmierung und entwickle eigene Projekte außerhalb des Schulprogramms.",
+              },
+              practice: {
+                title: "1 Monat Praxis mit Laravel",
+                description:
+                  "Ich habe ein Praktikum absolviert, in dem ich mit dem Laravel-Framework gearbeitet und den realistischeren Rhythmus der Anwendungsentwicklung kennengelernt habe.",
+              },
+            },
           },
-          facts: {
-            items: [
-              {
-                title: "Standort",
-                description:
-                  "Ergänze deine Stadt, Arbeitsweise oder Verfügbarkeit für Remote-Zusammenarbeit.",
-              },
-              {
-                title: "Hauptrolle",
-                description:
-                  "Beschreibe deine aktuelle Rolle, Spezialisierung oder die Richtung, in die du dich entwickeln möchtest.",
-              },
-              {
-                title: "Neben dem Code",
-                description:
-                  "Lass Raum für Interessen, Gesundheit, Lernen, Community oder etwas, das der Seite einen menschlichen Rhythmus gibt.",
-              },
-            ],
-          },
-          focusAreas: {
-            items: [
-              {
-                title: "Frontend Engineering",
-                description:
-                  "Oberflächen mit Fokus auf Nutzbarkeit, Barrierefreiheit, Animationen und stabile Komponentenstruktur.",
-              },
-              {
-                title: "Full-Stack-Denken",
-                description:
-                  "UI, API, Daten und Deployment zu Produkten verbinden, die verständlich und wartbar bleiben.",
-              },
-              {
-                title: "Persönliche Daten und Gesundheit",
-                description:
-                  "Ein Raum für transparente Experimente wie Glukosedaten, Gewohnheiten und sinnvolles Self-Tracking.",
-              },
-            ],
-          },
-          values: {
-            eyebrow: "Arbeitsweise",
-            title: "Was die Arbeit leitet",
-            items: [
-              {
-                title: "Klarheit zuerst",
-                description:
-                  "Gute Software sollte sich durch Struktur, Namen und vorhersehbares Verhalten selbst erklären.",
-              },
-              {
-                title: "Lernen in Projekten",
-                description:
-                  "Projekte sind ein sichtbarer Nachweis von Entwicklung, Neugier und praktischem Experimentieren.",
-              },
-              {
-                title: "Nützliche Details",
-                description:
-                  "Kleine Entscheidungen zu Interaktion, Barrierefreiheit und Performance zählen, weil Nutzer sie spüren.",
-              },
-            ],
-          },
-          timeline: {
-            eyebrow: "Weg",
-            title: "Meilensteine zum Ausfüllen",
-            items: [
-              {
-                period: "Jetzt",
-                title: "Aktueller Fokus",
-                description:
-                  "Ergänze, was du gerade lernst, baust oder verbesserst.",
-              },
-              {
-                period: "Kürzlich",
-                title: "Neueste Erfahrung",
-                description:
-                  "Beschreibe ein Projekt, eine Rolle, einen Kurs oder eine Herausforderung, die deine Fähigkeiten geprägt hat.",
-              },
-              {
-                period: "Weiter",
-                title: "Was als Nächstes kommt",
-                description:
-                  "Teile deine Ziele, bevorzugte Zusammenarbeit oder die Art von Problemen, die du lösen möchtest.",
-              },
-            ],
-          },
-          contact: {
-            title: "Lass uns den nächsten Abschnitt gemeinsam bauen",
+          tech: {
+            eyebrow: "Stack",
+            title: "Technologien, die ich aktuell entwickle",
             description:
-              "Nutze diesen Bereich als direkte Einladung: Zusammenarbeit, Fragen, Feedback oder einfach ein Hallo.",
-            action: "Schreib mir",
-            email: "znamirowskipatryk@gmail.com",
+              "Mein stärkster Fokus liegt auf Webanwendungen im Ökosystem von React, NestJS und TailwindCSS.",
+          },
+          strengths: {
+            eyebrow: "Stärken",
+            title: "Wie ich an Lernen und Probleme herangehe",
+            description:
+              "Ich stehe am Anfang meines Weges, und genau deshalb setze ich auf Flexibilität, Selbstständigkeit und Konsequenz.",
+            items: {
+              curiosity: {
+                title: "Großer Wissenshunger",
+                description:
+                  "Ich beschränke mich nicht auf das, was für Schulaufgaben nötig ist. Ich lese Dokumentationen, schaue Tutorials und teste aktuelle Technologien, um nah an den Trends zu bleiben.",
+              },
+              flexibility: {
+                title: "Keine schlechten Gewohnheiten und hohe Flexibilität",
+                description:
+                  "Ich stehe am Anfang meiner Laufbahn, deshalb nehme ich Wissen schnell auf und passe mich zügig an neue Standards, Werkzeuge und Team-Methoden an.",
+              },
+              determination: {
+                title: "Ausdauer beim Lösen von Problemen",
+                description:
+                  "Wenn ich auf einen Fehler im Code stoße, gebe ich nicht auf, bis ich seine Ursache verstehe. Ich kann selbstständig nach Lösungen suchen, was meine technische Eigenständigkeit stärkt.",
+              },
+            },
           },
         },
 
@@ -289,6 +368,9 @@ const de = {
           },
           sourceCode: {
             available: "Quellcode anzeigen",
+            openAction: "Quellcode anzeigen",
+            stateOpen: "Offener Quellcode",
+            stateClosed: "Geschlossener Quellcode",
             notAvailable: "Quellcode nicht verfügbar",
             closed: "Geschlossener Quellcode",
           },
@@ -297,6 +379,25 @@ const de = {
           status: "Status",
           team: "Team",
           technologies: "Technologien",
+          technologyCountOne: "{{count}} Technologie",
+          technologyCountMany: "{{count}} Technologien",
+          filterLabel: "Projektfilter",
+          filters: {
+            all: "Alle",
+            completed: "Abgeschlossene",
+            inProgress: "In Arbeit",
+            planned: "Geplante",
+          },
+          details: {
+            project: "Projekt",
+            description: "Beschreibung",
+            whatItDoes: "Was dieses Projekt zeigt",
+            meta: "Metadaten",
+            timeline: "Zeit und VerfĂĽgbarkeit",
+            team: "Team",
+            contributors: "Autoren und Rollen",
+            noContributors: "Keine Teamdaten.",
+          },
         },
 
         glucose: {
@@ -305,10 +406,6 @@ const de = {
             "Durchsuchen Sie Blutzuckerdaten von meinem CGM (kontinuierliches Glukosemessgerät) in Echtzeit. Sehen Sie aktuelle Messwerte, analysieren Sie Trends und überwachen Sie die im Zielbereich verbrachte Zeit. Alles an einem Ort, verfügbar für jeden Interessierten.",
           loading: "Glukosedaten werden geladen...",
           subpages: {
-            aboutDiabetes: {
-              navigation: "Über Diabetes",
-              title: "Informationen zu MODY-2-Diabetes",
-            },
             summary: {
               navigation: "Zusammenfassung",
               title: "Zusammenfassung der Blutzuckermesswerte",
@@ -323,7 +420,7 @@ const de = {
             },
           },
           current: {
-            title: "Aktueller Wert",
+            title: "Letzter Wert",
             sensor: "Sensor",
             noSensor: "Keine Sensordaten",
             active: "Aktiv",
@@ -336,6 +433,7 @@ const de = {
             activatedAt: "Aktiviert am",
             expiresIn: "Läuft ab in",
             refresh: "Nächste Aktualisierung",
+            sensorLife: "Sensorlaufzeit",
             trends: {
               none: "Kein Trend verfügbar",
               risingFast: "Steigt schnell",
@@ -347,98 +445,31 @@ const de = {
               fallingFast: "Fällt schnell",
             },
           },
-          aboutDiabetes: {
-            sections: {
-              pathophysiology: {
-                title: "Pathophysiologie und Ursachen",
-                content:
-                  "Die Krankheit ist das Ergebnis einer Mutation im GCK-Gen. Glukokinase ist ein Enzym, das als spezifischer 'Glukosesensor' in den Betazellen der Bauchspeicheldrüse fungiert. Bei Menschen mit MODY 2 ist dieser Sensor 'verstellt' – er erkennt Zucker erst bei einer höheren Konzentration. Die Bauchspeicheldrüse produziert Insulin richtig und in angemessenen Mengen, setzt es jedoch erst frei, wenn der Blutzuckerspiegel höher ist als bei einem gesunden Menschen (nüchtern meist um die 100-140 mg/dl).",
-              },
-              diagnosisAndSymptoms: {
-                title: "Symptome und Diagnose",
-                content:
-                  "MODY-2-Diabetes verläuft meist völlig asymptomatisch. Patienten leiden selten an übermäßigem Durst oder Polyurie. Aus diesem Grund wird er meist zufällig diagnostiziert – bei Vorsorgeuntersuchungen, arbeitsmedizinischen Checks, Infektionen oder bei Frauen bei routinemäßigen oralen Glukosetoleranztests (oGTT) in der Schwangerschaft. Eine endgültige und sichere Diagnose kann nur durch Gentests gestellt werden.",
-              },
-              treatment: {
-                title: "Management und Behandlung",
-                content:
-                  "Die wichtigste Information für Patienten ist, dass MODY 2 in den allermeisten Fällen keine medikamentöse Behandlung erfordert – weder mit oralen Medikamenten noch mit Insulin. Versuche, den Blutzuckerspiegel mit Medikamenten zu senken, sind oft wirkungslos, da der Körper ohnehin nach seinem neuen, erhöhten Gleichgewichtspunkt strebt. Die Grundlage bilden ein gesunder Lebensstil, eine ausgewogene Ernährung und körperliche Aktivität. Eine Ausnahme bildet die Schwangerschaft, in der aufgrund der Wachstumsrate des Fötus vorübergehend eine Insulintherapie erforderlich sein kann.",
-              },
-              inheritance: {
-                title: "Vererbung und Genetik",
-                content:
-                  "MODY 2 wird autosomal-dominant vererbt. Das bedeutet, dass die Mutation keine Generationen überspringt und die Familienanamnese (Diabetes bei einem Eltern- oder Großelternteil) stark belastet ist. Wenn ein Elternteil MODY-2-Diabetes hat, beträgt das Risiko, die Mutation an das Kind weiterzugeben, bei jeder Schwangerschaft genau 50 %.",
-              },
-            },
-            comparisonTable: {
-              title: "Vergleich der Diabetestypen",
-              header: {
-                feature: "Charakteristisches Merkmal",
-                mody2: "MODY 2 (GCK)",
-                type1: "Typ 1 (Autoimmun)",
-                type2: "Typ 2 (Metabolisch)",
-              },
-              age: {
-                feature: "Erkrankungs- / Diagnosealter",
-                mody2: "Meist vor dem 25. Lebensjahr (oft in der Kindheit)",
-                type1: "Meist Kinder, Jugendliche und junge Erwachsene",
-                type2:
-                  "Traditionell nach dem 40. Lebensjahr (heute zunehmend jünger)",
-              },
-              genetics: {
-                feature: "Genetischer Hintergrund / Vererbung",
-                mody2:
-                  "Monogen (ein mutiertes Gen). Autosomal-dominante Vererbung, sehr starke Familienanamnese.",
-                type1:
-                  "Polygen. Schwache Familienanamnese (eher Prädisposition).",
-                type2:
-                  "Polygen. Sehr starke Familienanamnese in Verbindung mit dem Lebensstil.",
-              },
-              bodyWeight: {
-                feature: "Körpergewicht",
-                mody2: "Meist normal",
-                type1:
-                  "Meist normal oder Untergewicht (Gewichtsverlust vor der Diagnose)",
-                type2: "Meist Übergewicht oder Adipositas (abdominal)",
-              },
-              insulinResistance: {
-                feature: "Insulinresistenz",
-                mody2: "Keine",
-                type1: "Keine",
-                type2: "Sehr hoch (Hauptursache der Krankheit)",
-              },
-              antibodies: {
-                feature: "Antikörper (Anti-GAD, ICA, ZnT8)",
-                mody2: "Nicht vorhanden",
-                type1: "Im Blut vorhanden (zerstören Betazellen)",
-                type2: "Nicht vorhanden",
-              },
-              insulinSecretion: {
-                feature: "Insulinsekretion (C-Peptid-Spiegel)",
-                mody2:
-                  "Erhalten. Insulin wird richtig ausgeschüttet, jedoch bei einer höheren Zuckerschwelle.",
-                type1:
-                  "Vollständiger Verlust (sehr niedriges oder kein C-Peptid).",
-                type2:
-                  "Anfangs erhöht (Hyperinsulinämie), sinkt im Laufe der Jahre.",
-              },
-              treatment: {
-                feature: "Behandlung der Wahl",
-                mody2:
-                  "Nur Ernährung und Bewegung. Medikamente und Insulin meist unnötig (Ausnahme: Schwangerschaft).",
-                type1:
-                  "Absolute, lebenslange Insulintherapie ab dem 1. Tag der Diagnose.",
-                type2:
-                  "Ernährung, Bewegung, orale Medikamente (z. B. Metformin), Inkretine, im späteren Stadium Insulin.",
-              },
-            },
-          },
           summary: {
             period: "Statistiken der letzten {{hours}} Stunden.",
             average: "Durchschnitt",
             highest: "Höchster Wert",
             lowest: "Niedrigster Wert",
             timeInRange: "Zeit im Bereich",
+            gmi: {
+              eyebrow: "GMI",
+              title: "Glykämie-Management-Indikator",
+              insufficient:
+                "GMI benötigt mindestens 7 Tage Glukosedaten. Wähle einen längeren Zeitraum, um diese Schätzung anzuzeigen.",
+              insufficientDatabase:
+                "Der gewählte Zeitraum ist lang genug, aber in der Datenbank gibt es noch nicht genug Glukosedaten, um GMI zu berechnen.",
+              context:
+                "GMI schätzt einen HbA1c-ähnlichen Trend aus CGM-Daten und ist besonders nützlich zusammen mit der Zeit im Zielbereich.",
+            },
+          },
+          timeRange: {
+            label: "Glukose-Zeitraum",
+            "1d": "1T",
+            "7d": "7T",
+            "14d": "14T",
+            "30d": "30T",
+            "90d": "90T",
+            all: "Gesamt",
           },
           timeInRange: {
             period: "Verteilung der letzten {{hours}} Stunden.",
@@ -447,6 +478,10 @@ const de = {
             empty: "Keine Glukosewerte für das Diagramm verfügbar.",
             range: "Zielbereich: {{low}}-{{high}} {{unit}}",
             value: "Glukose",
+            targetZone: "Zielbereich",
+            inRangeSummary:
+              "{{value}}% der sichtbaren Messwerte liegen im Zielbereich.",
+            referencePoints: "Referenzpunkte",
           },
           ranges: {
             high: "Kritisch hoch",
@@ -481,13 +516,26 @@ const de = {
         nav: {
           openMenu: "Navigationsmenü öffnen",
           closeMenu: "Navigationsmenü schließen",
+          mobileNavigation: "Mobile Navigation",
           changeLanguage: "Sprache wechseln",
           changeTheme: "Thema wechseln",
+          themes: {
+            light: "Hell",
+            dark: "Dunkel",
+            contrast: "Kontrast",
+          },
           pages: {
             home: "Startseite",
             aboutme: "Über mich",
             projects: "Projekte",
             glucose: "Blutzucker",
+          },
+          account: {
+            login: "Einloggen",
+            logout: "Ausloggen",
+            expand: "Kontomenü öffnen",
+            profile: "Profil",
+            settings: "Einstellungen",
           },
         },
         footer: {

@@ -4,10 +4,12 @@ import { AuthConfig } from './auth.config';
 import { GlucoseDexcomConfig } from './glucose-dexcom.config';
 import { HttpConfig } from './http.config';
 import { CacheConfig } from './cache.config';
+import { RedisConfig } from './redis.config';
 
 export const configProviders = [
   HttpConfig,
   CacheConfig,
+  RedisConfig,
   DatabaseConfig,
   AuthConfig,
   GlucoseLibreConfig,
@@ -17,6 +19,7 @@ export const configProviders = [
 export {
   HttpConfig,
   CacheConfig,
+  RedisConfig,
   DatabaseConfig,
   AuthConfig,
   GlucoseLibreConfig,

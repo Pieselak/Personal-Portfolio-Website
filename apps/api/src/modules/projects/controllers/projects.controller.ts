@@ -12,7 +12,6 @@ import { CreateProjectBody } from '../dto/input/createProject.dto';
 import { UpdateProjectBody } from '../dto/input/updateProject.dto';
 import { GetProjectResponse } from '../dto/response/getProject.dto';
 import {
-  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -26,6 +25,7 @@ import { UpdateProjectResponse } from '../dto/response/updateProject.dto';
 import { CreateProjectResponse } from '../dto/response/createProject.dto';
 import { ProjectsService } from '../services/project.service';
 import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
+import { AuthPermissions } from '../../auth/decorators/auth-permissions.decorator';
 
 @Controller('projects')
 export class ProjectsController {
@@ -81,7 +81,7 @@ export class ProjectsController {
 
   @CheckMaintenance()
   @Post() // tbd: responses, service function
-  @ApiBearerAuth()
+  @AuthPermissions('projects:create')
   @ApiOperation({
     summary: 'Create a new project',
     description:
@@ -104,12 +104,13 @@ export class ProjectsController {
     description: 'Service is unavailable',
   })
   createProject(@Body() body: CreateProjectBody): CreateProjectResponse {
+    void body;
     throw new NotImplementedException();
   }
 
   @CheckMaintenance()
   @Patch(':uuid') // tbd: responses, service function
-  @ApiBearerAuth()
+  @AuthPermissions('projects:update')
   @ApiOperation({
     summary: 'Update an existing project',
     description:
@@ -138,12 +139,14 @@ export class ProjectsController {
     @Param('uuid') uuid: string,
     @Body() body: UpdateProjectBody,
   ): UpdateProjectResponse {
+    void uuid;
+    void body;
     throw new NotImplementedException();
   }
 
   @CheckMaintenance()
   @Delete(':uuid') // tbd: responses, service function
-  @ApiBearerAuth()
+  @AuthPermissions('projects:delete')
   @ApiOperation({
     summary: 'Delete a project',
     description:
@@ -169,6 +172,7 @@ export class ProjectsController {
     description: 'Service is unavailable',
   })
   deleteProject(@Param('uuid') uuid: string) {
+    void uuid;
     throw new NotImplementedException();
   }
 }

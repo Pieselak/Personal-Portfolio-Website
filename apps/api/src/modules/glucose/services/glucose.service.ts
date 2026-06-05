@@ -24,6 +24,14 @@ import { BaseGlucoseService } from '../glucose.types';
 import { GetProviderModesResponse } from '../dto/response/getProviderModes.dto';
 import { SetProviderModeBody } from '../dto/input/setProviderMode.dto';
 import { SetProviderModeResponse } from '../dto/response/setProviderMode.dto';
+import { GetGlucoseManagementIndicatorQuery } from '../dto/input/getGlucoseManagementIndicator';
+import { GetGlucoseManagementIndicatorResponse } from '../dto/response/getGlucoseManagementIndicator';
+import {
+  GlucoseColors,
+  GlucoseSensors,
+  GlucoseStatus,
+  GlucoseTrends,
+} from '../glucose.enum';
 
 @Injectable()
 export class GlucoseService implements OnModuleInit, OnModuleDestroy {
@@ -231,6 +239,20 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     const unit = await this.selectedGlucoseService!.getUnit();
 
     return await this.repository.getLowestGlucose({
+      unit: unit,
+      hours: params.hours,
+      provider: this.selectedProviderName || undefined,
+    });
+  }
+
+  async getGlucoseManagementIndicator(
+    params: GetGlucoseManagementIndicatorQuery,
+  ): Promise<GetGlucoseManagementIndicatorResponse> {
+    this.ensureAvailable();
+
+    const unit = await this.selectedGlucoseService!.getUnit();
+
+    return await this.repository.getGlucoseManagementIndicator({
       unit: unit,
       hours: params.hours,
       provider: this.selectedProviderName || undefined,

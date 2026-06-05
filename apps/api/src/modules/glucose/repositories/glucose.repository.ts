@@ -11,6 +11,9 @@ import { GetHighestGlucoseResponse } from '../dto/response/getHighestGlucose.dto
 import { GetLowestGlucoseResponse } from '../dto/response/getLowestGlucose.dto';
 import { GetAverageGlucoseResponse } from '../dto/response/getAverageGlucose.dto';
 import { SettingsEntity } from '../../../entities/settings.entity';
+import { GetGlucoseManagementIndicatorResponse } from '../dto/response/getGlucoseManagementIndicator';
+import { GLUCOSE_CONSTANTS } from '../../../constants/glucose.constants';
+import { GlucoseUnits } from '../glucose.enum';
 
 @Injectable()
 export class GlucoseRepository {
@@ -30,7 +33,7 @@ export class GlucoseRepository {
 
     if (data.hours) {
       query.andWhere(
-        'EXTRACT(EPOCH FROM (NOW() - glucose.timestamp)) / 3600 <= :hours',
+        "glucose.timestamp BETWEEN NOW() - (:hours || ' hours')::interval AND NOW()",
         {
           hours: data.hours,
         },
@@ -120,9 +123,14 @@ export class GlucoseRepository {
 
       const percentageLow = toPercentage(parseInt(result.low));
       const percentageBelowRange = toPercentage(parseInt(result.belowRange));
-      const percentageInRange = toPercentage(parseInt(result.inRange));
       const percentageAboveRange = toPercentage(parseInt(result.aboveRange));
       const percentageHigh = toPercentage(parseInt(result.high));
+      const percentageInRange =
+        100 -
+        percentageLow -
+        percentageBelowRange -
+        percentageAboveRange -
+        percentageHigh;
 
       return {
         isDataSufficient: total > 0,
@@ -226,6 +234,57 @@ export class GlucoseRepository {
       this.logger.error('getLowestGlucose:', error.message);
       throw new InternalServerErrorException(
         `Failed to retrieve lowest glucose.`,
+      );
+    }
+  }
+
+  async getGlucoseManagementIndicator(data: {
+    unit: string;
+    hours?: number;
+    provider?: string;
+  }): Promise<GetGlucoseManagementIndicatorResponse> {
+    try {
+      const result = await this.applyFilters(
+        this.glucoseRepo
+          .createQueryBuilder('glucose')
+          .select('AVG(glucose.value)', 'avg')
+          .addSelect('COUNT(*)', 'count')
+          .addSelect('MIN(glucose.timestamp)', 'minTimestamp'),
+        data,
+      ).getRawOne();
+
+      const avgGlucose = result?.avg ? parseFloat(result.avg) : 0;
+      const count = result?.count ? parseInt(result.count) : 0;
+
+      const minTimestamp = result?.minTimestamp
+        ? new Date(result.minTimestamp)
+        : null;
+      const currentTimestamp = Date.now();
+      const dataDuration =
+        minTimestamp && currentTimestamp
+          ? (currentTimestamp - minTimestamp.getTime()) / (1000 * 3600 * 24)
+          : 0;
+
+      const isDataSufficient = dataDuration >= 7 && count > 0;
+
+      let gmiValue: number = 0;
+      if (isDataSufficient) {
+        if (data.unit === GlucoseUnits.MG_DL) {
+          gmiValue = Math.round(3.31 + 0.02392 * avgGlucose);
+        } else if (data.unit === GlucoseUnits.MMOL_L) {
+          gmiValue = Math.round(12.71 + 4.70587 * avgGlucose);
+        }
+      }
+
+      return {
+        isDataSufficient,
+        value: gmiValue,
+        hours: data.hours,
+      };
+    } catch (error) {
+      this.logger.error('getGlucoseManagementIndicator:', error.message);
+      throw new InternalServerErrorException(
+        'Failed to retrieve glucose management indicator.',
       );
     }
   }

@@ -1,245 +1,74 @@
-import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  ArrowLeft,
-  ExternalLink,
-  Lock,
-  Users,
-  Calendar,
-  LinkIcon,
-} from "lucide-react";
-import { motion } from "framer-motion";
+import { useParams } from "react-router-dom";
+import { Reveal } from "@/app/components/motion/Reveal.tsx";
+import { PageShell } from "@/app/components/ui/PageShell.tsx";
 import { NotFoundPage } from "@/app/modules/Common/NotFound/NotFound.page.tsx";
-import {
-  type Project,
-  projects,
-} from "@/app/modules/User/Projects/Projects.enums.ts";
+import { ProjectBackLink } from "@/app/modules/User/Projects/components/ProjectBackLink.tsx";
+import { ProjectContributorsPanel } from "@/app/modules/User/Projects/components/ProjectContributorsPanel.tsx";
+import { ProjectDescriptionPanel } from "@/app/modules/User/Projects/components/ProjectDescriptionPanel.tsx";
+import { ProjectHeroPanel } from "@/app/modules/User/Projects/components/ProjectHeroPanel.tsx";
+import { ProjectMetaPanel } from "@/app/modules/User/Projects/components/ProjectMetaPanel.tsx";
+import { ProjectPreviewImage } from "@/app/modules/User/Projects/components/ProjectPreviewImage.tsx";
+import { projects } from "@/app/modules/User/Projects/data/projects.ts";
 
 export function MyProjectsDetailsPage() {
   const params = useParams();
   const { t } = useTranslation();
 
-  const projectId = params.projectId ? parseInt(params.projectId) : null;
-  const project = projects.find((p: Project) => p.id === projectId);
+  const projectId = params.projectId ? Number.parseInt(params.projectId) : null;
+  const project = projects.find((item) => item.id === projectId);
+
   if (!project) {
     return <NotFoundPage message={t("pages.user.projects.projectNotFound")} />;
   }
 
-  const statusStyles = {
-    completed:
-      "bg-green-500/10 border-green-500/30 text-green-600 dark:text-green-400",
-    inProgress:
-      "bg-orange-500/10 border-orange-500/30 text-orange-600 dark:text-orange-400",
-    planned:
-      "bg-blue-500/10 border-blue-500/30 text-blue-600 dark:text-blue-400",
-  };
-
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-6">
-      <div className="space-y-6">
-        {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 px-4 py-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
-          >
-            <ArrowLeft size={18} />
-            <span>{t("pages.user.projects.returnToProjects")}</span>
-          </Link>
-        </motion.div>
+    <PageShell>
+      <Reveal>
+        <ProjectBackLink label={t("pages.user.projects.returnToProjects")} />
+      </Reveal>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Image and Metadata */}
-          <motion.div
-            className="lg:col-span-1"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="space-y-4 sticky top-6">
-              {/* Project Image */}
-              <div className="relative overflow-hidden rounded-2xl bg-muted border border-border shadow-lg h-64 lg:h-80">
-                <img
-                  src={project.image}
-                  className="w-full h-full object-cover"
-                  alt={project.title}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
-              </div>
+      <Reveal>
+        <ProjectHeroPanel
+          project={project}
+          eyebrow={t("pages.user.projects.details.project")}
+          statusLabel={t(`pages.user.projects.statuses.${project.status}`)}
+        />
+      </Reveal>
 
-              {/* Status Badge */}
-              <div className="flex justify-center">
-                <span
-                  className={`px-4 py-2 rounded-full text-sm font-semibold border ${statusStyles[project.status]}`}
-                >
-                  {t(`pages.user.projects.statuses.${project.status}`)}
-                </span>
-              </div>
+      <Reveal>
+        <section className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr] lg:items-start">
+          <ProjectDescriptionPanel
+            eyebrow={t("pages.user.projects.details.description")}
+            title={t("pages.user.projects.details.whatItDoes")}
+            description={project.description}
+          />
 
-              {/* Action Buttons */}
-              <div className="space-y-3">
-                {project.sourceCodeOpen ? (
-                  project.sourceCodeUrl ? (
-                    <motion.a
-                      href={project.sourceCodeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-accent/20 border border-accent rounded-xl text-accent hover:bg-accent/30 font-medium transition-colors"
-                    >
-                      <LinkIcon size={18} />
-                      {t("pages.user.projects.sourceCode.available")}
-                    </motion.a>
-                  ) : (
-                    <div className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-muted border border-border rounded-xl text-muted-foreground font-medium">
-                      <ExternalLink size={18} />
-                      {t("pages.user.projects.sourceCode.notAvailable")}
-                    </div>
-                  )
-                ) : (
-                  <div className="flex w-full items-center justify-center gap-2 px-4 py-3 bg-muted border border-border rounded-xl text-muted-foreground font-medium">
-                    <Lock size={18} />
-                    {t("pages.user.projects.sourceCode.closed")}
-                  </div>
-                )}
-              </div>
+          <div className="grid gap-4">
+            <ProjectPreviewImage project={project} />
 
-              {/* Metadata Cards */}
-              {project.startDate && (
-                <div className="bg-card border border-border rounded-xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                    <Calendar size={16} />
-                    <span className="font-medium uppercase tracking-wide">
-                      {t("pages.user.projects.startedAt")}
-                    </span>
-                  </div>
-                  <p className="text-primary font-semibold">
-                    {project.startDate}
-                  </p>
-                </div>
+            <ProjectMetaPanel
+              project={project}
+              eyebrow={t("pages.user.projects.details.meta")}
+              title={t("pages.user.projects.details.timeline")}
+              startedAtLabel={t("pages.user.projects.startedAt")}
+              completedAtLabel={t("pages.user.projects.completedAt")}
+              sourceOpenLabel={t("pages.user.projects.sourceCode.openAction")}
+              sourceClosedLabel={t("pages.user.projects.sourceCode.stateClosed")}
+              sourceUnavailableLabel={t(
+                "pages.user.projects.sourceCode.notAvailable",
               )}
+            />
 
-              {project.completeDate && (
-                <div className="bg-card border border-border rounded-xl p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                    <Calendar size={16} />
-                    <span className="font-medium uppercase tracking-wide">
-                      {t("user.myProjectsPage.completed")}
-                    </span>
-                  </div>
-                  <p className="text-primary font-semibold">
-                    {project.completeDate}
-                  </p>
-                </div>
-              )}
-
-              {/* Developers */}
-              {project.developers && project.developers.length > 0 && (
-                <div className="bg-card border border-border rounded-xl p-4 space-y-3">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users size={16} />
-                    <span className="font-medium uppercase tracking-wide text-sm">
-                      {t("pages.user.projects.team")}
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {project.developers.map((dev) => (
-                      <div
-                        key={dev.name}
-                        className="pb-2 last:pb-0 last:border-0 border-b border-border/50"
-                      >
-                        <p className="text-sm font-semibold text-primary">
-                          {dev.name}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {dev.role}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
-
-          {/* Right: Description and Tags */}
-          <motion.div
-            className="lg:col-span-2"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="space-y-6">
-              {/* Title */}
-              <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold text-primary">
-                  {project.title}
-                </h1>
-              </div>
-
-              {/* Tags */}
-              {project.tags && (
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-accent/10 border border-accent/30 text-accent"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Description */}
-              <div className="bg-card border border-border rounded-2xl p-6 md:p-8">
-                <div className="prose prose-invert max-w-none dark:prose-invert">
-                  <p className="text-base leading-relaxed text-foreground whitespace-pre-wrap">
-                    {project.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                    {t("pages.user.projects.status")}
-                  </p>
-                  <p className="text-sm font-semibold text-primary">
-                    {t(`pages.user.projects.statuses.${project.status}`)}
-                  </p>
-                </div>
-                {project.tags && (
-                  <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                      {t("pages.user.projects.technologies")}
-                    </p>
-                    <p className="text-sm font-semibold text-primary">
-                      {project.tags.length}
-                    </p>
-                  </div>
-                )}
-                {project.developers && (
-                  <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-2">
-                      Zespół
-                    </p>
-                    <p className="text-sm font-semibold text-primary">
-                      {project.developers.length}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </div>
+            <ProjectContributorsPanel
+              eyebrow={t("pages.user.projects.details.team")}
+              title={t("pages.user.projects.details.contributors")}
+              emptyMessage={t("pages.user.projects.details.noContributors")}
+              developers={project.developers}
+            />
+          </div>
+        </section>
+      </Reveal>
+    </PageShell>
   );
 }
