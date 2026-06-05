@@ -30,10 +30,10 @@ export class UsersService implements OnModuleInit {
       ),
     );
 
-    await this.repository.upsertRole(DEFAULT_USER_ROLE, 'User', []);
+    await this.repository.upsertRole(DEFAULT_USER_ROLE, 'user', []);
     await this.repository.upsertRole(
       DEFAULT_ADMIN_ROLE,
-      'Administrator',
+      'administrator',
       permissions,
     );
   }
@@ -84,9 +84,7 @@ export class UsersService implements OnModuleInit {
       );
     }
 
-    const userCount = await this.repository.countUsers();
-    const roleCode = userCount === 0 ? DEFAULT_ADMIN_ROLE : DEFAULT_USER_ROLE;
-    const role = await this.repository.findRoleByCode(roleCode);
+    const role = await this.repository.findRoleByCode(DEFAULT_USER_ROLE);
 
     if (!role) {
       throw new NotFoundException('Default role not found', 'ROLE_NOT_FOUND');
