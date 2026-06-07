@@ -1,10 +1,4 @@
-import {
-  ArrowRight,
-  ExternalLink,
-  GitBranch,
-  Mail,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, ExternalLink, GitBranch, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { BentoTile } from "@/app/components/ui/BentoTile.tsx";
@@ -27,27 +21,11 @@ const profileLinks = [
 
 export function HomeHero() {
   const { t } = useTranslation();
-  const techStack = ["React", "NestJS", "TailwindCSS"];
 
   return (
     <section className="grid min-h-[calc(100dvh-9rem)] w-full items-stretch gap-4 md:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] md:gap-5">
       <BentoTile className="flex min-h-[31rem] flex-col justify-between overflow-hidden bg-surface p-5 md:p-7">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-2 rounded-control border border-border bg-surface-inset px-3 py-2 text-xs font-black uppercase text-muted-foreground">
-            <Sparkles className="size-4" />
-            {t("pages.user.home.hero.eyebrow")}
-          </span>
-          {techStack.map((tech) => (
-            <span
-              key={tech}
-              className="rounded-control border border-border bg-surface-raised px-3 py-2 text-xs font-bold text-foreground"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        <div className="space-y-5 py-8 md:py-10">
+        <div className="space-y-5 pb-8 pt-0 md:pb-10 md:pt-0">
           <p className="text-sm font-black uppercase text-muted-foreground">
             {t("pages.user.home.hero.name")}
           </p>

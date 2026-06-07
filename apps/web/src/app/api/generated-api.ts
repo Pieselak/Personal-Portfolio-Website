@@ -150,19 +150,184 @@ export interface MaintenanceModeResponse {
   message: string;
 }
 
+export interface ProjectStatusColorResponse {
+  /** @example "green" */
+  code: string;
+  /** @example "Green" */
+  label: string;
+}
+
+export interface ProjectStatusResponse {
+  /** @example "IN_PROGRESS" */
+  code: string;
+  /** @example "In progress" */
+  label: string;
+  /** @example "Clock" */
+  icon: string;
+  color: ProjectStatusColorResponse;
+}
+
+export interface ProjectTagResponse {
+  /** @example "TypeScript" */
+  name: string;
+  /** @example "Code2" */
+  icon?: string;
+}
+
+export interface ProjectDeveloperResponse {
+  /** @example "Patryk Z." */
+  name: string;
+  /** @example "Full-Stack Developer" */
+  role?: string;
+  /** @example "https://github.com/Pieselak" */
+  profileUrl?: string;
+}
+
 export interface GetProjectResponse {
   /**
    * Unique identifier for the project
    * @example "123e4567-e89b-12d3-a456-426614174000"
    */
   uuid: string;
+  status: ProjectStatusResponse;
+  /** @example "Portfolio Website with Glucose Sensor Integration" */
+  title: string;
+  /** @example "Modern portfolio website with CGM integration." */
+  shortDescription: string;
+  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
+  detailedDescription: string;
+  /** @example "https://example.com/project-preview.png" */
+  imageUrl?: string;
+  tags: ProjectTagResponse[];
+  /** @example true */
+  sourceCodeOpen: boolean;
+  /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
+  sourceCodeUrl?: string;
+  developers: ProjectDeveloperResponse[];
+  /** @example "2025-11-19" */
+  startDate?: string;
+  /** @example "2026-01-31" */
+  completeDate?: string;
 }
 
-export type CreateProjectBody = object;
+export interface CreateProjectResponse extends GetProjectResponse {}
 
-export type UpdateProjectBody = object;
+export interface ProjectDeveloperBody {
+  /** @example "Patryk Z." */
+  name: string;
+  /** @example "Full-Stack Developer" */
+  role?: string;
+  /** @example "https://github.com/Pieselak" */
+  profileUrl?: string;
+}
 
-export type UpdateProjectResponse = object;
+export interface CreateProjectBody {
+  /** @example "PLANNED" */
+  status: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD" | "CANCELLED";
+  /** @example "Portfolio Website with Glucose Sensor Integration" */
+  title: string;
+  /** @example "Modern portfolio website with CGM integration." */
+  shortDescription: string;
+  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
+  detailedDescription: string;
+  /** @example "https://example.com/project-preview.png" */
+  imageUrl?: string;
+  /** @example ["TypeScript","React","NestJS"] */
+  tags?: string[];
+  /** @example true */
+  sourceCodeOpen: boolean;
+  /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
+  sourceCodeUrl?: string;
+  developers?: ProjectDeveloperBody[];
+  /** @example "2025-11-19" */
+  startDate?: string;
+  /** @example "2026-01-31" */
+  completeDate?: string;
+}
+
+export interface UpdateProjectBody {
+  /** @example "PLANNED" */
+  status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD" | "CANCELLED";
+  /** @example "Portfolio Website with Glucose Sensor Integration" */
+  title?: string;
+  /** @example "Modern portfolio website with CGM integration." */
+  shortDescription?: string;
+  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
+  detailedDescription?: string;
+  /** @example "https://example.com/project-preview.png" */
+  imageUrl?: string;
+  /** @example ["TypeScript","React","NestJS"] */
+  tags?: string[];
+  /** @example true */
+  sourceCodeOpen?: boolean;
+  /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
+  sourceCodeUrl?: string;
+  developers?: ProjectDeveloperBody[];
+  /** @example "2025-11-19" */
+  startDate?: string;
+  /** @example "2026-01-31" */
+  completeDate?: string;
+}
+
+export interface UpdateProjectResponse {
+  /**
+   * Unique identifier for the project
+   * @example "123e4567-e89b-12d3-a456-426614174000"
+   */
+  uuid: string;
+  status: ProjectStatusResponse;
+  /** @example "Portfolio Website with Glucose Sensor Integration" */
+  title: string;
+  /** @example "Modern portfolio website with CGM integration." */
+  shortDescription: string;
+  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
+  detailedDescription: string;
+  /** @example "https://example.com/project-preview.png" */
+  imageUrl?: string;
+  tags: ProjectTagResponse[];
+  /** @example true */
+  sourceCodeOpen: boolean;
+  /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
+  sourceCodeUrl?: string;
+  developers: ProjectDeveloperResponse[];
+  /** @example "2025-11-19" */
+  startDate?: string;
+  /** @example "2026-01-31" */
+  completeDate?: string;
+}
+
+export interface DeleteProjectResponse {
+  /** @example true */
+  deleted: boolean;
+}
+
+export interface GetGlucoseAvailabilityResponse {
+  /**
+   * Indicates whether the glucose module is enabled
+   * @example true
+   */
+  enabled: boolean;
+  /**
+   * Indicates whether an active glucose provider is selected
+   * @example true
+   */
+  hasProvider: boolean;
+  /**
+   * Configured glucose provider mode
+   * @example "auto"
+   */
+  configuredProvider: "none" | "auto" | "libre" | "dexcom";
+  /**
+   * Currently active glucose provider
+   * @example "libre"
+   */
+  activeProvider?: "libre" | "dexcom";
+  /**
+   * Machine-readable reason for the current availability state
+   * @example "AVAILABLE"
+   */
+  reason: "MODULE_DISABLED" | "NO_PROVIDER" | "INITIALIZING" | "AVAILABLE";
+}
 
 export interface GetCurrentGlucoseResponse {
   /**
@@ -875,7 +1040,7 @@ export class API<
       data: CreateProjectBody,
       params: RequestParams = {},
     ) =>
-      this.request<GetProjectResponse, void>({
+      this.request<CreateProjectResponse, void>({
         path: `/projects`,
         method: "POST",
         body: data,
@@ -941,14 +1106,31 @@ export class API<
       uuid: string,
       params: RequestParams = {},
     ) =>
-      this.request<void, void>({
+      this.request<DeleteProjectResponse, void>({
         path: `/projects/${uuid}`,
         method: "DELETE",
         secure: true,
+        format: "json",
         ...params,
       }),
   };
   glucose = {
+    /**
+     * @description Returns whether the glucose module is enabled and has an active provider.
+     *
+     * @tags Glucose Data
+     * @name GlucoseControllerGetAvailability
+     * @summary Get glucose module availability
+     * @request GET:/glucose/availability
+     */
+    glucoseControllerGetAvailability: (params: RequestParams = {}) =>
+      this.request<GetGlucoseAvailabilityResponse, any>({
+        path: `/glucose/availability`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
     /**
      * @description Retrieves the current glucose reading.
      *

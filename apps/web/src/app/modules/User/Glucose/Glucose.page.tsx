@@ -14,6 +14,12 @@ import { TimeInRangePanel } from "@/app/modules/User/Glucose/components/TimeInRa
 import { SummaryPanel } from "@/app/modules/User/Glucose/components/SummaryPanel.tsx";
 import { TimeRangeSelector } from "@/app/modules/User/Glucose/components/TimeRangeSelector.tsx";
 import type { GlucoseTimeRange } from "@/app/modules/User/Glucose/constants/glucoseTimeRanges.ts";
+import { useGlucoseAvailability } from "@/app/api/queries/useGlucose.ts";
+import {
+  GlucoseAvailabilityState,
+  GlucoseErrorState,
+  GlucoseLoadingState,
+} from "@/app/modules/User/Glucose/GlucoseStates.tsx";
 
 const GLUCOSE_SECTIONS: GlucoseSection[] = ["graph", "timeinrange", "summary"];
 
@@ -26,6 +32,7 @@ export function GlucosePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeSection = getSection(searchParams.get("section"));
   const [selectedRange, setSelectedRange] = useState<GlucoseTimeRange>("7d");
+  const availabilityQuery = useGlucoseAvailability();
 
   useEffect(() => {
     if (searchParams.get("section") !== activeSection) {
@@ -41,6 +48,30 @@ export function GlucosePage() {
     setSearchParams(nextParams);
   }
 
+  const availability = availabilityQuery.data;
+  const isGlucoseAvailable =
+    availability?.enabled &&
+    availability.hasProvider &&
+    availability.reason === "AVAILABLE";
+
+  let availabilityVariant: "disabled" | "noProvider" | "initializing" | "unavailable" =
+    "unavailable";
+  let availabilityTitleKey = "pages.user.glucose.availability.unavailableTitle";
+  let availabilityMessageKey = "pages.user.glucose.availability.unavailable";
+  if (availability?.reason === "MODULE_DISABLED") {
+    availabilityVariant = "disabled";
+    availabilityTitleKey = "pages.user.glucose.availability.disabledTitle";
+    availabilityMessageKey = "pages.user.glucose.availability.disabled";
+  } else if (availability?.reason === "NO_PROVIDER") {
+    availabilityVariant = "noProvider";
+    availabilityTitleKey = "pages.user.glucose.availability.noProviderTitle";
+    availabilityMessageKey = "pages.user.glucose.availability.noProvider";
+  } else if (availability?.reason === "INITIALIZING") {
+    availabilityVariant = "initializing";
+    availabilityTitleKey = "pages.user.glucose.availability.initializingTitle";
+    availabilityMessageKey = "pages.user.glucose.availability.initializing";
+  }
+
   return (
     <PageShell>
       <UserHeader
@@ -48,6 +79,21 @@ export function GlucosePage() {
         subtitle={t("pages.user.glucose.subtitle")}
       />
 
+      {availabilityQuery.isLoading && <GlucoseLoadingState />}
+      {availabilityQuery.isError && (
+        <GlucoseErrorState
+          message={t("pages.user.glucose.availability.unavailable")}
+        />
+      )}
+      {availabilityQuery.isSuccess && !isGlucoseAvailable && (
+        <GlucoseAvailabilityState
+          title={t(availabilityTitleKey)}
+          message={t(availabilityMessageKey)}
+          variant={availabilityVariant}
+        />
+      )}
+      {isGlucoseAvailable && (
+        <>
       <Reveal>
         <GlucoseStatusHeader />
       </Reveal>
@@ -75,6 +121,8 @@ export function GlucosePage() {
           <SummaryPanel selectedRange={selectedRange} />
         )}
       </Reveal>
+        </>
+      )}
     </PageShell>
   );
 }

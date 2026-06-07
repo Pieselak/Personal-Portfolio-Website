@@ -21,15 +21,21 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <Link
-      to={`/projects/${project.id}`}
+      to={`/projects/${project.uuid}`}
       className="group flex min-h-100 flex-col overflow-hidden rounded-tile border border-border bg-surface transition-[border-color,background-color] duration-200 hover:border-ring hover:bg-surface-raised"
     >
       <div className="relative h-40 overflow-hidden border-b border-border bg-surface-inset">
-        <img
-          src={project.image}
-          className="size-full object-cover grayscale transition-[filter,transform] duration-300 group-hover:scale-[1.03] group-hover:grayscale-0"
-          alt={project.title}
-        />
+        {project.image ? (
+          <img
+            src={project.image}
+            className="size-full object-cover grayscale transition-[filter,transform] duration-300 group-hover:scale-[1.03] group-hover:grayscale-0"
+            alt={project.title}
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center p-6 text-center text-sm font-black text-muted-foreground">
+            {project.title}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-4 p-5">

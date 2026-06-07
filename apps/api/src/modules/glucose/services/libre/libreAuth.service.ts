@@ -5,13 +5,13 @@ import {
   Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import { GlucoseLibreConfig } from '../../../../config';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ThrottlerException } from '@nestjs/throttler';
-import { lastValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
 import { GLUCOSE_CONSTANTS } from '../../../../constants/glucose.constants';
+import { LibreAPI } from '../../dto/external/libreGeneratedApi';
+import { HTTP_CONSTANTS } from '../../../../constants/http.constants';
 
 interface LibreTokenResponse {
   data: {
@@ -33,15 +33,24 @@ interface TokenResponse {
 
 export class GlucoseLibreAuthService {
   private readonly logger = new Logger(GlucoseLibreAuthService.name);
+  private readonly api: LibreAPI<void>;
 
   private initFail = false;
   private authFetchPromise: Promise<TokenResponse> | null = null;
 
   constructor(
     private readonly config: GlucoseLibreConfig,
-    private readonly httpService: HttpService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) {
+    this.api = new LibreAPI({
+      baseURL: this.getLibreBaseUrl(),
+      timeout: HTTP_CONSTANTS.TIMEOUT_MS,
+    });
+  }
+
+  private getLibreBaseUrl(): string {
+    return this.config.apiUrl.replace(/\/llu\/?$/, '');
+  }
 
   private ensureAvailable(): void {
     if (this.initFail) {
@@ -128,22 +137,19 @@ export class GlucoseLibreAuthService {
           );
         }
 
-        const response = await lastValueFrom(
-          this.httpService.post(
-            `${this.config.apiUrl}/auth/login`,
-            {
-              email: this.config.email,
-              password: this.config.password,
+        const response = (await this.api.llu.postLluAuthLogin(
+          {
+            email: this.config.email,
+            password: this.config.password,
+          },
+          {
+            headers: {
+              product: this.config.product,
+              version: this.config.version,
             },
-            {
-              headers: {
-                product: this.config.product,
-                version: this.config.version,
-              },
-              validateStatus: () => true,
-            },
-          ),
-        );
+            validateStatus: () => true,
+          },
+        )) as AxiosResponse<LibreTokenResponse>;
 
         const data = await this.handleTokenResponse(response);
 

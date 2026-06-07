@@ -4,22 +4,29 @@ import { Reveal } from "@/app/components/motion/Reveal.tsx";
 import { PageShell } from "@/app/components/ui/PageShell.tsx";
 import { UserHeader } from "@/app/layouts/User/Header/UserHeader.tsx";
 import { ProjectFilterControl } from "@/app/modules/User/Projects/components/ProjectFilterControl.tsx";
-import { ProjectsEmptyState } from "@/app/modules/User/Projects/components/ProjectsEmptyState.tsx";
+import {
+  ProjectsErrorState,
+  ProjectsEmptyState,
+  ProjectsLoadingState,
+} from "@/app/modules/User/Projects/components/ProjectsEmptyState.tsx";
 import { ProjectsGrid } from "@/app/modules/User/Projects/components/ProjectsGrid.tsx";
-import { projects } from "@/app/modules/User/Projects/data/projects.ts";
 import type { ProjectFilter } from "@/app/modules/User/Projects/types/project.types.ts";
+import { useProjectList } from "@/app/api/queries/useProjects.ts";
 
 export function MyProjectsListPage() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<ProjectFilter>("all");
+  const projectsQuery = useProjectList();
 
   const visibleProjects = useMemo(() => {
+    const projects = projectsQuery.data ?? [];
+
     if (filter === "all") {
       return projects;
     }
 
     return projects.filter((project) => project.status === filter);
-  }, [filter]);
+  }, [filter, projectsQuery.data]);
 
   return (
     <PageShell>
@@ -31,7 +38,11 @@ export function MyProjectsListPage() {
       <ProjectFilterControl value={filter} onChange={setFilter} />
 
       <Reveal key={filter}>
-        {visibleProjects.length > 0 ? (
+        {projectsQuery.isLoading ? (
+          <ProjectsLoadingState message={t("pages.user.projects.loading")} />
+        ) : projectsQuery.isError ? (
+          <ProjectsErrorState message={t("pages.user.projects.loadError")} />
+        ) : visibleProjects.length > 0 ? (
           <ProjectsGrid projects={visibleProjects} />
         ) : (
           <ProjectsEmptyState message={t("pages.user.projects.noProjects")} />

@@ -385,7 +385,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetProjectResponse"
+                  "$ref": "#/components/schemas/CreateProjectResponse"
                 }
               }
             }
@@ -439,6 +439,9 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid project UUID"
+          },
           "404": {
             "description": "Project with the specified ID not found"
           },
@@ -488,6 +491,9 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid project UUID"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -529,7 +535,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Project deleted successfully"
+            "description": "Project deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid project UUID"
           },
           "401": {
             "description": "Unauthorized"
@@ -555,6 +571,29 @@
         "summary": "Delete a project",
         "tags": [
           "Projects"
+        ]
+      }
+    },
+    "/glucose/availability": {
+      "get": {
+        "description": "Returns whether the glucose module is enabled and has an active provider.",
+        "operationId": "GlucoseController_getAvailability",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved glucose module availability",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetGlucoseAvailabilityResponse"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get glucose module availability",
+        "tags": [
+          "Glucose Data"
         ]
       }
     },
@@ -1259,6 +1298,85 @@
           "message"
         ]
       },
+      "ProjectStatusColorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "GREEN"
+          },
+          "color": {
+            "type": "string",
+            "example": "green"
+          }
+        },
+        "required": [
+          "code",
+          "color"
+        ]
+      },
+      "ProjectStatusResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "IN_PROGRESS"
+          },
+          "label": {
+            "type": "string",
+            "example": "In progress"
+          },
+          "icon": {
+            "type": "string",
+            "example": "Clock"
+          },
+          "color": {
+            "$ref": "#/components/schemas/ProjectStatusColorResponse"
+          }
+        },
+        "required": [
+          "code",
+          "label",
+          "icon",
+          "color"
+        ]
+      },
+      "ProjectTagResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "TypeScript"
+          },
+          "icon": {
+            "type": "string",
+            "example": "Code2"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "ProjectDeveloperResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Patryk Z."
+          },
+          "role": {
+            "type": "string",
+            "example": "Full-Stack Developer"
+          },
+          "profileUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
       "GetProjectResponse": {
         "type": "object",
         "properties": {
@@ -1266,23 +1384,418 @@
             "type": "string",
             "description": "Unique identifier for the project",
             "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatusResponse"
+          },
+          "title": {
+            "type": "string",
+            "example": "Portfolio Website with Glucose Sensor Integration"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Modern portfolio website with CGM integration."
+          },
+          "detailedDescription": {
+            "type": "string",
+            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/project-preview.png"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectTagResponse"
+            }
+          },
+          "sourceCodeOpen": {
+            "type": "boolean",
+            "example": true
+          },
+          "sourceCodeUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDeveloperResponse"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19"
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31"
           }
         },
         "required": [
-          "uuid"
+          "uuid",
+          "status",
+          "title",
+          "shortDescription",
+          "detailedDescription",
+          "tags",
+          "sourceCodeOpen",
+          "developers"
+        ]
+      },
+      "ProjectDeveloperBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Patryk Z."
+          },
+          "role": {
+            "type": "string",
+            "example": "Full-Stack Developer"
+          },
+          "profileUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak"
+          }
+        },
+        "required": [
+          "name"
         ]
       },
       "CreateProjectBody": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "ON_HOLD"
+            ],
+            "example": "PLANNED"
+          },
+          "title": {
+            "type": "string",
+            "example": "Portfolio Website with Glucose Sensor Integration"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Modern portfolio website with CGM integration."
+          },
+          "detailedDescription": {
+            "type": "string",
+            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/project-preview.png"
+          },
+          "tags": {
+            "example": [
+              "TypeScript",
+              "React",
+              "NestJS"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceCodeOpen": {
+            "type": "boolean",
+            "example": true
+          },
+          "sourceCodeUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDeveloperBody"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19"
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31"
+          }
+        },
+        "required": [
+          "status",
+          "title",
+          "shortDescription",
+          "detailedDescription",
+          "sourceCodeOpen"
+        ]
+      },
+      "CreateProjectResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Unique identifier for the project",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatusResponse"
+          },
+          "title": {
+            "type": "string",
+            "example": "Portfolio Website with Glucose Sensor Integration"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Modern portfolio website with CGM integration."
+          },
+          "detailedDescription": {
+            "type": "string",
+            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/project-preview.png"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectTagResponse"
+            }
+          },
+          "sourceCodeOpen": {
+            "type": "boolean",
+            "example": true
+          },
+          "sourceCodeUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDeveloperResponse"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19"
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31"
+          }
+        },
+        "required": [
+          "uuid",
+          "status",
+          "title",
+          "shortDescription",
+          "detailedDescription",
+          "tags",
+          "sourceCodeOpen",
+          "developers"
+        ]
       },
       "UpdateProjectBody": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "PLANNED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "ON_HOLD"
+            ],
+            "example": "PLANNED"
+          },
+          "title": {
+            "type": "string",
+            "example": "Portfolio Website with Glucose Sensor Integration"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Modern portfolio website with CGM integration."
+          },
+          "detailedDescription": {
+            "type": "string",
+            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/project-preview.png"
+          },
+          "tags": {
+            "example": [
+              "TypeScript",
+              "React",
+              "NestJS"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceCodeOpen": {
+            "type": "boolean",
+            "example": true
+          },
+          "sourceCodeUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDeveloperBody"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19"
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31"
+          }
+        }
       },
       "UpdateProjectResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Unique identifier for the project",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ProjectStatusResponse"
+          },
+          "title": {
+            "type": "string",
+            "example": "Portfolio Website with Glucose Sensor Integration"
+          },
+          "shortDescription": {
+            "type": "string",
+            "example": "Modern portfolio website with CGM integration."
+          },
+          "detailedDescription": {
+            "type": "string",
+            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/project-preview.png"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectTagResponse"
+            }
+          },
+          "sourceCodeOpen": {
+            "type": "boolean",
+            "example": true
+          },
+          "sourceCodeUrl": {
+            "type": "string",
+            "example": "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe"
+          },
+          "developers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectDeveloperResponse"
+            }
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19"
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31"
+          }
+        },
+        "required": [
+          "uuid",
+          "status",
+          "title",
+          "shortDescription",
+          "detailedDescription",
+          "tags",
+          "sourceCodeOpen",
+          "developers"
+        ]
+      },
+      "DeleteProjectResponse": {
+        "type": "object",
+        "properties": {
+          "deleted": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "deleted"
+        ]
+      },
+      "GetGlucoseAvailabilityResponse": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the glucose module is enabled",
+            "example": true
+          },
+          "hasProvider": {
+            "type": "boolean",
+            "description": "Indicates whether an active glucose provider is selected",
+            "example": true
+          },
+          "configuredProvider": {
+            "type": "string",
+            "description": "Configured glucose provider mode",
+            "enum": [
+              "none",
+              "auto",
+              "libre",
+              "dexcom"
+            ],
+            "example": "auto"
+          },
+          "activeProvider": {
+            "type": "string",
+            "description": "Currently active glucose provider",
+            "enum": [
+              "libre",
+              "dexcom"
+            ],
+            "example": "libre"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Machine-readable reason for the current availability state",
+            "enum": [
+              "MODULE_DISABLED",
+              "NO_PROVIDER",
+              "INITIALIZING",
+              "AVAILABLE"
+            ],
+            "example": "AVAILABLE"
+          }
+        },
+        "required": [
+          "enabled",
+          "hasProvider",
+          "configuredProvider",
+          "reason"
+        ]
       },
       "GlucoseUnit": {
         "type": "string",

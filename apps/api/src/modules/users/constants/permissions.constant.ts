@@ -1,4 +1,4 @@
-export const PERMISSIONS = [
+export const PERMISSIONS: string[] = [
   'status.maintenance:update',
   'projects:create',
   'projects:update',
@@ -12,8 +12,13 @@ export const PERMISSIONS = [
   'roles:manage',
 ] as const;
 
-export type PermissionCode = (typeof PERMISSIONS)[number];
-
-export const DEFAULT_USER_ROLE = 'USER';
-export const DEFAULT_CONTRIBUTOR_ROLE = 'CONTRIBUTOR';
-export const DEFAULT_ADMIN_ROLE = 'ADMIN';
+export const ROLES: Array<{
+  code: string;
+  label: string;
+  permissions: string[];
+}> = [
+  { code: 'USER', label: 'user', permissions: [] },
+  { code: 'CONTRIBUTOR', label: 'contributor', permissions: [] },
+  { code: 'ADMIN', label: 'administrator', permissions: PERMISSIONS },
+];
+export const DEFAULT_ROLE_CODE: string = ROLES[0].code;

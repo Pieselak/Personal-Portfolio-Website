@@ -354,6 +354,9 @@ const pl = {
           title: "Moje projekty",
           subtitle:
             "Tutaj znajdziesz listę moich projektów osobistych i zawodowych. Każdy projekt jest dla mnie ważny, ponieważ reprezentuje moje umiejętności, pasję i zaangażowanie w rozwój technologii. Zapraszam do zapoznania się z moimi projektami i kontaktu, jeśli masz pytania lub chcesz współpracować!",
+          loadingProjects: "Wczytywanie projektów...",
+          loadingProject: "Wczytywanie projektu...",
+          loadError: "Nie udało się teraz wczytać projektów.",
           noProjects:
             "Nie mam jeszcze żadnych projektów do pokazania, ale pracuję nad nimi!",
           projectNotFound:
@@ -362,6 +365,7 @@ const pl = {
           statuses: {
             completed: "Ukończony",
             inProgress: "W trakcie realizacji",
+            onHold: "Wstrzymany",
             planned: "Zaplanowany",
           },
           sourceCode: {
@@ -393,6 +397,7 @@ const pl = {
             meta: "Metadane",
             timeline: "Czas i dostępność",
             team: "Zespół",
+            view: "Wyświetl",
             contributors: "Autorzy i role",
             noContributors: "Brak danych o zespole.",
           },
@@ -403,6 +408,21 @@ const pl = {
           subtitle:
             "Przeglądaj dane dotyczące glukozy we krwi z mojego CGM (sensora glukozy we krwi) w czasie rzeczywistym. Przeglądaj aktualne odczyty, analizuj trendy i monitoruj czas spędzony w docelowym zakresie glukozy we krwi. Wszystko to w jednym miejscu, dostępne dla każdego zainteresowanego.",
           loading: "Wczytywanie danych glukozy...",
+          availability: {
+            eyebrow: "Status modułu CGM",
+            disabledTitle: "Moduł glukozy jest wyłączony",
+            disabled:
+              "Moduł glukozy jest obecnie wyłączony przez administratora strony.",
+            noProviderTitle: "Brak podłączonego providera",
+            noProvider:
+              "Moduł glukozy jest włączony, ale żaden dostawca danych nie jest teraz dostępny.",
+            initializingTitle: "Moduł glukozy się uruchamia",
+            initializing:
+              "Moduł glukozy właśnie się uruchamia. Dane pojawią się tutaj za chwilę.",
+            unavailableTitle: "Nie udało się sprawdzić statusu",
+            unavailable:
+              "Nie udało się teraz sprawdzić dostępności modułu glukozy.",
+          },
           subpages: {
             summary: {
               navigation: "Podsumowanie",
@@ -426,6 +446,7 @@ const pl = {
             status: "Status odczytu",
             current: "Aktualny",
             stale: "Nieaktualny",
+            outOfRange: "Poza zakresem",
             readAt: "Odczytano",
             lastUpload: "Ostatni odczyt",
             activatedAt: "Aktywowany",

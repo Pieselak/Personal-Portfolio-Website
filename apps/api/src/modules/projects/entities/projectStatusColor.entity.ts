@@ -8,9 +8,6 @@ export class ProjectStatusColorEntity {
   @Column({ type: 'varchar', length: 50, unique: true })
   code: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  label: string;
-
   @Column({ type: 'varchar', length: 7 })
   color: string;
 }

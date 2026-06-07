@@ -11,11 +11,26 @@ import { GetCurrentGlucoseResponse } from '../dto/response/getCurrentGlucose.dto
 import { GetGraphDataResponse } from '../dto/response/getGraphData.dto';
 import { GetSensorDataResponse } from '../dto/response/getSensorData.dto';
 import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
+import { GetGlucoseAvailabilityResponse } from '../dto/response/getGlucoseAvailability.dto';
 
 @Controller('glucose')
 @ApiTags('Glucose Data')
 export class GlucoseController {
   constructor(private readonly glucoseService: GlucoseService) {}
+
+  @Get('availability')
+  @ApiOperation({
+    summary: 'Get glucose module availability',
+    description:
+      'Returns whether the glucose module is enabled and has an active provider.',
+  })
+  @ApiOkResponse({
+    description: 'Successfully retrieved glucose module availability',
+    type: GetGlucoseAvailabilityResponse,
+  })
+  getAvailability(): GetGlucoseAvailabilityResponse {
+    return this.glucoseService.getAvailability();
+  }
 
   @CheckMaintenance()
   @Get('current')

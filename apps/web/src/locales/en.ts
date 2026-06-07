@@ -353,14 +353,18 @@ const en = {
           title: "My projects",
           subtitle:
             "Here you will find a list of my personal and professional projects. Every project is important to me, as it represents my skills, passion, and commitment to technological development. Feel free to check them out and contact me if you have any questions or want to collaborate!",
+          loadingProjects: "Loading projects...",
+          loadingProject: "Loading project...",
+          loadError: "Projects could not be loaded right now.",
           noProjects:
             "I don't have any projects to show yet, but I'm working on them!",
           projectNotFound:
-            "Project not found. It might have been abducted by aliens or is just hiding from us.",
+            "Project not found. It might have been abducted by aliens, or it's just hiding from us.",
           returnToProjects: "Return to projects",
           statuses: {
             completed: "Completed",
             inProgress: "Work in Progress",
+            onHold: "On hold",
             planned: "Planned",
           },
           sourceCode: {
@@ -392,6 +396,7 @@ const en = {
             meta: "Metadata",
             timeline: "Time and availability",
             team: "Team",
+            view: "View",
             contributors: "Authors and roles",
             noContributors: "No team data.",
           },
@@ -402,6 +407,21 @@ const en = {
           subtitle:
             "Browse blood glucose data from my CGM (continuous glucose monitor) in real-time. View current readings, analyze trends, and monitor time spent in target glucose range. Everything in one place, available for anyone interested.",
           loading: "Loading glucose data...",
+          availability: {
+            eyebrow: "CGM module status",
+            disabledTitle: "Glucose module is off",
+            disabled:
+              "The glucose module is currently disabled by the site administrator.",
+            noProviderTitle: "No provider connected",
+            noProvider:
+              "The glucose module is enabled, but no glucose data provider is available right now.",
+            initializingTitle: "Glucose module is starting",
+            initializing:
+              "The glucose module is starting up. Data will appear here shortly.",
+            unavailableTitle: "Status check failed",
+            unavailable:
+              "The glucose module availability could not be checked right now.",
+          },
           subpages: {
             summary: {
               navigation: "Summary",
@@ -425,6 +445,7 @@ const en = {
             status: "Reading status",
             current: "Current",
             stale: "Stale",
+            outOfRange: "Out of range",
             readAt: "Read at",
             lastUpload: "Last upload",
             activatedAt: "Activated at",

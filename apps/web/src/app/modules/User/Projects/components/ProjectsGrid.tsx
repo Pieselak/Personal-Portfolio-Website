@@ -9,7 +9,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {projects.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+        <ProjectCard key={project.uuid} project={project} />
       ))}
     </section>
   );

@@ -59,7 +59,7 @@ export function getTrendIndicatorConfig(trend?: GlucoseTrend) {
     case GlucoseTrend.FallingFast:
       return { arrowCount: 2, rotation: 180 };
     default:
-      return { arrowCount: 1, rotation: 90 };
+      return { arrowCount: 1, rotation: 0 };
   }
 }
 

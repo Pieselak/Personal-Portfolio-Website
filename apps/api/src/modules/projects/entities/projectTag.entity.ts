@@ -10,10 +10,8 @@ export class ProjectTagEntity {
   label: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  icon: string;
+  icon: string | null;
 
-  @ManyToMany(() => ProjectEntity, (project) => project.tags, {
-    cascade: true,
-  })
+  @ManyToMany(() => ProjectEntity, (project) => project.projectTags)
   projects: ProjectEntity[];
 }

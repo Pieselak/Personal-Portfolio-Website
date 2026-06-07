@@ -1,4 +1,4 @@
-import { ArrowUp, RefreshCw } from "lucide-react";
+import { ArrowUp, CircleQuestionMark, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { GetCurrentGlucoseResponse } from "@/app/api/generated-api.ts";
 import { BentoTile } from "@/app/components/ui/BentoTile.tsx";
@@ -39,33 +39,47 @@ export function CurrentGlucoseTile({ current }: CurrentGlucoseTileProps) {
       <div className="grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
         <div>
           <div className="flex items-start gap-4">
-            <p className={`text-7xl font-black leading-none ${toneClasses.text}`}>
-              {current.value}
+            <p
+              className={`text-7xl font-black leading-none ${toneClasses.text}`}
+            >
+              {current.status === "computable"
+                ? current.value
+                : current.status === "low"
+                  ? "Lo"
+                  : "Hi"}
             </p>
             <div
               className={`mt-2 flex size-12 items-center justify-center rounded-control border ${toneClasses.bg} ${toneClasses.border} ${toneClasses.text}`}
-              aria-label={t(`pages.user.glucose.current.trends.${current.trend}`)}
+              aria-label={t(
+                `pages.user.glucose.current.trends.${current.trend}`,
+              )}
             >
               <span
                 className="relative flex size-8 items-center justify-center"
                 style={{ transform: `rotate(${trendConfig.rotation}deg)` }}
               >
-                {Array.from({ length: trendConfig.arrowCount }).map(
-                  (_, index) => (
-                    <ArrowUp
-                      key={index}
-                      className="absolute size-7"
-                      style={{
-                        transform: `translateY(${index * 7 - (trendConfig.arrowCount - 1) * 3.5}px)`,
-                      }}
-                    />
-                  ),
+                {current.trend === "none" && (
+                  <CircleQuestionMark className="size-7" />
                 )}
+                {current.trend !== "none" &&
+                  Array.from({ length: trendConfig.arrowCount }).map(
+                    (_, index) => (
+                      <ArrowUp
+                        key={index}
+                        className="absolute size-7"
+                        style={{
+                          transform: `translateY(${index * 7 - (trendConfig.arrowCount - 1) * 3.5}px)`,
+                        }}
+                      />
+                    ),
+                  )}
               </span>
             </div>
           </div>
           <p className="mt-2 text-xl font-black text-muted-foreground">
-            {current.unit}
+            {current.status === "computable"
+              ? current.unit
+              : t("pages.user.glucose.current.outOfRange")}
           </p>
         </div>
 

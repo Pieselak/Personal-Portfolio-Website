@@ -357,14 +357,18 @@ const de = {
           title: "Meine Projekte",
           subtitle:
             "Hier findest du eine Liste meiner persönlichen und beruflichen Projekte. Jedes Projekt ist mir wichtig, da es meine Fähigkeiten, meine Leidenschaft und mein Engagement für die technologische Entwicklung repräsentiert. Schau sie dir gerne an und kontaktiere mich, wenn du Fragen hast oder zusammenarbeiten möchtest!",
+          loadingProjects: "Projekte werden geladen...",
+          loadingProject: "Projekt wird geladen...",
+          loadError: "Projekte können zurzeit nicht geladen werden.",
           noProjects:
             "Ich habe noch keine Projekte zum Vorzeigen, aber ich arbeite daran!",
           projectNotFound:
-            "Projekt nicht gefunden. Es könnte von Aliens entführt worden sein oder versteckt sich einfach vor uns.",
+            "Projekt nicht gefunden. Es könnte von Außerirdischen entführt worden sein oder es versteckt sich einfach vor uns.",
           returnToProjects: "Zurück zu den Projekten",
           statuses: {
             completed: "Abgeschlossen",
             inProgress: "In Arbeit",
+            onHold: "Pausiert",
             planned: "Geplant",
           },
           sourceCode: {
@@ -396,6 +400,7 @@ const de = {
             meta: "Metadaten",
             timeline: "Zeit und VerfĂĽgbarkeit",
             team: "Team",
+            view: "Sicht",
             contributors: "Autoren und Rollen",
             noContributors: "Keine Teamdaten.",
           },
@@ -406,6 +411,21 @@ const de = {
           subtitle:
             "Durchsuchen Sie Blutzuckerdaten von meinem CGM (kontinuierliches Glukosemessgerät) in Echtzeit. Sehen Sie aktuelle Messwerte, analysieren Sie Trends und überwachen Sie die im Zielbereich verbrachte Zeit. Alles an einem Ort, verfügbar für jeden Interessierten.",
           loading: "Glukosedaten werden geladen...",
+          availability: {
+            eyebrow: "CGM-Modulstatus",
+            disabledTitle: "Glukosemodul ist ausgeschaltet",
+            disabled:
+              "Das Glukosemodul wurde vom Website-Administrator deaktiviert.",
+            noProviderTitle: "Kein Anbieter verbunden",
+            noProvider:
+              "Das Glukosemodul ist aktiviert, aber derzeit ist kein Datenanbieter verfügbar.",
+            initializingTitle: "Glukosemodul startet",
+            initializing:
+              "Das Glukosemodul wird gestartet. Die Daten erscheinen in Kürze hier.",
+            unavailableTitle: "Statusprüfung fehlgeschlagen",
+            unavailable:
+              "Die Verfügbarkeit des Glukosemoduls konnte derzeit nicht geprüft werden.",
+          },
           subpages: {
             summary: {
               navigation: "Zusammenfassung",
@@ -429,6 +449,7 @@ const de = {
             status: "Messstatus",
             current: "Aktuell",
             stale: "Veraltet",
+            outOfRange: "Außerhalb des Geltungsbereichs",
             readAt: "Gemessen um",
             lastUpload: "Letzter Upload",
             activatedAt: "Aktiviert am",

@@ -23,7 +23,7 @@ export class ProjectEntity {
   status: ProjectStatusEntity;
 
   @Column({ type: 'text', nullable: true })
-  image: string;
+  image: string | null;
 
   @Column({ type: 'varchar', length: 255 })
   title: string;
@@ -35,10 +35,10 @@ export class ProjectEntity {
   detailedDescription: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  tags: string;
+  tags: unknown;
 
   @Column({ type: 'jsonb', nullable: true })
-  developers: string;
+  developers: unknown;
 
   @Column({ type: 'boolean', default: false, name: 'source_code_open' })
   sourceCodeOpen: boolean;
@@ -49,13 +49,13 @@ export class ProjectEntity {
     nullable: true,
     name: 'source_code_url',
   })
-  sourceCodeUrl: string;
+  sourceCodeUrl: string | null;
 
   @Column({ type: 'date', nullable: true, name: 'start_date' })
-  startDate: Date;
+  startDate: Date | null;
 
   @Column({ type: 'date', nullable: true, name: 'complete_date' })
-  completeDate: Date;
+  completeDate: Date | null;
 
   @ManyToMany(() => ProjectTagEntity, { cascade: true, eager: true })
   @JoinTable({

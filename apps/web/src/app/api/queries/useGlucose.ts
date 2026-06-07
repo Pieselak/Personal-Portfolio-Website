@@ -9,7 +9,23 @@ import type {
   GetSensorDataResponse,
   GetTimeInRangeResponse,
   GetGlucoseManagementIndicatorResponse,
+  GetGlucoseAvailabilityResponse,
 } from "@/app/api/generated-api.ts";
+
+export const useGlucoseAvailability = () => {
+  return useQuery({
+    queryKey: ["glucose", "availability"],
+    queryFn: () => ApiClient.glucose.glucoseControllerGetAvailability(),
+    select: (response): GetGlucoseAvailabilityResponse => response.data,
+    staleTime: 30 * 1000,
+    refetchInterval: (query) => {
+      const data = query.state.data as
+        | GetGlucoseAvailabilityResponse
+        | undefined;
+      return data?.reason === "INITIALIZING" ? 30 * 1000 : false;
+    },
+  });
+};
 
 export const useGlucoseCurrent = () => {
   return useQuery({

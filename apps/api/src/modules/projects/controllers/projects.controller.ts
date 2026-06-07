@@ -1,10 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  NotImplementedException,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { CreateProjectBody } from '../dto/input/createProject.dto';
 import { UpdateProjectBody } from '../dto/input/updateProject.dto';
 import { GetProjectResponse } from '../dto/response/getProject.dto';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
@@ -19,6 +21,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiServiceUnavailableResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UpdateProjectResponse } from '../dto/response/updateProject.dto';
@@ -26,13 +29,20 @@ import { CreateProjectResponse } from '../dto/response/createProject.dto';
 import { ProjectsService } from '../services/project.service';
 import { CheckMaintenance } from '../../status/decorators/checkMaintenance.decorator';
 import { AuthPermissions } from '../../auth/decorators/auth-permissions.decorator';
+import { DeleteProjectResponse } from '../dto/response/deleteProject.dto';
+
+const projectUuidPipe = new ParseUUIDPipe({
+  version: '4',
+  exceptionFactory: () => new BadRequestException('Invalid request.'),
+});
 
 @Controller('projects')
+@ApiTags('Projects')
 export class ProjectsController {
   constructor(private readonly projectService: ProjectsService) {}
 
   @CheckMaintenance()
-  @Get() // tbd: responses, service function
+  @Get()
   @ApiOperation({
     summary: 'Retrieve a list of all projects',
     description:
@@ -54,7 +64,7 @@ export class ProjectsController {
   }
 
   @CheckMaintenance()
-  @Get(':uuid') // tbd: responses, service function
+  @Get(':uuid')
   @ApiOperation({
     summary: 'Retrieve a project',
     description:
@@ -67,6 +77,9 @@ export class ProjectsController {
   @ApiNotFoundResponse({
     description: 'Project with the specified ID not found',
   })
+  @ApiBadRequestResponse({
+    description: 'Invalid project UUID',
+  })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
@@ -74,13 +87,13 @@ export class ProjectsController {
     description: 'Service is unavailable',
   })
   async getProjectById(
-    @Param('uuid') uuid: string,
+    @Param('uuid', projectUuidPipe) uuid: string,
   ): Promise<GetProjectResponse> {
-    return await this.projectService.findProjectByUuid(uuid);
+    return this.projectService.findProjectByUuid(uuid);
   }
 
   @CheckMaintenance()
-  @Post() // tbd: responses, service function
+  @Post()
   @AuthPermissions('projects:create')
   @ApiOperation({
     summary: 'Create a new project',
@@ -88,7 +101,7 @@ export class ProjectsController {
       'Creates a new project entity with the provided data. Requires permission: projects:create',
   })
   @ApiCreatedResponse({
-    type: GetProjectResponse,
+    type: CreateProjectResponse,
     description: 'Project created successfully',
   })
   @ApiUnauthorizedResponse({
@@ -103,13 +116,14 @@ export class ProjectsController {
   @ApiServiceUnavailableResponse({
     description: 'Service is unavailable',
   })
-  createProject(@Body() body: CreateProjectBody): CreateProjectResponse {
-    void body;
-    throw new NotImplementedException();
+  async createProject(
+    @Body() body: CreateProjectBody,
+  ): Promise<CreateProjectResponse> {
+    return this.projectService.createProject(body);
   }
 
   @CheckMaintenance()
-  @Patch(':uuid') // tbd: responses, service function
+  @Patch(':uuid')
   @AuthPermissions('projects:update')
   @ApiOperation({
     summary: 'Update an existing project',
@@ -123,6 +137,9 @@ export class ProjectsController {
   @ApiNotFoundResponse({
     description: 'Project with the specified ID not found',
   })
+  @ApiBadRequestResponse({
+    description: 'Invalid project UUID',
+  })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',
   })
@@ -135,17 +152,15 @@ export class ProjectsController {
   @ApiServiceUnavailableResponse({
     description: 'Service is unavailable',
   })
-  updateProject(
-    @Param('uuid') uuid: string,
+  async updateProject(
+    @Param('uuid', projectUuidPipe) uuid: string,
     @Body() body: UpdateProjectBody,
-  ): UpdateProjectResponse {
-    void uuid;
-    void body;
-    throw new NotImplementedException();
+  ): Promise<UpdateProjectResponse> {
+    return this.projectService.updateProject(uuid, body);
   }
 
   @CheckMaintenance()
-  @Delete(':uuid') // tbd: responses, service function
+  @Delete(':uuid')
   @AuthPermissions('projects:delete')
   @ApiOperation({
     summary: 'Delete a project',
@@ -153,11 +168,14 @@ export class ProjectsController {
       'Deletes the project entity identified by the provided ID. Requires permission: projects:delete',
   })
   @ApiOkResponse({
-    // type:
+    type: DeleteProjectResponse,
     description: 'Project deleted successfully',
   })
   @ApiNotFoundResponse({
     description: 'Project with the specified ID not found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid project UUID',
   })
   @ApiUnauthorizedResponse({
     description: 'Unauthorized',
@@ -171,8 +189,10 @@ export class ProjectsController {
   @ApiServiceUnavailableResponse({
     description: 'Service is unavailable',
   })
-  deleteProject(@Param('uuid') uuid: string) {
-    void uuid;
-    throw new NotImplementedException();
+  async deleteProject(
+    @Param('uuid', projectUuidPipe) uuid: string,
+  ): Promise<DeleteProjectResponse> {
+    await this.projectService.deleteProject(uuid);
+    return { deleted: true };
   }
 }

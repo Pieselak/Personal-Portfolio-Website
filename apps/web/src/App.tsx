@@ -78,7 +78,7 @@ function App() {
               <Route index element={<UnderConstructionPage />} />
               <Route path=":userId" element={<UnderConstructionPage />} />
             </Route>
-            <Route path="users">
+            <Route path="projects">
               <Route index element={<UnderConstructionPage />} />
               <Route path=":projectId" element={<UnderConstructionPage />} />
             </Route>

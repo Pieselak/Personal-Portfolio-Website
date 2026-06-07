@@ -10,10 +10,9 @@ import { UsersRepository } from '../repositories/users.repository';
 import { UserEntity } from '../entities/user.entity';
 import { UserResponse } from '../dto/response/user.dto';
 import {
-  DEFAULT_ADMIN_ROLE,
-  DEFAULT_CONTRIBUTOR_ROLE,
-  DEFAULT_USER_ROLE,
+  DEFAULT_ROLE_CODE,
   PERMISSIONS,
+  ROLES,
 } from '../constants/permissions.constant';
 
 @Injectable()
@@ -31,16 +30,14 @@ export class UsersService implements OnModuleInit {
       ),
     );
 
-    await this.repository.upsertRole(DEFAULT_USER_ROLE, 'user', []);
-    await this.repository.upsertRole(
-      DEFAULT_CONTRIBUTOR_ROLE,
-      'contributor',
-      [],
-    );
-    await this.repository.upsertRole(
-      DEFAULT_ADMIN_ROLE,
-      'administrator',
-      permissions,
+    await Promise.all(
+      ROLES.map((role) => {
+        this.repository.upsertRole(
+          role.code,
+          role.label,
+          permissions.filter((p) => role.permissions.includes(p.code)),
+        );
+      }),
     );
   }
 
@@ -90,7 +87,7 @@ export class UsersService implements OnModuleInit {
       );
     }
 
-    const role = await this.repository.findRoleByCode(DEFAULT_USER_ROLE);
+    const role = await this.repository.findRoleByCode(DEFAULT_ROLE_CODE);
 
     if (!role) {
       throw new NotFoundException('Default role not found', 'ROLE_NOT_FOUND');

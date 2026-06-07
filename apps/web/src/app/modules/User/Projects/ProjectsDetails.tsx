@@ -9,16 +9,26 @@ import { ProjectDescriptionPanel } from "@/app/modules/User/Projects/components/
 import { ProjectHeroPanel } from "@/app/modules/User/Projects/components/ProjectHeroPanel.tsx";
 import { ProjectMetaPanel } from "@/app/modules/User/Projects/components/ProjectMetaPanel.tsx";
 import { ProjectPreviewImage } from "@/app/modules/User/Projects/components/ProjectPreviewImage.tsx";
-import { projects } from "@/app/modules/User/Projects/data/projects.ts";
+import { useProject } from "@/app/api/queries/useProjects.ts";
+import { ProjectsLoadingState } from "@/app/modules/User/Projects/components/ProjectsEmptyState.tsx";
 
 export function MyProjectsDetailsPage() {
   const params = useParams();
   const { t } = useTranslation();
+  const projectQuery = useProject(params.projectId);
+  const project = projectQuery.data;
 
-  const projectId = params.projectId ? Number.parseInt(params.projectId) : null;
-  const project = projects.find((item) => item.id === projectId);
+  if (projectQuery.isLoading) {
+    return (
+      <PageShell>
+        <ProjectsLoadingState
+          message={t("pages.user.projects.loadingProject")}
+        />
+      </PageShell>
+    );
+  }
 
-  if (!project) {
+  if (projectQuery.isError || !project) {
     return <NotFoundPage message={t("pages.user.projects.projectNotFound")} />;
   }
 
@@ -54,7 +64,9 @@ export function MyProjectsDetailsPage() {
               startedAtLabel={t("pages.user.projects.startedAt")}
               completedAtLabel={t("pages.user.projects.completedAt")}
               sourceOpenLabel={t("pages.user.projects.sourceCode.openAction")}
-              sourceClosedLabel={t("pages.user.projects.sourceCode.stateClosed")}
+              sourceClosedLabel={t(
+                "pages.user.projects.sourceCode.stateClosed",
+              )}
               sourceUnavailableLabel={t(
                 "pages.user.projects.sourceCode.notAvailable",
               )}

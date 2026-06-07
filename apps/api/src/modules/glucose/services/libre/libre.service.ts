@@ -1,14 +1,10 @@
 import {
-  BadRequestException,
   HttpException,
   Inject,
   Injectable,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
 import { AxiosResponse } from 'axios';
-import { ThrottlerException } from '@nestjs/throttler';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { clearTimeout } from 'node:timers';
 import { GlucoseProviders } from '../../glucose.enum';
@@ -22,18 +18,29 @@ import { GlucoseRepository } from '../../repositories/glucose.repository';
 import { GlucoseLibreTransformer } from './libre.transformer';
 import { BaseGlucoseService } from '../../glucose.types';
 import { LibreApiResponse } from '../../dto/external/libreResponse.dto';
+import { LibreAPI } from '../../dto/external/libreGeneratedApi';
+import { HTTP_CONSTANTS } from '../../../../constants/http.constants';
 
 @Injectable()
 export class GlucoseLibreService extends BaseGlucoseService {
+  private readonly api: LibreAPI<void>;
+
   constructor(
     @Inject(GlucoseLibreConfig) private readonly config: GlucoseLibreConfig,
     private readonly authService: GlucoseLibreAuthService,
-    private readonly httpService: HttpService,
     private readonly repository: GlucoseRepository,
     private readonly transformer: GlucoseLibreTransformer,
     @Inject(CACHE_MANAGER) protected cacheManager: Cache,
   ) {
     super(cacheManager);
+    this.api = new LibreAPI({
+      baseURL: this.getLibreBaseUrl(),
+      timeout: HTTP_CONSTANTS.TIMEOUT_MS,
+    });
+  }
+
+  private getLibreBaseUrl(): string {
+    return this.config.apiUrl.replace(/\/llu\/?$/, '');
   }
 
   initialize(): void {
@@ -150,20 +157,18 @@ export class GlucoseLibreService extends BaseGlucoseService {
           );
         }
         const { token, patientId } = await this.authService.getToken();
-        const response: AxiosResponse<LibreApiResponse> = await lastValueFrom(
-          this.httpService.get(
-            `${this.config.apiUrl}/connections/${patientId}/graph`,
-            {
-              headers: {
-                Authorization: token,
-                product: this.config.product,
-                version: this.config.version,
-                'account-id': this.config.accountId,
-              },
-              validateStatus: () => true,
+        const response = (await this.api.llu.getLluConnectionsIdGraph(
+          patientId,
+          {
+            headers: {
+              Authorization: token,
+              product: this.config.product,
+              version: this.config.version,
+              'account-id': this.config.accountId,
             },
-          ),
-        );
+            validateStatus: () => true,
+          },
+        )) as AxiosResponse<{ data?: LibreApiResponse }>;
 
         const data = await this.handleResponse(response);
         this.glucoseData = this.transformer.transform(data);

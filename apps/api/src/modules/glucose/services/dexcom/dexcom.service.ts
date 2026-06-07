@@ -1,11 +1,9 @@
 import {
-  BadRequestException,
   HttpException,
   Inject,
   Injectable,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
 import { GlucoseDexcomConfig } from '../../../../config';
 import { GetCurrentGlucoseResponse } from '../../dto/response/getCurrentGlucose.dto';
 import { GetGraphDataResponse } from '../../dto/response/getGraphData.dto';
@@ -17,7 +15,6 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { clearTimeout } from 'node:timers';
 import { GLUCOSE_CONSTANTS } from '../../../../constants/glucose.constants';
 import { AxiosResponse } from 'axios';
-import { lastValueFrom } from 'rxjs';
 import {
   DexcomApiDataRangeResponse,
   DexcomApiDevicesResponse,
@@ -35,7 +32,6 @@ export class GlucoseDexcomService extends BaseGlucoseService {
   constructor(
     @Inject(GlucoseDexcomConfig) private readonly config: GlucoseDexcomConfig,
     private readonly authService: GlucoseDexcomAuthService,
-    private readonly httpService: HttpService,
     private readonly repository: GlucoseRepository,
     private readonly transformer: GlucoseDexcomTransformer,
     @Inject(CACHE_MANAGER) cacheManager: Cache,
@@ -172,57 +168,32 @@ export class GlucoseDexcomService extends BaseGlucoseService {
           return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
         };
 
-        const rangeResponse: AxiosResponse<DexcomApiDataRangeResponse> =
-          await lastValueFrom(
-            this.httpService.get(
-              `${this.config.apiUrl}/${this.config.apiVersion}/users/self/dataRange`,
-              {
-                headers: {
-                  Authorization: token,
-                },
-                validateStatus: () => true,
-              },
-            ),
-          );
+        const requestParams = {
+          headers: { Authorization: token },
+          validateStatus: () => true,
+        };
+
+        const rangeResponse =
+          (await this.api.v3.getDataRangeV3(undefined, requestParams)) as AxiosResponse<DexcomApiDataRangeResponse>;
 
         const dataRange: DexcomApiDataRangeResponse =
           await this.handleResponse(rangeResponse);
 
-        const egvsUrl = new URL(
-          `${this.config.apiUrl}/${this.config.apiVersion}/users/self/egvs`,
+        const egvsStartDate = new Date(
+          new Date(dataRange.egvs.end.systemTime).getTime() -
+            12 * 3600 * GLUCOSE_CONSTANTS.SEC_TO_MS,
         );
-        egvsUrl.searchParams.append(
-          'startDate',
-          formatDate(
-            new Date(
-              new Date(dataRange.egvs.end.systemTime).getTime() -
-                12 * 3600 * GLUCOSE_CONSTANTS.SEC_TO_MS,
-            ),
-          ),
-        );
-        egvsUrl.searchParams.append('endDate', formatDate(new Date()));
-        const egvsResponse: AxiosResponse<DexcomApiEgvsResponse> =
-          await lastValueFrom(
-            this.httpService.get(egvsUrl.toString(), {
-              headers: {
-                Authorization: token,
-              },
-              validateStatus: () => true,
-            }),
-          );
+        const egvsResponse =
+          (await this.api.v3.getEstimatedGlucoseValuesV3(
+            {
+              startDate: formatDate(egvsStartDate),
+              endDate: formatDate(new Date()),
+            },
+            requestParams,
+          )) as AxiosResponse<DexcomApiEgvsResponse>;
 
-        const devicesResponse: AxiosResponse<DexcomApiDevicesResponse> =
-          await lastValueFrom(
-            this.httpService.get(
-              `${this.config.apiUrl}/${this.config.apiVersion}/users/self/devices`,
-              {
-                headers: {
-                  Authorization: token,
-                },
-                validateStatus: () => true,
-              },
-            ),
-          );
+        const devicesResponse =
+          (await this.api.v3.getDevicesV3(requestParams)) as AxiosResponse<DexcomApiDevicesResponse>;
 
         const egvsData = await this.handleResponse(egvsResponse);
         const devicesData = await this.handleResponse(devicesResponse);

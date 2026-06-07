@@ -1,15 +1,16 @@
-export type ProjectStatus = "completed" | "inProgress" | "planned";
+export type ProjectStatus = "completed" | "inProgress" | "planned" | "onHold";
 
 export type ProjectDeveloper = {
   name: string;
-  role: string;
+  role?: string;
+  profileUrl?: string;
 };
 
 export type Project = {
-  id: number;
+  uuid: string;
   title: string;
   description: string;
-  image: string;
+  image?: string;
   status: ProjectStatus;
   sourceCodeOpen: boolean;
   sourceCodeUrl?: string;

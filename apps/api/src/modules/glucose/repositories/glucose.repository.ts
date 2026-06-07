@@ -55,19 +55,15 @@ export class GlucoseRepository {
     provider: string;
     timestamp: Date;
   }): Promise<void> {
-    try {
-      await this.glucoseRepo.upsert(
-        {
-          value: data.value,
-          unit: data.unit,
-          provider: data.provider,
-          timestamp: data.timestamp,
-        },
-        ['timestamp'],
-      );
-    } catch (error) {
-      this.logger.error(`saveGlucoseMeasurement: ${error.message}`);
-    }
+    await this.glucoseRepo.upsert(
+      {
+        value: data.value,
+        unit: data.unit,
+        provider: data.provider,
+        timestamp: data.timestamp,
+      },
+      ['timestamp'],
+    );
   }
 
   async getTimeInRange(data: {
