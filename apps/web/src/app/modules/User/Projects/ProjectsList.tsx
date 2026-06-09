@@ -39,7 +39,7 @@ export function MyProjectsListPage() {
 
       <Reveal key={filter}>
         {projectsQuery.isLoading ? (
-          <ProjectsLoadingState message={t("pages.user.projects.loading")} />
+          <ProjectsLoadingState message={t("pages.user.projects.loadingProjects")} />
         ) : projectsQuery.isError ? (
           <ProjectsErrorState message={t("pages.user.projects.loadError")} />
         ) : visibleProjects.length > 0 ? (

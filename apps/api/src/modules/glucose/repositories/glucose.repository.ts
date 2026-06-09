@@ -266,15 +266,15 @@ export class GlucoseRepository {
       let gmiValue: number = 0;
       if (isDataSufficient) {
         if (data.unit === GlucoseUnits.MG_DL) {
-          gmiValue = Math.round(3.31 + 0.02392 * avgGlucose);
+          gmiValue = 3.31 + 0.02392 * avgGlucose;
         } else if (data.unit === GlucoseUnits.MMOL_L) {
-          gmiValue = Math.round(12.71 + 4.70587 * avgGlucose);
+          gmiValue = 12.71 + 4.70587 * avgGlucose;
         }
       }
 
       return {
         isDataSufficient,
-        value: gmiValue,
+        value: Number(gmiValue.toFixed(1)),
         hours: data.hours,
       };
     } catch (error) {
