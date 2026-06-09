@@ -15,17 +15,17 @@ import { useProjectList } from "@/app/api/queries/useProjects.ts";
 
 export function MyProjectsListPage() {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<ProjectFilter>("all");
+  const [filter, setFilter] = useState<ProjectFilter>("ALL");
   const projectsQuery = useProjectList();
 
   const visibleProjects = useMemo(() => {
     const projects = projectsQuery.data ?? [];
 
-    if (filter === "all") {
+    if (filter === "ALL") {
       return projects;
     }
 
-    return projects.filter((project) => project.status === filter);
+    return projects.filter((project) => project.status.code === filter);
   }, [filter, projectsQuery.data]);
 
   return (

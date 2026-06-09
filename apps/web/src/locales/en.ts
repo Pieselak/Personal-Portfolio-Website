@@ -387,6 +387,7 @@ const en = {
             all: "All",
             completed: "Completed",
             inProgress: "In progress",
+            onHold: "On hold",
             planned: "Planned",
           },
           details: {

@@ -1,7 +1,10 @@
 import { StatusBadge } from "@/app/components/ui/StatusBadge.tsx";
 import { BentoTile } from "@/app/components/ui/BentoTile.tsx";
 import { projectStatusTone } from "@/app/modules/User/Projects/constants/projectStatus.ts";
-import type { Project } from "@/app/modules/User/Projects/types/project.types.ts";
+import type {
+  Project,
+  ProjectStatus,
+} from "@/app/modules/User/Projects/types/project.types.ts";
 
 type ProjectHeroPanelProps = {
   project: Project;
@@ -19,7 +22,7 @@ export function ProjectHeroPanel({
       eyebrow={eyebrow}
       title={project.title}
       action={
-        <StatusBadge tone={projectStatusTone[project.status]}>
+        <StatusBadge tone={projectStatusTone[project.status.code as ProjectStatus]}>
           {statusLabel}
         </StatusBadge>
       }

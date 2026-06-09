@@ -1,33 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class ProjectStatusColorResponse {
-  @ApiProperty({ example: 'GREEN' })
-  code: string;
-
-  @ApiProperty({ example: 'green' })
-  color: string;
-}
-
 export class ProjectStatusResponse {
   @ApiProperty({ example: 'IN_PROGRESS' })
   code: string;
 
   @ApiProperty({ example: 'In progress' })
   label: string;
-
-  @ApiProperty({ example: 'Clock' })
-  icon: string;
-
-  @ApiProperty({ type: ProjectStatusColorResponse })
-  color: ProjectStatusColorResponse;
-}
-
-export class ProjectTagResponse {
-  @ApiProperty({ example: 'TypeScript' })
-  name: string;
-
-  @ApiProperty({ required: false, example: 'Code2' })
-  icon?: string;
 }
 
 export class ProjectDeveloperResponse {
@@ -69,8 +47,12 @@ export class GetProjectResponse {
   })
   imageUrl?: string;
 
-  @ApiProperty({ type: ProjectTagResponse, isArray: true })
-  tags: ProjectTagResponse[];
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    example: ['TypeScript', 'React', 'NestJS'],
+  })
+  tags: string[];
 
   @ApiProperty({ example: true })
   sourceCodeOpen: boolean;

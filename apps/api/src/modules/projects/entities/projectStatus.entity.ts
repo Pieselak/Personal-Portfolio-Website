@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { ProjectStatusColorEntity } from './projectStatusColor.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('projects_statuses')
 export class ProjectStatusEntity {
@@ -17,11 +10,4 @@ export class ProjectStatusEntity {
 
   @Column({ type: 'varchar', length: 255 })
   label: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  icon: string;
-
-  @ManyToOne(() => ProjectStatusColorEntity, { cascade: true, eager: true })
-  @JoinColumn({ name: 'color_id' })
-  color: ProjectStatusColorEntity;
 }

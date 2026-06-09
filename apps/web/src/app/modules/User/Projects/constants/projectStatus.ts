@@ -1,23 +1,23 @@
 import {
   Calendar,
-  CalendarCheck,
-  CalendarRange,
-  CalendarX,
-  CheckCircle2,
+  CalendarCheck2,
+  CalendarClock,
+  CalendarCog,
+  type LucideIcon,
 } from "lucide-react";
 import type { Tone } from "@/app/components/ui/tone.ts";
 import type { ProjectStatus } from "@/app/modules/User/Projects/types/project.types.ts";
 
 export const projectStatusTone = {
-  completed: "green",
-  inProgress: "yellow",
-  planned: "gray",
-  onHold: "orange",
+  COMPLETED: "green",
+  IN_PROGRESS: "yellow",
+  PLANNED: "gray",
+  ON_HOLD: "orange",
 } satisfies Record<ProjectStatus, Tone>;
 
 export const projectStatusIcon = {
-  completed: CalendarCheck,
-  inProgress: CalendarRange,
-  planned: Calendar,
-  onHold: CalendarX,
-} satisfies Record<ProjectStatus, typeof CheckCircle2>;
+  COMPLETED: CalendarCheck2,
+  IN_PROGRESS: CalendarCog,
+  ON_HOLD: CalendarClock,
+  PLANNED: Calendar,
+} satisfies Record<ProjectStatus, LucideIcon>;

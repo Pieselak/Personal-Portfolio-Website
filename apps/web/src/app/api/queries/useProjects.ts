@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { ApiClient } from "@/app/api/client.ts";
-import { mapProjectFromApi } from "@/app/modules/User/Projects/utils/projectApiAdapter.ts";
 
 export const projectQueryKeys = {
   all: ["projects"] as const,
@@ -14,25 +13,17 @@ export const projectQueryKeys = {
 export const useProjectList = () => {
   return useQuery({
     queryKey: projectQueryKeys.list(),
-    queryFn: async () => {
-      const response = await ApiClient.projects.projectsControllerGetProjects();
-      return response.data;
-    },
-    select: (projects) => projects.map(mapProjectFromApi),
+    queryFn: () => ApiClient.projects.projectsControllerGetProjects(),
+    select: (response) => response.data,
   });
 };
 
 export const useProject = (projectUuid?: string) => {
   return useQuery({
     queryKey: projectQueryKeys.detail(projectUuid ?? ""),
-    queryFn: async () => {
-      const response =
-        await ApiClient.projects.projectsControllerGetProjectById(
-          projectUuid ?? "",
-        );
-      return response.data;
-    },
-    select: mapProjectFromApi,
+    queryFn: () =>
+      ApiClient.projects.projectsControllerGetProjectById(projectUuid ?? ""),
+    select: (response) => response.data,
     enabled: Boolean(projectUuid),
   });
 };

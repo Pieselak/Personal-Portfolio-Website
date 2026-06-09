@@ -388,6 +388,7 @@ const pl = {
             all: "Wszystkie",
             completed: "Ukończone",
             inProgress: "W trakcie",
+            onHold: "Zawieszone",
             planned: "Zaplanowane",
           },
           details: {

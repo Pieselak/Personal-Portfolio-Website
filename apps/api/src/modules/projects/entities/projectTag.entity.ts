@@ -9,9 +9,6 @@ export class ProjectTagEntity {
   @Column({ type: 'varchar', length: 255 })
   label: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  icon: string | null;
-
   @ManyToMany(() => ProjectEntity, (project) => project.projectTags)
   projects: ProjectEntity[];
 }

@@ -32,8 +32,8 @@ export const useGlucoseCurrent = () => {
     queryKey: ["glucose", "current"],
     queryFn: () => ApiClient.glucose.glucoseControllerGetCurrentGlucose(),
     select: (response): GetCurrentGlucoseResponse => response.data,
-    staleTime: 60 * 1000,
-    refetchInterval: 60 * 1000,
+    staleTime: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
+    refetchInterval: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
   });
 };
 
@@ -41,19 +41,9 @@ export const useGlucoseGraph = (hours?: number) => {
   return useQuery({
     queryKey: ["glucose", "graph", hours],
     queryFn: () => ApiClient.glucose.glucoseControllerGetGraphData(),
-    select: (response): GetGraphDataResponse => {
-      if (!hours) return response.data;
-
-      const minTimestamp = Date.now() - hours * 60 * 60 * 1000;
-      return {
-        ...response.data,
-        data: response.data.data.filter(
-          (point) => Number(point.timestamp) >= minTimestamp,
-        ),
-      };
-    },
-    staleTime: 60 * 1000,
-    refetchInterval: 60 * 1000,
+    select: (response): GetGraphDataResponse => response.data,
+    staleTime: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
+    refetchInterval: (response: any) => response?.data?.refreshIn ?? 60 * 1000,
     placeholderData: (previousData) => previousData,
   });
 };

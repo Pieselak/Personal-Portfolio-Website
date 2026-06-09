@@ -1,7 +1,8 @@
 import {
   Calendar,
-  CalendarCheck,
-  CalendarRange,
+  CalendarCheck2,
+  CalendarClock,
+  CalendarCog,
   FolderKanban,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -29,22 +30,27 @@ export function ProjectFilterControl({
         className="w-full backdrop-blur-xl sm:w-auto"
         options={[
           {
-            value: "all",
+            value: "ALL",
             label: t("pages.user.projects.filters.all"),
             icon: <FolderKanban className="size-4" />,
           },
           {
-            value: "completed",
+            value: "COMPLETED",
             label: t("pages.user.projects.filters.completed"),
-            icon: <CalendarCheck className="size-4" />,
+            icon: <CalendarCheck2 className="size-4" />,
           },
           {
-            value: "inProgress",
+            value: "IN_PROGRESS",
             label: t("pages.user.projects.filters.inProgress"),
-            icon: <CalendarRange className="size-4" />,
+            icon: <CalendarCog className="size-4" />,
           },
           {
-            value: "planned",
+            value: "ON_HOLD",
+            label: t("pages.user.projects.filters.onHold"),
+            icon: <CalendarClock className="size-4" />,
+          },
+          {
+            value: "PLANNED",
             label: t("pages.user.projects.filters.planned"),
             icon: <Calendar className="size-4" />,
           },

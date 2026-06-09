@@ -67,7 +67,7 @@ export class GlucoseDexcomTransformer {
     const glucoseIsCurrent =
       sensorIsActive &&
       currentTimestamp - glucoseTimestamp <=
-        GLUCOSE_CONSTANTS.LIBRE.FETCH_TIMEOUT_MS;
+        2 * GLUCOSE_CONSTANTS.DEXCOM.FETCH_TIMEOUT_MS;
 
     // Glucose unit
     let glucoseUnit: GlucoseUnits;

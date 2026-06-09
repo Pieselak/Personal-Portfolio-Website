@@ -7,10 +7,8 @@ import { UpdateProjectBody } from '../dto/input/updateProject.dto';
 import {
   GetProjectResponse,
   ProjectDeveloperResponse,
-  ProjectTagResponse,
 } from '../dto/response/getProject.dto';
 import { ProjectEntity } from '../entities/project.entity';
-import { ProjectStatusColorEntity } from '../entities/projectStatusColor.entity';
 import { ProjectStatusEntity } from '../entities/projectStatus.entity';
 import { ProjectTagEntity } from '../entities/projectTag.entity';
 
@@ -21,8 +19,6 @@ export class ProjectsRepository {
     private readonly projectRepo: Repository<ProjectEntity>,
     @InjectRepository(ProjectStatusEntity)
     private readonly statusRepo: Repository<ProjectStatusEntity>,
-    @InjectRepository(ProjectStatusColorEntity)
-    private readonly statusColorRepo: Repository<ProjectStatusColorEntity>,
     @InjectRepository(ProjectTagEntity)
     private readonly tagRepo: Repository<ProjectTagEntity>,
   ) {}
@@ -50,16 +46,10 @@ export class ProjectsRepository {
     const jsonTags = this.parseJsonArray<{ name?: string; icon?: string }>(
       project.tags,
     );
-    const tags: ProjectTagResponse[] =
+    const tags: string[] =
       project.projectTags?.length > 0
-        ? project.projectTags.map((tag) => ({
-            name: tag.label,
-            icon: tag.icon ?? undefined,
-          }))
-        : jsonTags.map((tag) => ({
-            name: tag.name ?? '',
-            icon: tag.icon,
-          }));
+        ? project.projectTags.map((tag) => tag.label)
+        : jsonTags.map((tag) => tag.name ?? '');
     const developers = this.parseJsonArray<ProjectDeveloperResponse>(
       project.developers,
     );
@@ -69,11 +59,6 @@ export class ProjectsRepository {
       status: {
         code: project.status.code,
         label: project.status.label,
-        icon: project.status.icon,
-        color: {
-          code: project.status.color.code,
-          color: project.status.color.color,
-        },
       },
       title: project.title,
       shortDescription: project.shortDescription,
@@ -94,26 +79,14 @@ export class ProjectsRepository {
     return this.statusRepo.findOne({ where: { code: statusCode } });
   }
 
-  async upsertStatusColor(
-    code: string,
-    color: string,
-  ): Promise<ProjectStatusColorEntity> {
-    await this.statusColorRepo.upsert({ code, color }, ['code']);
-    return this.statusColorRepo.findOneOrFail({ where: { code } });
-  }
-
   async upsertStatus(
     code: string,
     label: string,
-    icon: string,
-    color: ProjectStatusColorEntity,
   ): Promise<ProjectStatusEntity> {
     const existingStatus = await this.statusRepo.findOne({ where: { code } });
 
     if (existingStatus) {
       existingStatus.label = label;
-      existingStatus.icon = icon;
-      existingStatus.color = color;
       return this.statusRepo.save(existingStatus);
     }
 
@@ -121,8 +94,6 @@ export class ProjectsRepository {
       this.statusRepo.create({
         code,
         label,
-        icon,
-        color,
       }),
     );
   }
@@ -141,7 +112,7 @@ export class ProjectsRepository {
     const existingLabels = new Set(existingTags.map((tag) => tag.label));
     const missingTags = uniqueLabels
       .filter((label) => !existingLabels.has(label))
-      .map((label) => this.tagRepo.create({ label, icon: null }));
+      .map((label) => this.tagRepo.create({ label }));
 
     return [...existingTags, ...missingTags];
   }

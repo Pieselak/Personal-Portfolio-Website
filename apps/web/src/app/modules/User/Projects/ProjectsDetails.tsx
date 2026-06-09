@@ -42,7 +42,9 @@ export function MyProjectsDetailsPage() {
         <ProjectHeroPanel
           project={project}
           eyebrow={t("pages.user.projects.details.project")}
-          statusLabel={t(`pages.user.projects.statuses.${project.status}`)}
+          statusLabel={t(
+            `pages.user.projects.statuses.${project.status.label}`,
+          )}
         />
       </Reveal>
 
@@ -51,7 +53,7 @@ export function MyProjectsDetailsPage() {
           <ProjectDescriptionPanel
             eyebrow={t("pages.user.projects.details.description")}
             title={t("pages.user.projects.details.whatItDoes")}
-            description={project.description}
+            description={project.detailedDescription}
           />
 
           <div className="grid gap-4">

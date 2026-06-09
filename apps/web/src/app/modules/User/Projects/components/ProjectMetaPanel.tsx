@@ -2,6 +2,8 @@ import { Calendar, ExternalLink, Lock } from "lucide-react";
 import { BentoTile } from "@/app/components/ui/BentoTile.tsx";
 import { Button } from "@/app/components/ui/Button.tsx";
 import type { Project } from "@/app/modules/User/Projects/types/project.types.ts";
+import { formatProjectDate } from "@/app/modules/User/Projects/utils/projectFormatter.ts";
+import { useTranslation } from "react-i18next";
 
 type ProjectMetaPanelProps = {
   project: Project;
@@ -24,6 +26,7 @@ export function ProjectMetaPanel({
   sourceClosedLabel,
   sourceUnavailableLabel,
 }: ProjectMetaPanelProps) {
+  const { i18n } = useTranslation();
   return (
     <BentoTile eyebrow={eyebrow} title={title}>
       <div className="space-y-3">
@@ -34,7 +37,7 @@ export function ProjectMetaPanel({
               {startedAtLabel}
             </p>
             <p className="mt-2 font-black text-foreground">
-              {project.startDate}
+              {formatProjectDate(project.startDate, i18n.language)}
             </p>
           </div>
         )}
@@ -46,7 +49,7 @@ export function ProjectMetaPanel({
               {completedAtLabel}
             </p>
             <p className="mt-2 font-black text-foreground">
-              {project.completeDate}
+              {formatProjectDate(project.completeDate, i18n.language)}
             </p>
           </div>
         )}
@@ -66,7 +69,9 @@ export function ProjectMetaPanel({
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-control border border-border bg-surface-inset px-4 py-3 text-sm font-black text-muted-foreground">
             <Lock className="size-4" />
-            {project.sourceCodeOpen ? sourceUnavailableLabel : sourceClosedLabel}
+            {project.sourceCodeOpen
+              ? sourceUnavailableLabel
+              : sourceClosedLabel}
           </div>
         )}
       </div>

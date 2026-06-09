@@ -7,9 +7,9 @@ type ProjectPreviewImageProps = {
 export function ProjectPreviewImage({ project }: ProjectPreviewImageProps) {
   return (
     <div className="overflow-hidden rounded-tile border border-border bg-surface-inset">
-      {project.image ? (
+      {project.imageUrl ? (
         <img
-          src={project.image}
+          src={project.imageUrl}
           className="h-64 w-full object-cover grayscale md:h-80"
           alt={project.title}
         />

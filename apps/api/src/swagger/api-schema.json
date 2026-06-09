@@ -1298,23 +1298,6 @@
           "message"
         ]
       },
-      "ProjectStatusColorResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string",
-            "example": "GREEN"
-          },
-          "color": {
-            "type": "string",
-            "example": "green"
-          }
-        },
-        "required": [
-          "code",
-          "color"
-        ]
-      },
       "ProjectStatusResponse": {
         "type": "object",
         "properties": {
@@ -1325,36 +1308,11 @@
           "label": {
             "type": "string",
             "example": "In progress"
-          },
-          "icon": {
-            "type": "string",
-            "example": "Clock"
-          },
-          "color": {
-            "$ref": "#/components/schemas/ProjectStatusColorResponse"
           }
         },
         "required": [
           "code",
-          "label",
-          "icon",
-          "color"
-        ]
-      },
-      "ProjectTagResponse": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "TypeScript"
-          },
-          "icon": {
-            "type": "string",
-            "example": "Code2"
-          }
-        },
-        "required": [
-          "name"
+          "label"
         ]
       },
       "ProjectDeveloperResponse": {
@@ -1405,9 +1363,14 @@
             "example": "https://example.com/project-preview.png"
           },
           "tags": {
+            "example": [
+              "TypeScript",
+              "React",
+              "NestJS"
+            ],
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProjectTagResponse"
+              "type": "string"
             }
           },
           "sourceCodeOpen": {
@@ -1563,9 +1526,14 @@
             "example": "https://example.com/project-preview.png"
           },
           "tags": {
+            "example": [
+              "TypeScript",
+              "React",
+              "NestJS"
+            ],
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProjectTagResponse"
+              "type": "string"
             }
           },
           "sourceCodeOpen": {
@@ -1694,9 +1662,14 @@
             "example": "https://example.com/project-preview.png"
           },
           "tags": {
+            "example": [
+              "TypeScript",
+              "React",
+              "NestJS"
+            ],
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ProjectTagResponse"
+              "type": "string"
             }
           },
           "sourceCodeOpen": {

@@ -6,7 +6,10 @@ import {
   projectStatusIcon,
   projectStatusTone,
 } from "@/app/modules/User/Projects/constants/projectStatus.ts";
-import type { Project } from "@/app/modules/User/Projects/types/project.types.ts";
+import type {
+  Project,
+  ProjectStatus,
+} from "@/app/modules/User/Projects/types/project.types.ts";
 
 type ProjectCardProps = {
   project: Project;
@@ -14,7 +17,8 @@ type ProjectCardProps = {
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const { t } = useTranslation();
-  const StatusIcon = projectStatusIcon[project.status];
+  const statusCode = project.status.code as ProjectStatus;
+  const StatusIcon = projectStatusIcon[statusCode];
   const SourceIcon = project.sourceCodeOpen ? GitBranch : Lock;
   const visibleTags = (project.tags ?? []).slice(0, 3);
   const hiddenTagsCount = (project.tags?.length ?? 0) - visibleTags.length;
@@ -25,9 +29,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
       className="group flex min-h-100 flex-col overflow-hidden rounded-tile border border-border bg-surface transition-[border-color,background-color] duration-200 hover:border-ring hover:bg-surface-raised"
     >
       <div className="relative h-40 overflow-hidden border-b border-border bg-surface-inset">
-        {project.image ? (
+        {project.imageUrl ? (
           <img
-            src={project.image}
+            src={project.imageUrl}
             className="size-full object-cover grayscale transition-[filter,transform] duration-300 group-hover:scale-[1.03] group-hover:grayscale-0"
             alt={project.title}
           />
@@ -40,8 +44,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <StatusBadge tone={projectStatusTone[project.status]}>
-            {t(`pages.user.projects.statuses.${project.status}`)}
+          <StatusBadge tone={projectStatusTone[statusCode]}>
+            {t(`pages.user.projects.statuses.${project.status.label}`)}
           </StatusBadge>
         </div>
 
@@ -55,7 +59,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         <p className="line-clamp-3 text-sm leading-6 text-muted-foreground">
-          {project.description}
+          {project.shortDescription}
         </p>
 
         <div className="flex flex-wrap gap-2">

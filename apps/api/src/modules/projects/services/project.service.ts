@@ -3,10 +3,7 @@ import { ProjectsRepository } from '../repositories/projects.repository';
 import { GetProjectResponse } from '../dto/response/getProject.dto';
 import { CreateProjectBody } from '../dto/input/createProject.dto';
 import { UpdateProjectBody } from '../dto/input/updateProject.dto';
-import {
-  PROJECT_STATUS_COLORS,
-  PROJECT_STATUSES,
-} from '../constants/projects.constant';
+import { PROJECT_STATUSES } from '../constants/projects.constant';
 
 @Injectable()
 export class ProjectsService implements OnModuleInit {
@@ -17,29 +14,9 @@ export class ProjectsService implements OnModuleInit {
   }
 
   async ensureDefaultProjectStatuses(): Promise<void> {
-    const colors = await Promise.all(
-      PROJECT_STATUS_COLORS.map(({ code, color }) =>
-        this.repository.upsertStatusColor(code, color),
-      ),
-    );
-    const colorsByCode = new Map(colors.map((color) => [color.code, color]));
-
     await Promise.all(
       PROJECT_STATUSES.map((status) => {
-        const color = colorsByCode.get(status.colorCode);
-
-        if (!color) {
-          throw new Error(
-            `Project status color "${status.colorCode}" is not defined`,
-          );
-        }
-
-        return this.repository.upsertStatus(
-          status.code,
-          status.label,
-          status.icon,
-          color,
-        );
+        return this.repository.upsertStatus(status.code, status.label);
       }),
     );
   }

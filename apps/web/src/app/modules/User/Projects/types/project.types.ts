@@ -1,4 +1,6 @@
-export type ProjectStatus = "completed" | "inProgress" | "planned" | "onHold";
+import type { GetProjectResponse } from "@/app/api/generated-api.ts";
+
+export type ProjectStatus = "COMPLETED" | "IN_PROGRESS" | "PLANNED" | "ON_HOLD";
 
 export type ProjectDeveloper = {
   name: string;
@@ -6,18 +8,6 @@ export type ProjectDeveloper = {
   profileUrl?: string;
 };
 
-export type Project = {
-  uuid: string;
-  title: string;
-  description: string;
-  image?: string;
-  status: ProjectStatus;
-  sourceCodeOpen: boolean;
-  sourceCodeUrl?: string;
-  tags?: string[];
-  startDate?: string;
-  completeDate?: string;
-  developers?: ProjectDeveloper[];
-};
+export type Project = GetProjectResponse;
 
-export type ProjectFilter = "all" | ProjectStatus;
+export type ProjectFilter = "ALL" | ProjectStatus;

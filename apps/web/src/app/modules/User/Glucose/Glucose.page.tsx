@@ -31,7 +31,7 @@ export function GlucosePage() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const activeSection = getSection(searchParams.get("section"));
-  const [selectedRange, setSelectedRange] = useState<GlucoseTimeRange>("7d");
+  const [selectedRange, setSelectedRange] = useState<GlucoseTimeRange>("1d");
   const availabilityQuery = useGlucoseAvailability();
 
   useEffect(() => {
@@ -54,8 +54,11 @@ export function GlucosePage() {
     availability.hasProvider &&
     availability.reason === "AVAILABLE";
 
-  let availabilityVariant: "disabled" | "noProvider" | "initializing" | "unavailable" =
-    "unavailable";
+  let availabilityVariant:
+    | "disabled"
+    | "noProvider"
+    | "initializing"
+    | "unavailable" = "unavailable";
   let availabilityTitleKey = "pages.user.glucose.availability.unavailableTitle";
   let availabilityMessageKey = "pages.user.glucose.availability.unavailable";
   if (availability?.reason === "MODULE_DISABLED") {
@@ -94,33 +97,33 @@ export function GlucosePage() {
       )}
       {isGlucoseAvailable && (
         <>
-      <Reveal>
-        <GlucoseStatusHeader />
-      </Reveal>
+          <Reveal>
+            <GlucoseStatusHeader />
+          </Reveal>
 
-      <div className="sticky top-3 z-20 grid w-full gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
-        <GlucoseSectionTabs
-          value={activeSection}
-          onChange={handleSectionChange}
-        />
-          <TimeRangeSelector
-            value={selectedRange}
-            onChange={setSelectedRange}
-            includeAll
-          />
-      </div>
+          <div className="sticky top-3 z-20 grid w-full gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
+            <GlucoseSectionTabs
+              value={activeSection}
+              onChange={handleSectionChange}
+            />
+            <TimeRangeSelector
+              value={selectedRange}
+              onChange={setSelectedRange}
+              includeAll
+            />
+          </div>
 
-      <Reveal key={activeSection}>
-        {activeSection === "graph" && (
-          <GlucoseChartPanel selectedRange={selectedRange} />
-        )}
-        {activeSection === "timeinrange" && (
-          <TimeInRangePanel selectedRange={selectedRange} />
-        )}
-        {activeSection === "summary" && (
-          <SummaryPanel selectedRange={selectedRange} />
-        )}
-      </Reveal>
+          <Reveal key={activeSection}>
+            {activeSection === "graph" && (
+              <GlucoseChartPanel selectedRange={selectedRange} />
+            )}
+            {activeSection === "timeinrange" && (
+              <TimeInRangePanel selectedRange={selectedRange} />
+            )}
+            {activeSection === "summary" && (
+              <SummaryPanel selectedRange={selectedRange} />
+            )}
+          </Reveal>
         </>
       )}
     </PageShell>

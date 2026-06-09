@@ -150,28 +150,11 @@ export interface MaintenanceModeResponse {
   message: string;
 }
 
-export interface ProjectStatusColorResponse {
-  /** @example "green" */
-  code: string;
-  /** @example "Green" */
-  label: string;
-}
-
 export interface ProjectStatusResponse {
   /** @example "IN_PROGRESS" */
   code: string;
   /** @example "In progress" */
   label: string;
-  /** @example "Clock" */
-  icon: string;
-  color: ProjectStatusColorResponse;
-}
-
-export interface ProjectTagResponse {
-  /** @example "TypeScript" */
-  name: string;
-  /** @example "Code2" */
-  icon?: string;
 }
 
 export interface ProjectDeveloperResponse {
@@ -198,7 +181,8 @@ export interface GetProjectResponse {
   detailedDescription: string;
   /** @example "https://example.com/project-preview.png" */
   imageUrl?: string;
-  tags: ProjectTagResponse[];
+  /** @example ["TypeScript","React","NestJS"] */
+  tags: string[];
   /** @example true */
   sourceCodeOpen: boolean;
   /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
@@ -209,8 +193,6 @@ export interface GetProjectResponse {
   /** @example "2026-01-31" */
   completeDate?: string;
 }
-
-export interface CreateProjectResponse extends GetProjectResponse {}
 
 export interface ProjectDeveloperBody {
   /** @example "Patryk Z." */
@@ -223,7 +205,7 @@ export interface ProjectDeveloperBody {
 
 export interface CreateProjectBody {
   /** @example "PLANNED" */
-  status: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD" | "CANCELLED";
+  status: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
   /** @example "Portfolio Website with Glucose Sensor Integration" */
   title: string;
   /** @example "Modern portfolio website with CGM integration." */
@@ -245,9 +227,37 @@ export interface CreateProjectBody {
   completeDate?: string;
 }
 
+export interface CreateProjectResponse {
+  /**
+   * Unique identifier for the project
+   * @example "123e4567-e89b-12d3-a456-426614174000"
+   */
+  uuid: string;
+  status: ProjectStatusResponse;
+  /** @example "Portfolio Website with Glucose Sensor Integration" */
+  title: string;
+  /** @example "Modern portfolio website with CGM integration." */
+  shortDescription: string;
+  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
+  detailedDescription: string;
+  /** @example "https://example.com/project-preview.png" */
+  imageUrl?: string;
+  /** @example ["TypeScript","React","NestJS"] */
+  tags: string[];
+  /** @example true */
+  sourceCodeOpen: boolean;
+  /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
+  sourceCodeUrl?: string;
+  developers: ProjectDeveloperResponse[];
+  /** @example "2025-11-19" */
+  startDate?: string;
+  /** @example "2026-01-31" */
+  completeDate?: string;
+}
+
 export interface UpdateProjectBody {
   /** @example "PLANNED" */
-  status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD" | "CANCELLED";
+  status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
   /** @example "Portfolio Website with Glucose Sensor Integration" */
   title?: string;
   /** @example "Modern portfolio website with CGM integration." */
@@ -284,7 +294,8 @@ export interface UpdateProjectResponse {
   detailedDescription: string;
   /** @example "https://example.com/project-preview.png" */
   imageUrl?: string;
-  tags: ProjectTagResponse[];
+  /** @example ["TypeScript","React","NestJS"] */
+  tags: string[];
   /** @example true */
   sourceCodeOpen: boolean;
   /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */

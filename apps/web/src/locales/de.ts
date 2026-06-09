@@ -391,6 +391,7 @@ const de = {
             all: "Alle",
             completed: "Abgeschlossene",
             inProgress: "In Arbeit",
+            onHold: "Pausiert",
             planned: "Geplante",
           },
           details: {
