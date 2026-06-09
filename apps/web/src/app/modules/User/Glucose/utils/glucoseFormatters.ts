@@ -1,18 +1,3 @@
-type DurationFormatConstructor = new (
-  locales?: Intl.LocalesArgument,
-  options?: { style?: "long" | "short" | "narrow" | "digital" },
-) => {
-  format(duration: {
-    days?: number;
-    hours?: number;
-    minutes?: number;
-  }): string;
-};
-
-const DurationFormat = (
-  Intl as typeof Intl & { DurationFormat: DurationFormatConstructor }
-).DurationFormat;
-
 export function formatGlucoseDate(
   timestamp: number | string | null | undefined,
   language: string,
@@ -40,7 +25,7 @@ export function formatGlucoseDuration(
   const days = Math.floor(totalMinutes / 1_440);
   const hours = Math.floor((totalMinutes % 1_440) / 60);
   const minutes = totalMinutes % 60;
-  const formatter = new DurationFormat(language, { style: "short" });
+  const formatter = new Intl.DurationFormat(language, { style: "short" });
 
   if (days > 0) return formatter.format({ days, hours });
   if (hours > 0) return formatter.format({ hours, minutes });
