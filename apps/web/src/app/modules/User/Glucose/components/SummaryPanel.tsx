@@ -18,6 +18,8 @@ import {
   type GlucoseTimeRange,
 } from "@/app/modules/User/Glucose/constants/glucoseTimeRanges.ts";
 import { PanelLoadingOverlay } from "@/app/modules/User/Glucose/components/PanelLoadingOverlay.tsx";
+import { formatGlucoseDuration } from "@/app/modules/User/Glucose/utils/glucoseFormatters.ts";
+import i18n from "@/i18n.ts";
 
 type SummaryPanelProps = {
   selectedRange: GlucoseTimeRange;
@@ -69,9 +71,16 @@ export function SummaryPanel({ selectedRange }: SummaryPanelProps) {
   return (
     <BentoTile
       title={t("pages.user.glucose.subpages.summary.title")}
-      description={t("pages.user.glucose.summary.period", {
-        hours: timeInRangeQuery.data.hours ?? hours ?? t("pages.user.glucose.timeRange.all"),
-      })}
+      description={
+        timeInRangeQuery.data.hours || hours
+          ? t("pages.user.glucose.summary.period", {
+              duration: formatGlucoseDuration(
+                (timeInRangeQuery.data.hours || hours || 0) * 60 * 60 * 1000,
+                i18n.language,
+              ),
+            })
+          : t("pages.user.glucose.summary.periodAll")
+      }
       className="relative"
     >
       <PanelLoadingOverlay visible={isFetching} />

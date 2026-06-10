@@ -466,7 +466,8 @@ const pl = {
             },
           },
           summary: {
-            period: "Statystyki z ostatnich {{hours}} godzin.",
+            period: "Statystyki z ostatnich {{duration}}.",
+            periodAll: "Statystyki z wszystkich dostępnych danych",
             average: "Średnia",
             highest: "Najwyższa",
             lowest: "Najniższa",
@@ -492,7 +493,8 @@ const pl = {
             all: "Całość",
           },
           timeInRange: {
-            period: "Rozkład z ostatnich {{hours}} godzin.",
+            period: "Rozkład z ostatnich {{duration}}.",
+            periodAll: "Rozkład z wszystkich dostępnych danych.",
           },
           graph: {
             empty: "Brak odczytów glukozy do wyświetlenia na wykresie.",

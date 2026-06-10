@@ -1,73 +1,141 @@
-# React + TypeScript + Vite
+# About Me Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend aplikacji portfolio zbudowany jako SPA w React i TypeScript. Prezentuje
+profil autora, projekty oraz dane glikemiczne pobierane z backendowego API.
 
-Currently, two official plugins are available:
+## Funkcje
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- responsywna strona główna i sekcja „O mnie”,
+- lista projektów z filtrowaniem i widokiem szczegółów,
+- wykresy glikemii, Time in Range, GMI i podsumowania,
+- rejestracja, logowanie i resetowanie hasła,
+- obsługa sesji oraz autoryzowanych zapytań,
+- interfejs w języku polskim, angielskim i niemieckim,
+- jasny i ciemny motyw,
+- animacje oraz nawigacja mobilna,
+- polityka prywatności i warunki korzystania,
+- widoki błędów, ładowania i trybu konserwacji.
 
-## React Compiler
+## Technologie
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 i TypeScript,
+- Vite 7,
+- React Router,
+- Tailwind CSS 4,
+- TanStack React Query,
+- Zustand,
+- Axios i klient generowany z OpenAPI,
+- i18next,
+- Recharts,
+- Framer Motion,
+- Zod i Lucide React.
 
-## Expanding the ESLint configuration
+## Wymagania
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 24,
+- pnpm 10,
+- uruchomione backendowe API.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Konfiguracja
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Utwórz `.env` na podstawie `.env.example`:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=http://localhost:2100
+VITE_CONTACT_EMAIL=kontakt@example.com
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Zmienna | Opis |
+| --- | --- |
+| `VITE_API_URL` | Bazowy adres backendowego API. |
+| `VITE_CONTACT_EMAIL` | Adres wyświetlany w sekcjach kontaktowych. |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Domyślny adres API to `http://localhost:2100/`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Uruchomienie
+
+Z katalogu głównego monorepo:
+
+```bash
+pnpm install
+pnpm --dir apps/web dev
 ```
+
+Lub bezpośrednio z `apps/web`:
+
+```bash
+pnpm dev
+```
+
+Aplikacja działa pod `http://localhost:2000`.
+
+## Główne trasy
+
+| Trasa | Widok |
+| --- | --- |
+| `/home` | Strona główna. |
+| `/about` | Informacje o autorze. |
+| `/projects` | Lista projektów. |
+| `/projects/:projectId` | Szczegóły projektu. |
+| `/glucose` | Panel danych glikemicznych. |
+| `/language` | Wybór języka. |
+| `/login` | Logowanie. |
+| `/register` | Rejestracja. |
+| `/reset-password` | Resetowanie hasła. |
+| `/terms` | Warunki korzystania. |
+| `/privacy` | Polityka prywatności. |
+
+## Struktura
+
+```text
+src/
+|-- app/
+|   |-- api/          # klient API, queries i mutations
+|   |-- components/   # współdzielone komponenty UI
+|   |-- hooks/        # współdzielone hooki
+|   |-- layouts/      # układ strony i nawigacja
+|   `-- modules/      # moduły funkcjonalne
+|-- locales/          # tłumaczenia PL, EN i DE
+|-- App.tsx           # routing
+|-- i18n.ts           # konfiguracja języków
+|-- index.css         # Tailwind i zmienne motywu
+`-- main.tsx          # punkt wejścia
+```
+
+Importy aplikacji korzystają z aliasu `@`, wskazującego na `src`.
+
+## Zarządzanie stanem
+
+- TanStack React Query obsługuje dane serwerowe, cache i odświeżanie,
+- Zustand przechowuje stan sesji i współdzielony stan klienta,
+- lokalny stan React służy do stanu pojedynczych komponentów,
+- `localStorage` przechowuje wybrany język i preferencje interfejsu.
+
+## Integracja z API
+
+Klient Axios znajduje się w `src/app/api`. Token JWT jest dołączany przez
+interceptor, a zapytania są opakowane w queries i mutations React Query.
+
+Po zmianie schematu backendu wygeneruj klienta ponownie:
+
+```bash
+pnpm generate:api
+```
+
+Źródłem jest `../api/src/swagger/api-schema.json`, a wynikiem
+`src/app/api/generated-api.ts`. Nie edytuj wygenerowanego pliku ręcznie.
+
+## Skrypty
+
+| Komenda | Działanie |
+| --- | --- |
+| `pnpm dev` | Uruchamia Vite na porcie `2000`. |
+| `pnpm build` | Sprawdza TypeScript i tworzy build w `dist`. |
+| `pnpm lint` | Uruchamia ESLint. |
+| `pnpm preview` | Pokazuje lokalny podgląd buildu. |
+| `pnpm generate:api` | Generuje typowanego klienta API. |
+
+## Wdrożenie
+
+`vercel.json` definiuje budowanie przez pnpm oraz przekierowanie tras SPA do
+`index.html`. Katalogiem wynikowym jest `dist`.

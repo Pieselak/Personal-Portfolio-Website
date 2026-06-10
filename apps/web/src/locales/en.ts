@@ -465,7 +465,8 @@ const en = {
             },
           },
           summary: {
-            period: "Statistics from the last {{hours}} hours.",
+            period: "Statistics from the last {{duration}}.",
+            periodAll: "Statistics from all available data.",
             average: "Average",
             highest: "Highest",
             lowest: "Lowest",
@@ -491,7 +492,8 @@ const en = {
             all: "All time",
           },
           timeInRange: {
-            period: "Distribution from the last {{hours}} hours.",
+            period: "Distribution from the last {{duration}}.",
+            periodAll: "Distribution from all available data.",
           },
           graph: {
             empty: "No glucose readings available for the graph.",

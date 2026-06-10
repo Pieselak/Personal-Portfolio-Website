@@ -13,13 +13,14 @@ import {
 } from "@/app/modules/User/Glucose/constants/glucoseTimeRanges.ts";
 import { getTimeInRangeSegments } from "@/app/modules/User/Glucose/utils/glucoseDisplay.ts";
 import { PanelLoadingOverlay } from "@/app/modules/User/Glucose/components/PanelLoadingOverlay.tsx";
+import { formatGlucoseDuration } from "@/app/modules/User/Glucose/utils/glucoseFormatters.ts";
 
 type TimeInRangePanelProps = {
   selectedRange: GlucoseTimeRange;
 };
 
 export function TimeInRangePanel({ selectedRange }: TimeInRangePanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const hours = getGlucoseRangeHours(selectedRange);
   const timeInRangeQuery = useGlucoseTimeInRange(hours);
 
@@ -37,9 +38,16 @@ export function TimeInRangePanel({ selectedRange }: TimeInRangePanelProps) {
   return (
     <BentoTile
       title={t("pages.user.glucose.subpages.timeInRange.title")}
-      description={t("pages.user.glucose.timeInRange.period", {
-        hours: timeInRange.hours ?? hours ?? t("pages.user.glucose.timeRange.all"),
-      })}
+      description={
+        timeInRange.hours || hours
+          ? t("pages.user.glucose.timeInRange.period", {
+              duration: formatGlucoseDuration(
+                (timeInRange.hours || hours || 0) * 60 * 60 * 1000,
+                i18n.language,
+              ),
+            })
+          : t("pages.user.glucose.timeInRange.periodAll")
+      }
       className="relative"
     >
       <PanelLoadingOverlay visible={timeInRangeQuery.isFetching} />

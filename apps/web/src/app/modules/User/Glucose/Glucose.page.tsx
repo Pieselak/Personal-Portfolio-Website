@@ -95,7 +95,7 @@ export function GlucosePage() {
           variant={availabilityVariant}
         />
       )}
-      {isGlucoseAvailable && (
+      {availabilityQuery.isSuccess && isGlucoseAvailable && (
         <>
           <Reveal>
             <GlucoseStatusHeader />

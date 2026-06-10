@@ -1,98 +1,170 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# About Me API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend aplikacji portfolio zbudowany w NestJS. Udostępnia REST API dla
+projektów, użytkowników, uwierzytelniania, statusu aplikacji oraz danych
+glikemicznych pobieranych z LibreView lub Dexcom.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Funkcje
 
-## Description
+- rejestracja, logowanie, wylogowanie i pobieranie bieżącego użytkownika,
+- autoryzacja JWT oraz unieważnianie tokenów z użyciem Redis,
+- role i uprawnienia użytkowników,
+- operacje CRUD dla projektów,
+- status usługi i tryb konserwacji,
+- integracja z LibreView,
+- integracja OAuth z Dexcom,
+- aktualny pomiar, dane sensora i wykres glikemii,
+- średnia, minimum, maksimum, GMI oraz Time in Range,
+- walidacja DTO i globalny limit zapytań,
+- dokumentacja OpenAPI/Swagger.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Technologie
 
-## Project setup
+- NestJS 11 i TypeScript,
+- TypeORM,
+- PostgreSQL,
+- Redis,
+- Passport i JWT,
+- Axios,
+- Swagger,
+- class-validator i class-transformer,
+- Jest.
 
-```bash
-$ pnpm install
+## Wymagania
+
+- Node.js 24,
+- pnpm 10,
+- PostgreSQL,
+- Redis lub `REDIS_REQUIRED=false` podczas pracy lokalnej,
+- dane dostępowe do LibreView lub Dexcom, jeżeli moduł glikemii ma być aktywny.
+
+## Konfiguracja
+
+Utwórz `.env` na podstawie `.env.example`:
+
+```env
+PORT=2100
+CORS_ORIGIN=http://localhost:2000
+NODE_ENV=localdevelopment
+
+DATABASE_URL=postgresql://postgres:password@localhost:5432/app_db
+
+JWT_SECRET=replace_with_a_long_random_secret
+JWT_EXPIRES_IN=1d
+
+REDIS_URL=redis://localhost:6379
+REDIS_REQUIRED=false
+
+LIBRE_API_URL=https://api.libreview.io/llu
+LIBRE_VERSION=4.16.0
+LIBRE_PRODUCT=llu.android
+LIBRE_EMAIL=
+LIBRE_PASSWORD=
+LIBRE_ACCOUNT_ID=
+
+DEXCOM_API_URL=https://sandbox-api.dexcom.com
+DEXCOM_API_VERSION=v3
+DEXCOM_CLIENT_ID=
+DEXCOM_CLIENT_SECRET=
+DEXCOM_REDIRECT_URI=http://localhost:2100/glucose/auth/dexcom/callback
 ```
 
-## Compile and run the project
+Nie umieszczaj prawdziwych sekretów ani danych logowania w repozytorium.
+
+## Uruchomienie
+
+Z katalogu głównego monorepo:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
+pnpm --dir apps/api start:dev
 ```
 
-## Run tests
+Lub bezpośrednio z `apps/api`:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm start:dev
 ```
 
-## Deployment
+API domyślnie działa pod `http://localhost:2100`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Dokumentacja API
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Po uruchomieniu serwera:
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+- Swagger UI: `http://localhost:2100/docs`,
+- OpenAPI JSON: `http://localhost:2100/docs-json`,
+- OpenAPI YAML: `http://localhost:2100/docs-yaml`.
+
+Przy `NODE_ENV=localdevelopment` schemat jest również zapisywany do
+`src/swagger/api-schema.json` podczas startu aplikacji.
+
+## Moduły
+
+| Moduł | Zakres |
+| --- | --- |
+| `auth` | Rejestracja, logowanie, JWT i wylogowanie. |
+| `users` | Użytkownicy, role i uprawnienia. |
+| `projects` | Lista, szczegóły i zarządzanie projektami. |
+| `status` | Stan usługi i tryb konserwacji. |
+| `glucose` | Dostawcy, pomiary, wykresy i statystyki glikemii. |
+
+## Główne endpointy
+
+| Prefiks | Przeznaczenie |
+| --- | --- |
+| `/auth` | Uwierzytelnianie i bieżąca sesja. |
+| `/users` | Zarządzanie użytkownikami. |
+| `/projects` | Projekty portfolio. |
+| `/status` | Status i tryb konserwacji. |
+| `/glucose` | Dostępność, pomiary i dane sensora. |
+| `/glucose/statistics` | Statystyki glikemii. |
+| `/glucose/settings` | Konfiguracja dostawcy. |
+| `/glucose/auth` | Autoryzacja Dexcom OAuth. |
+
+Dokładne parametry, odpowiedzi i wymagane uprawnienia są opisane w Swagger UI.
+
+## Struktura
+
+```text
+src/
+|-- config/       # konfiguracja bazy, JWT, Redis i integracji
+|-- constants/    # stałe aplikacji
+|-- entities/     # encje współdzielone
+|-- modules/      # moduły domenowe
+|-- swagger/      # wygenerowany schemat OpenAPI
+|-- app.module.ts
+`-- main.ts
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Każdy moduł domenowy może zawierać kontrolery, serwisy, repozytoria, encje oraz
+DTO wejściowe i odpowiedzi.
 
-## Resources
+## Skrypty
 
-Check out a few resources that may come in handy when working with NestJS:
+| Komenda | Działanie |
+| --- | --- |
+| `pnpm start:dev` | Uruchamia serwer w trybie watch. |
+| `pnpm start:debug` | Uruchamia serwer z debuggerem. |
+| `pnpm build` | Buduje aplikację do `dist`. |
+| `pnpm start:prod` | Uruchamia zbudowaną aplikację. |
+| `pnpm lint` | Uruchamia ESLint z automatycznymi poprawkami. |
+| `pnpm format` | Formatuje kod Prettierem. |
+| `pnpm test` | Uruchamia testy jednostkowe. |
+| `pnpm test:e2e` | Uruchamia testy end-to-end. |
+| `pnpm test:cov` | Generuje raport pokrycia testami. |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Baza danych
 
-## Support
+Aplikacja korzysta z PostgreSQL i TypeORM. Encje są wykrywane automatycznie, a
+opcja `synchronize` jest obecnie włączona. W środowisku produkcyjnym zalecane
+jest wyłączenie automatycznej synchronizacji i użycie migracji.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Bezpieczeństwo
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- hasła są hashowane przez bcrypt,
+- chronione endpointy używają JWT i guardów uprawnień,
+- wylogowane tokeny mogą być przechowywane na czarnej liście Redis,
+- CORS zezwala na pochodzenie ustawione w `CORS_ORIGIN`,
+- globalny throttler ogranicza ruch do 100 żądań na minutę,
+- dane wejściowe są walidowane przez `ValidationPipe`.

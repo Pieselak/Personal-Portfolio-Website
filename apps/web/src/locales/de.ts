@@ -469,7 +469,8 @@ const de = {
             },
           },
           summary: {
-            period: "Statistiken der letzten {{hours}} Stunden.",
+            period: "Statistiken der letzten {{duration}}.",
+            periodAll: "Statistiken aus allen verfügbaren Daten.",
             average: "Durchschnitt",
             highest: "Höchster Wert",
             lowest: "Niedrigster Wert",
@@ -495,7 +496,8 @@ const de = {
             all: "Gesamt",
           },
           timeInRange: {
-            period: "Verteilung der letzten {{hours}} Stunden.",
+            period: "Verteilung der letzten {{duration}}.",
+            periodAll: "Verteilung aus allen verfügbaren Daten.",
           },
           graph: {
             empty: "Keine Glukosewerte für das Diagramm verfügbar.",

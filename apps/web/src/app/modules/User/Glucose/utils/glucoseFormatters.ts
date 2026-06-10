@@ -25,7 +25,7 @@ export function formatGlucoseDuration(
   const days = Math.floor(totalMinutes / 1_440);
   const hours = Math.floor((totalMinutes % 1_440) / 60);
   const minutes = totalMinutes % 60;
-  const formatter = new Intl.DurationFormat(language, { style: "short" });
+  const formatter = new Intl.DurationFormat(language, { style: "long" });
 
   if (days > 0) return formatter.format({ days, hours });
   if (hours > 0) return formatter.format({ hours, minutes });
