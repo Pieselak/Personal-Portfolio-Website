@@ -14,12 +14,30 @@
   ],
   "routes": [
     {
+      "src": "/(.*)",
+      "methods": ["OPTIONS"],
+      "status": 204,
+      "headers": {
+        "Access-Control-Allow-Origin": "https://pieselak.vercel.app",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Max-Age": "86400",
+        "Vary": "Origin"
+      }
+    },
+    {
       "src": "/assets/(.*)",
       "dest": "/public/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "src/main.ts"
+      "dest": "src/main.ts",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://pieselak.vercel.app",
+        "Access-Control-Allow-Credentials": "true",
+        "Vary": "Origin"
+      }
     }
   ]
 }

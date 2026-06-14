@@ -10,16 +10,43 @@ import type { Request, Response } from 'express';
 
 type ExpressHandler = (request: Request, response: Response) => void;
 
+function normalizeOrigin(origin: string): string {
+  return origin.trim().replace(/\/+$/, '');
+}
+
+function getAllowedOrigins(): Set<string> {
+  const configuredOrigins = (process.env.CORS_ORIGIN ?? '')
+    .split(',')
+    .map(normalizeOrigin)
+    .filter(Boolean);
+
+  return new Set([
+    'http://localhost:2000',
+    'http://127.0.0.1:2000',
+    'https://pieselak.vercel.app',
+    ...configuredOrigins,
+  ]);
+}
+
 async function createApplication(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const allowedOrigins = getAllowedOrigins();
 
   app.useBodyParser('json', { limit: '2mb' });
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(normalizeOrigin(origin))) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin ${origin} is not allowed by CORS`), false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204,
   });
 
   app.useStaticAssets(join(__dirname, '..', 'public'), {
@@ -74,7 +101,18 @@ export default async function handler(
   response: Response,
 ): Promise<void> {
   const server = await getServer();
-  server(request, response);
+
+  await new Promise<void>((resolve, reject) => {
+    response.once('finish', resolve);
+    response.once('close', resolve);
+    response.once('error', reject);
+
+    try {
+      server(request, response);
+    } catch (error) {
+      reject(error instanceof Error ? error : new Error(String(error)));
+    }
+  });
 }
 
 if (!process.env.VERCEL) {
