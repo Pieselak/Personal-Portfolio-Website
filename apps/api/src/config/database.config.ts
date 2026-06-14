@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { IsString, validateSync } from '@nestjs/class-validator';
 import { plainToClass } from 'class-transformer';
+import pg from 'pg';
+import { GameAdminPlatform1760000000000 } from '../migrations/1760000000000-GameAdminPlatform';
+import { UserBlockingAndAnnouncementCleanup1760000001000 } from '../migrations/1760000001000-UserBlockingAndAnnouncementCleanup';
+import { EnsureRoleSystemColumn1760000002000 } from '../migrations/1760000002000-EnsureRoleSystemColumn';
 
 class DatabaseConfigDto {
   @IsString()
@@ -17,7 +21,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
     const errors = validateSync(config);
 
     if (errors.length > 0) {
-      throw new Error(`Invalid configuration: ${errors}`);
+      throw new Error(`Invalid configuration: ${JSON.stringify(errors)}`);
     }
 
     this.databaseUrl = config.DATABASE_URL;
@@ -28,9 +32,14 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       type: 'postgres',
       url: this.databaseUrl,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+      migrations: [
+        GameAdminPlatform1760000000000,
+        UserBlockingAndAnnouncementCleanup1760000001000,
+        EnsureRoleSystemColumn1760000002000,
+      ],
+      migrationsRun: process.env.NODE_ENV !== 'localdevelopment',
       synchronize: process.env.NODE_ENV === 'localdevelopment',
-      driver: require('pg'),
+      driver: pg,
     };
   }
 }
