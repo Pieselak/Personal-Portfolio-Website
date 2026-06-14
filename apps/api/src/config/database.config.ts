@@ -40,14 +40,6 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       migrationsRun: false, //process.env.NODE_ENV !== 'localdevelopment',
       synchronize: true, //process.env.NODE_ENV === 'localdevelopment',
       driver: pg,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
     };
   }
 }
