@@ -6,9 +6,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { writeFileSync } from 'node:fs';
+import type { Request, Response } from 'express';
 
-async function bootstrap() {
-  const logger = new Logger('AppModule');
+type ExpressHandler = (request: Request, response: Response) => void;
+
+async function createApplication(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useBodyParser('json', { limit: '2mb' });
@@ -46,7 +48,35 @@ async function bootstrap() {
     );
   }
 
+  return app;
+}
+
+async function bootstrap() {
+  const logger = new Logger('AppModule');
+  const app = await createApplication();
   await app.listen(process.env.PORT ?? 3000);
   logger.log(`Server started on port ${process.env.PORT}`);
 }
-void bootstrap();
+
+let serverPromise: Promise<ExpressHandler> | undefined;
+
+async function getServer(): Promise<ExpressHandler> {
+  serverPromise ??= createApplication().then(async (app) => {
+    await app.init();
+    return app.getHttpAdapter().getInstance() as ExpressHandler;
+  });
+
+  return serverPromise;
+}
+
+export default async function handler(
+  request: Request,
+  response: Response,
+): Promise<void> {
+  const server = await getServer();
+  server(request, response);
+}
+
+if (!process.env.VERCEL) {
+  void bootstrap();
+}
