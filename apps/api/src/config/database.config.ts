@@ -28,7 +28,8 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       type: 'postgres',
       url: this.databaseUrl,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true,
+      migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+      synchronize: process.env.NODE_ENV === 'localdevelopment',
       driver: require('pg'),
     };
   }

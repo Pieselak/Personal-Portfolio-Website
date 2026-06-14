@@ -14,13 +14,7 @@ export const queryClient = new QueryClient({
       },
     },
     mutations: {
-      retry(failureCount, error: unknown) {
-        if (isCancel(error)) return false;
-
-        if (isAxiosError(error) && error.response) return false;
-
-        return failureCount < 2;
-      },
+      retry: false,
     },
   },
 });

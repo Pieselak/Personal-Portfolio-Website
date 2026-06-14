@@ -3,9 +3,14 @@ import type { ReactNode } from "react";
 type DataTableProps = {
   headers: string[];
   rows: ReactNode[][];
+  emptyMessage?: string;
 };
 
-export function DataTable({ headers, rows }: DataTableProps) {
+export function DataTable({
+  headers,
+  rows,
+  emptyMessage = "No data",
+}: DataTableProps) {
   return (
     <div className="overflow-x-auto rounded-tile border border-border">
       <table className="w-full min-w-[720px] border-collapse text-left text-sm">
@@ -22,25 +27,36 @@ export function DataTable({ headers, rows }: DataTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-border bg-surface">
-          {rows.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className="transition-colors duration-200 hover:bg-surface-raised"
-            >
-              {row.map((cell, cellIndex) => (
-                <td
-                  key={cellIndex}
-                  className={`px-4 py-3 align-top leading-6 ${
-                    cellIndex === 0
-                      ? "font-black text-foreground"
-                      : "text-muted-foreground"
-                  }`}
-                >
-                  {cell}
-                </td>
-              ))}
+          {rows.length === 0 ? (
+            <tr>
+              <td
+                colSpan={headers.length}
+                className="px-4 py-10 text-center font-bold text-muted-foreground"
+              >
+                {emptyMessage}
+              </td>
             </tr>
-          ))}
+          ) : (
+            rows.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className="transition-colors duration-200 hover:bg-surface-raised"
+              >
+                {row.map((cell, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className={`px-4 py-3 align-top leading-6 ${
+                      cellIndex === 0
+                        ? "font-black text-foreground"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

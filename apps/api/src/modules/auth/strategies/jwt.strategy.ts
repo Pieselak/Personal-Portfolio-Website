@@ -28,8 +28,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     const user = await this.usersService.findUserByUuid(payload.sub);
 
-    if (!user.isActive) {
-      throw new UnauthorizedException('User is inactive');
+    if (!this.usersService.isUserAccessAllowed(user)) {
+      throw new UnauthorizedException('User is inactive or blocked');
     }
 
     return {

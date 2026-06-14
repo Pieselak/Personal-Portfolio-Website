@@ -75,12 +75,59 @@ export interface UserResponse {
   /** @example "admin" */
   username: string;
   isActive: boolean;
+  isBlocked: boolean;
+  blockedUntil?: string | null;
+  blockedReason?: string | null;
   role: UserRoleResponse;
 }
 
 export interface UpdateUserRoleBody {
   /** @example "ADMIN" */
   roleCode: string;
+}
+
+export interface UpdateUserStatusBody {
+  isActive: boolean;
+}
+
+export interface BlockUserBody {
+  /**
+   * ISO timestamp until which the account remains blocked
+   * @example "2026-06-21T12:00:00.000Z"
+   */
+  blockedUntil: string;
+  /**
+   * @maxLength 500
+   * @example "Repeated violation of the service rules"
+   */
+  reason: string;
+}
+
+export interface RoleResponse {
+  /** @example "EDITOR" */
+  code: string;
+  /** @example "Editor" */
+  label: string;
+  isSystem: boolean;
+  permissions: string[];
+}
+
+export interface CreateRoleBody {
+  /** @example "EDITOR" */
+  code: string;
+  /** @example "Editor" */
+  label: string;
+  permissions: string[];
+}
+
+export interface UpdateRoleBody {
+  label?: string;
+  permissions?: string[];
+}
+
+export interface DeleteRoleBody {
+  /** @example "USER" */
+  replacementRoleCode: string;
 }
 
 export interface RegisterBody {
@@ -194,6 +241,12 @@ export interface GetProjectResponse {
   completeDate?: string;
 }
 
+export interface TranslatedTextDto {
+  pl: string;
+  en: string;
+  de: string;
+}
+
 export interface ProjectDeveloperBody {
   /** @example "Patryk Z." */
   name: string;
@@ -206,12 +259,9 @@ export interface ProjectDeveloperBody {
 export interface CreateProjectBody {
   /** @example "PLANNED" */
   status: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
-  /** @example "Portfolio Website with Glucose Sensor Integration" */
-  title: string;
-  /** @example "Modern portfolio website with CGM integration." */
-  shortDescription: string;
-  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
-  detailedDescription: string;
+  title: TranslatedTextDto;
+  shortDescription: TranslatedTextDto;
+  detailedDescription: TranslatedTextDto;
   /** @example "https://example.com/project-preview.png" */
   imageUrl?: string;
   /** @example ["TypeScript","React","NestJS"] */
@@ -225,6 +275,8 @@ export interface CreateProjectBody {
   startDate?: string;
   /** @example "2026-01-31" */
   completeDate?: string;
+  /** @default false */
+  isPublished?: boolean;
 }
 
 export interface CreateProjectResponse {
@@ -258,12 +310,9 @@ export interface CreateProjectResponse {
 export interface UpdateProjectBody {
   /** @example "PLANNED" */
   status?: "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "ON_HOLD";
-  /** @example "Portfolio Website with Glucose Sensor Integration" */
-  title?: string;
-  /** @example "Modern portfolio website with CGM integration." */
-  shortDescription?: string;
-  /** @example "The project presents a portfolio, projects module, and glucose sensor integration." */
-  detailedDescription?: string;
+  title?: TranslatedTextDto;
+  shortDescription?: TranslatedTextDto;
+  detailedDescription?: TranslatedTextDto;
   /** @example "https://example.com/project-preview.png" */
   imageUrl?: string;
   /** @example ["TypeScript","React","NestJS"] */
@@ -277,6 +326,8 @@ export interface UpdateProjectBody {
   startDate?: string;
   /** @example "2026-01-31" */
   completeDate?: string;
+  /** @default false */
+  isPublished?: boolean;
 }
 
 export interface UpdateProjectResponse {
@@ -508,12 +559,19 @@ export interface HandleDexcomOAuthResponse {
   message: string;
 }
 
+export interface GlucoseProviderModeResponse {
+  /** @example "auto" */
+  name: string;
+  /** @example true */
+  selected: boolean;
+}
+
 export interface GetProviderModesResponse {
   /**
    * List of available modes for the glucose provider with their selection status
    * @example [{"name":"none","selected":true},{"name":"auto","selected":false}]
    */
-  providers: string[];
+  providers: GlucoseProviderModeResponse[];
 }
 
 export interface SetProviderModeBody {
@@ -660,6 +718,175 @@ export interface GetGlucoseManagementIndicatorResponse {
    * @example 168
    */
   hours?: number;
+}
+
+export interface AnnouncementResponse {
+  uuid: string;
+  title: string;
+  content: string;
+  actionLabel?: string;
+  actionUrl?: string;
+  variant: "INFO" | "SUCCESS" | "WARNING" | "CRITICAL";
+  dismissible: boolean;
+}
+
+export interface CreateAnnouncementBody {
+  title: TranslatedTextDto;
+  content: TranslatedTextDto;
+  actionLabel?: TranslatedTextDto;
+  actionUrl?: string;
+  variant: "INFO" | "SUCCESS" | "WARNING" | "CRITICAL";
+  dismissible: boolean;
+}
+
+export interface UpdateAnnouncementBody {
+  title?: TranslatedTextDto;
+  content?: TranslatedTextDto;
+  actionLabel?: TranslatedTextDto;
+  actionUrl?: string;
+  variant?: "INFO" | "SUCCESS" | "WARNING" | "CRITICAL";
+  dismissible?: boolean;
+}
+
+export interface GameSettingsResponse {
+  /**
+   * Indicates whether new educational game sessions are enabled
+   * @example true
+   */
+  enabled: boolean;
+}
+
+export interface UpdateGameSettingsBody {
+  enabled: boolean;
+}
+
+export interface PublicBossResponse {
+  uuid: string;
+  slug: string;
+  name: string;
+  description: string;
+  maxRounds: number;
+  questionCount: number;
+}
+
+export interface GameAdminStatsResponse {
+  /**
+   * Number of players currently connected to active game rooms
+   * @min 0
+   * @example 4
+   */
+  activePlayers: number;
+}
+
+export interface CreateBossBody {
+  slug: string;
+  name: TranslatedTextDto;
+  description: TranslatedTextDto;
+  /**
+   * @min 5
+   * @max 30
+   */
+  maxRounds: number;
+  published?: boolean;
+}
+
+export interface GameAnswerBody {
+  content: TranslatedTextDto;
+  isCorrect: boolean;
+  orderIndex?: number;
+  matchKey?: string;
+}
+
+export interface ImportQuestionBody {
+  content: TranslatedTextDto;
+  explanation: TranslatedTextDto;
+  type: "SINGLE_CHOICE" | "TRUE_FALSE" | "ORDER" | "MATCHING";
+  category: string;
+  /**
+   * @min 1
+   * @max 5
+   */
+  difficulty: number;
+  sourceUrl: string;
+  verifiedAt: string;
+  answers: GameAnswerBody[];
+  published?: boolean;
+}
+
+export interface ImportBossBody {
+  slug: string;
+  name: TranslatedTextDto;
+  description: TranslatedTextDto;
+  /**
+   * @min 5
+   * @max 30
+   */
+  maxRounds: number;
+  published?: boolean;
+  questions: ImportQuestionBody[];
+}
+
+export interface ImportGameContentBody {
+  /** @example 1 */
+  version: 1;
+  bosses: ImportBossBody[];
+}
+
+export interface ImportedBossResponse {
+  uuid: string;
+  slug: string;
+}
+
+export interface ImportGameContentResponse {
+  bossesImported: number;
+  questionsImported: number;
+  bosses: ImportedBossResponse[];
+}
+
+export interface UpdateBossBody {
+  slug?: string;
+  name?: TranslatedTextDto;
+  description?: TranslatedTextDto;
+  /**
+   * @min 5
+   * @max 30
+   */
+  maxRounds?: number;
+  published?: boolean;
+}
+
+export interface CreateQuestionBody {
+  bossUuid: string;
+  content: TranslatedTextDto;
+  explanation: TranslatedTextDto;
+  type: "SINGLE_CHOICE" | "TRUE_FALSE" | "ORDER" | "MATCHING";
+  category: string;
+  /**
+   * @min 1
+   * @max 5
+   */
+  difficulty: number;
+  sourceUrl: string;
+  verifiedAt: string;
+  answers: GameAnswerBody[];
+  published?: boolean;
+}
+
+export interface UpdateQuestionBody {
+  bossUuid?: string;
+  content?: TranslatedTextDto;
+  explanation?: TranslatedTextDto;
+  type?: "SINGLE_CHOICE" | "TRUE_FALSE" | "ORDER" | "MATCHING";
+  category?: string;
+  /**
+   * @min 1
+   * @max 5
+   */
+  difficulty?: number;
+  sourceUrl?: string;
+  verifiedAt?: string;
+  answers?: GameAnswerBody[];
+  published?: boolean;
 }
 
 import type {
@@ -885,6 +1112,22 @@ export class API<
       }),
 
     /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersControllerDeleteUser
+     * @request DELETE:/users/{uuid}
+     * @secure
+     */
+    usersControllerDeleteUser: (uuid: string, params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/users/${uuid}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
      * @description Replaces the user role. A user can have only one role. Requires permission: users.roles:update
      *
      * @tags Users
@@ -905,6 +1148,170 @@ export class API<
         secure: true,
         type: ContentType.Json,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersControllerUpdateUserStatus
+     * @request PATCH:/users/{uuid}/status
+     * @secure
+     */
+    usersControllerUpdateUserStatus: (
+      uuid: string,
+      data: UpdateUserStatusBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<UserResponse, void>({
+        path: `/users/${uuid}/status`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersControllerBlockUser
+     * @request PATCH:/users/{uuid}/block
+     * @secure
+     */
+    usersControllerBlockUser: (
+      uuid: string,
+      data: BlockUserBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<UserResponse, void>({
+        path: `/users/${uuid}/block`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Users
+     * @name UsersControllerUnblockUser
+     * @request DELETE:/users/{uuid}/block
+     * @secure
+     */
+    usersControllerUnblockUser: (uuid: string, params: RequestParams = {}) =>
+      this.request<UserResponse, void>({
+        path: `/users/${uuid}/block`,
+        method: "DELETE",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+  };
+  roles = {
+    /**
+     * No description
+     *
+     * @tags Roles
+     * @name RolesControllerGetRoles
+     * @request GET:/roles
+     * @secure
+     */
+    rolesControllerGetRoles: (params: RequestParams = {}) =>
+      this.request<RoleResponse[], void>({
+        path: `/roles`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Roles
+     * @name RolesControllerCreateRole
+     * @request POST:/roles
+     * @secure
+     */
+    rolesControllerCreateRole: (
+      data: CreateRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RoleResponse, void>({
+        path: `/roles`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Roles
+     * @name RolesControllerGetPermissions
+     * @request GET:/roles/permissions
+     * @secure
+     */
+    rolesControllerGetPermissions: (params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/roles/permissions`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Roles
+     * @name RolesControllerUpdateRole
+     * @request PATCH:/roles/{code}
+     * @secure
+     */
+    rolesControllerUpdateRole: (
+      code: string,
+      data: UpdateRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<RoleResponse, void>({
+        path: `/roles/${code}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Roles
+     * @name RolesControllerDeleteRole
+     * @request DELETE:/roles/{code}
+     * @secure
+     */
+    rolesControllerDeleteRole: (
+      code: string,
+      data: DeleteRoleBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/roles/${code}`,
+        method: "DELETE",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         ...params,
       }),
   };
@@ -1122,6 +1529,139 @@ export class API<
         method: "DELETE",
         secure: true,
         format: "json",
+        ...params,
+      }),
+  };
+  admin = {
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerFindAll
+     * @request GET:/admin/projects
+     * @secure
+     */
+    adminProjectsControllerFindAll: (params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/admin/projects`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerCreate
+     * @request POST:/admin/projects
+     * @secure
+     */
+    adminProjectsControllerCreate: (
+      data: CreateProjectBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/admin/projects`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerFindOne
+     * @request GET:/admin/projects/{uuid}
+     * @secure
+     */
+    adminProjectsControllerFindOne: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/admin/projects/${uuid}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerUpdate
+     * @request PATCH:/admin/projects/{uuid}
+     * @secure
+     */
+    adminProjectsControllerUpdate: (
+      uuid: string,
+      data: UpdateProjectBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/admin/projects/${uuid}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerRemove
+     * @request DELETE:/admin/projects/{uuid}
+     * @secure
+     */
+    adminProjectsControllerRemove: (uuid: string, params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/admin/projects/${uuid}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerPublish
+     * @request POST:/admin/projects/{uuid}/publish
+     * @secure
+     */
+    adminProjectsControllerPublish: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/admin/projects/${uuid}/publish`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Admin Projects
+     * @name AdminProjectsControllerUnpublish
+     * @request POST:/admin/projects/{uuid}/unpublish
+     * @secure
+     */
+    adminProjectsControllerUnpublish: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/admin/projects/${uuid}/unpublish`,
+        method: "POST",
+        secure: true,
         ...params,
       }),
   };
@@ -1414,6 +1954,440 @@ export class API<
         method: "GET",
         query: query,
         format: "json",
+        ...params,
+      }),
+  };
+  announcements = {
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerGetActive
+     * @request GET:/announcements/active
+     */
+    announcementsControllerGetActive: (
+      query?: {
+        lang?: "pl" | "en" | "de";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<AnnouncementResponse, any>({
+        path: `/announcements/active`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerFindAll
+     * @request GET:/announcements
+     * @secure
+     */
+    announcementsControllerFindAll: (params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/announcements`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerCreate
+     * @request POST:/announcements
+     * @secure
+     */
+    announcementsControllerCreate: (
+      data: CreateAnnouncementBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/announcements`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerFindOne
+     * @request GET:/announcements/{uuid}
+     * @secure
+     */
+    announcementsControllerFindOne: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/announcements/${uuid}`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerUpdate
+     * @request PATCH:/announcements/{uuid}
+     * @secure
+     */
+    announcementsControllerUpdate: (
+      uuid: string,
+      data: UpdateAnnouncementBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/announcements/${uuid}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerRemove
+     * @request DELETE:/announcements/{uuid}
+     * @secure
+     */
+    announcementsControllerRemove: (uuid: string, params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/announcements/${uuid}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerPublish
+     * @request POST:/announcements/{uuid}/publish
+     * @secure
+     */
+    announcementsControllerPublish: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/announcements/${uuid}/publish`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Announcements
+     * @name AnnouncementsControllerUnpublish
+     * @request POST:/announcements/{uuid}/unpublish
+     * @secure
+     */
+    announcementsControllerUnpublish: (
+      uuid: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/announcements/${uuid}/unpublish`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+  };
+  settings = {
+    /**
+     * No description
+     *
+     * @tags Settings
+     * @name SettingsControllerGetPublicGameSettings
+     * @request GET:/settings/game/public
+     */
+    settingsControllerGetPublicGameSettings: (params: RequestParams = {}) =>
+      this.request<GameSettingsResponse, any>({
+        path: `/settings/game/public`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Settings
+     * @name SettingsControllerGetGameSettings
+     * @request GET:/settings/game
+     * @secure
+     */
+    settingsControllerGetGameSettings: (params: RequestParams = {}) =>
+      this.request<GameSettingsResponse, void>({
+        path: `/settings/game`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Settings
+     * @name SettingsControllerUpdateGameSettings
+     * @request PATCH:/settings/game
+     * @secure
+     */
+    settingsControllerUpdateGameSettings: (
+      data: UpdateGameSettingsBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<GameSettingsResponse, void>({
+        path: `/settings/game`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  game = {
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerGetBosses
+     * @request GET:/game/bosses
+     */
+    gameControllerGetBosses: (
+      query?: {
+        lang?: "pl" | "en" | "de";
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<PublicBossResponse[], any>({
+        path: `/game/bosses`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerGetHistory
+     * @request GET:/game/history
+     */
+    gameControllerGetHistory: (params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/game/history`,
+        method: "GET",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerGetAdminBosses
+     * @request GET:/game/admin/bosses
+     * @secure
+     */
+    gameControllerGetAdminBosses: (params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/game/admin/bosses`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerCreateBoss
+     * @request POST:/game/admin/bosses
+     * @secure
+     */
+    gameControllerCreateBoss: (
+      data: CreateBossBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/game/admin/bosses`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerGetAdminStats
+     * @request GET:/game/admin/stats
+     * @secure
+     */
+    gameControllerGetAdminStats: (params: RequestParams = {}) =>
+      this.request<GameAdminStatsResponse, void>({
+        path: `/game/admin/stats`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerImportGameContent
+     * @request POST:/game/admin/import
+     * @secure
+     */
+    gameControllerImportGameContent: (
+      data: ImportGameContentBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<ImportGameContentResponse, void>({
+        path: `/game/admin/import`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerUpdateBoss
+     * @request PATCH:/game/admin/bosses/{uuid}
+     * @secure
+     */
+    gameControllerUpdateBoss: (
+      uuid: string,
+      data: UpdateBossBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/game/admin/bosses/${uuid}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerDeleteBoss
+     * @request DELETE:/game/admin/bosses/{uuid}
+     * @secure
+     */
+    gameControllerDeleteBoss: (uuid: string, params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/game/admin/bosses/${uuid}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerGetAdminQuestions
+     * @request GET:/game/admin/questions
+     * @secure
+     */
+    gameControllerGetAdminQuestions: (params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/game/admin/questions`,
+        method: "GET",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerCreateQuestion
+     * @request POST:/game/admin/questions
+     * @secure
+     */
+    gameControllerCreateQuestion: (
+      data: CreateQuestionBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/game/admin/questions`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerUpdateQuestion
+     * @request PATCH:/game/admin/questions/{uuid}
+     * @secure
+     */
+    gameControllerUpdateQuestion: (
+      uuid: string,
+      data: UpdateQuestionBody,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, void>({
+        path: `/game/admin/questions/${uuid}`,
+        method: "PATCH",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameControllerDeleteQuestion
+     * @request DELETE:/game/admin/questions/{uuid}
+     * @secure
+     */
+    gameControllerDeleteQuestion: (uuid: string, params: RequestParams = {}) =>
+      this.request<any, void>({
+        path: `/game/admin/questions/${uuid}`,
+        method: "DELETE",
+        secure: true,
         ...params,
       }),
   };

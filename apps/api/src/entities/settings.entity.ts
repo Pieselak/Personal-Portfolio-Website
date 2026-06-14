@@ -1,4 +1,3 @@
-// typescript
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('settings')

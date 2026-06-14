@@ -1,0 +1,92 @@
+name: Push Docker images to Amazon ECR
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ecr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: web
+            dockerfile: apps/web/Dockerfile
+            repository_variable: ECR_WEB_REPOSITORY
+          - name: api
+            dockerfile: apps/api/Dockerfile
+            repository_variable: ECR_API_REPOSITORY
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Validate repository variables
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_ROLE_ARN: ${{ vars.AWS_ROLE_ARN }}
+          ECR_REPOSITORY: ${{ vars[matrix.repository_variable] }}
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: |
+          test -n "$AWS_REGION" || { echo "::error::Missing repository variable AWS_REGION"; exit 1; }
+          test -n "$AWS_ROLE_ARN" || { echo "::error::Missing repository variable AWS_ROLE_ARN"; exit 1; }
+          test -n "$ECR_REPOSITORY" || { echo "::error::Missing repository variable ${{ matrix.repository_variable }}"; exit 1; }
+          if [ "${{ matrix.name }}" = "web" ]; then
+            test -n "$VITE_API_URL" || { echo "::error::Missing repository variable VITE_API_URL"; exit 1; }
+          fi
+
+      - name: Configure AWS credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          role-session-name: github-actions-ecr-${{ matrix.name }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to Amazon ECR
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push web image
+        if: matrix.name == 'web'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
+            VITE_CONTACT_EMAIL=${{ vars.VITE_CONTACT_EMAIL }}
+          tags: |
+            ${{ steps.ecr.outputs.registry }}/${{ vars[matrix.repository_variable] }}:latest
+            ${{ steps.ecr.outputs.registry }}/${{ vars[matrix.repository_variable] }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+      - name: Build and push API image
+        if: matrix.name == 'api'
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ steps.ecr.outputs.registry }}/${{ vars[matrix.repository_variable] }}:latest
+            ${{ steps.ecr.outputs.registry }}/${{ vars[matrix.repository_variable] }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+

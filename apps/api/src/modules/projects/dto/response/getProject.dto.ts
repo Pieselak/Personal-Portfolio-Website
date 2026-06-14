@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TranslatedText } from '../../../../common/dto/translated-text.dto';
 
 export class ProjectStatusResponse {
   @ApiProperty({ example: 'IN_PROGRESS' })
@@ -71,4 +72,16 @@ export class GetProjectResponse {
 
   @ApiProperty({ required: false, example: '2026-01-31' })
   completeDate?: string;
+}
+
+export class AdminProjectResponse extends GetProjectResponse {
+  @ApiProperty()
+  translations: {
+    title: TranslatedText;
+    shortDescription: TranslatedText;
+    detailedDescription: TranslatedText;
+  };
+
+  @ApiProperty()
+  isPublished: boolean;
 }

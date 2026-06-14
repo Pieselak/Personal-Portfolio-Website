@@ -3,6 +3,7 @@ import { useLocation, useOutlet } from "react-router-dom";
 import {
   type LucideIcon,
   CandyIcon,
+  Gamepad2Icon,
   FoldersIcon,
   HomeIcon,
   UserIcon,
@@ -12,6 +13,7 @@ import useIsMobile from "@/app/hooks/useIsMobile.ts";
 import { UserFooter } from "@/app/layouts/User/Footer/UserFooter.tsx";
 import { UserNavigation } from "@/app/layouts/User/Navigation/UserNavigation.tsx";
 import { UserMobileNavigation } from "@/app/layouts/User/MobileNavigation/UserMobileNavigation.tsx";
+import { GlobalAnnouncement } from "@/app/components/announcements/GlobalAnnouncement.tsx";
 
 export type navigationItem = {
   label: string;
@@ -24,6 +26,7 @@ const navigationItems: navigationItem[] = [
   { label: "aboutme", icon: UserIcon, url: "/about" },
   { label: "projects", icon: FoldersIcon, url: "/projects" },
   { label: "glucose", icon: CandyIcon, url: "/glucose" },
+  { label: "game", icon: Gamepad2Icon, url: "/game" },
 ];
 
 export function UserLayout() {
@@ -34,6 +37,7 @@ export function UserLayout() {
   return (
     <MotionConfig transition={{ duration: 0.25, ease: "easeInOut" }}>
       <div className="flex flex-col justify-start items-center min-h-dvh overflow-x-hidden">
+        <GlobalAnnouncement />
         {isMobile ? (
           <UserMobileNavigation navigationItems={navigationItems} />
         ) : (

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, In, IsNull, LessThanOrEqual, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { RoleEntity } from '../entities/role.entity';
 import { PermissionEntity } from '../entities/permission.entity';
@@ -14,6 +14,7 @@ export class UsersRepository {
     private readonly roleRepo: Repository<RoleEntity>,
     @InjectRepository(PermissionEntity)
     private readonly permissionRepo: Repository<PermissionEntity>,
+    private readonly dataSource: DataSource,
   ) {}
 
   countUsers(): Promise<number> {
@@ -22,6 +23,19 @@ export class UsersRepository {
 
   findAllUsers(): Promise<UserEntity[]> {
     return this.userRepo.find();
+  }
+
+  countAvailableUsersByRole(code: string): Promise<number> {
+    return this.userRepo.count({
+      where: [
+        { isActive: true, blockedUntil: IsNull(), role: { code } },
+        {
+          isActive: true,
+          blockedUntil: LessThanOrEqual(new Date()),
+          role: { code },
+        },
+      ],
+    });
   }
 
   findUserByUuid(uuid: string): Promise<UserEntity | null> {
@@ -38,6 +52,19 @@ export class UsersRepository {
 
   findRoleByCode(code: string): Promise<RoleEntity | null> {
     return this.roleRepo.findOne({ where: { code } });
+  }
+
+  findAllRoles(): Promise<RoleEntity[]> {
+    return this.roleRepo.find({ order: { isSystem: 'DESC', label: 'ASC' } });
+  }
+
+  findAllPermissions(): Promise<PermissionEntity[]> {
+    return this.permissionRepo.find({ order: { code: 'ASC' } });
+  }
+
+  findPermissionsByCodes(codes: string[]): Promise<PermissionEntity[]> {
+    if (!codes.length) return Promise.resolve([]);
+    return this.permissionRepo.find({ where: { code: In(codes) } });
   }
 
   async upsertPermission(code: string): Promise<PermissionEntity> {
@@ -62,6 +89,7 @@ export class UsersRepository {
     if (existingRole) {
       existingRole.label = label;
       existingRole.permissions = permissions;
+      existingRole.isSystem = true;
       return this.roleRepo.save(existingRole);
     }
 
@@ -69,9 +97,32 @@ export class UsersRepository {
       this.roleRepo.create({
         code,
         label,
+        isSystem: true,
         permissions,
       }),
     );
+  }
+
+  saveRole(role: RoleEntity): Promise<RoleEntity> {
+    return this.roleRepo.save(role);
+  }
+
+  createRole(data: Partial<RoleEntity>): RoleEntity {
+    return this.roleRepo.create(data);
+  }
+
+  async replaceRoleAndDelete(
+    role: RoleEntity,
+    replacement: RoleEntity,
+  ): Promise<void> {
+    await this.dataSource.transaction(async (manager) => {
+      await manager.update(
+        UserEntity,
+        { role: { id: role.id } },
+        { role: replacement },
+      );
+      await manager.remove(RoleEntity, role);
+    });
   }
 
   createUser(data: Partial<UserEntity>): Promise<UserEntity> {
@@ -80,5 +131,9 @@ export class UsersRepository {
 
   saveUser(user: UserEntity): Promise<UserEntity> {
     return this.userRepo.save(user);
+  }
+
+  async removeUser(user: UserEntity): Promise<void> {
+    await this.userRepo.remove(user);
   }
 }

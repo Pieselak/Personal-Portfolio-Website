@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserEntity } from '../../entities/user.entity';
 
 export class UserRoleResponse {
@@ -25,6 +25,15 @@ export class UserResponse {
   @ApiProperty()
   isActive: boolean;
 
+  @ApiProperty()
+  isBlocked: boolean;
+
+  @ApiPropertyOptional({ type: String, nullable: true })
+  blockedUntil: string | null;
+
+  @ApiPropertyOptional({ type: String, nullable: true })
+  blockedReason: string | null;
+
   @ApiProperty({ type: UserRoleResponse })
   role: UserRoleResponse;
 
@@ -34,6 +43,11 @@ export class UserResponse {
       email: user.email,
       username: user.username,
       isActive: user.isActive,
+      isBlocked: Boolean(
+        user.blockedUntil && user.blockedUntil.getTime() > Date.now(),
+      ),
+      blockedUntil: user.blockedUntil?.toISOString() ?? null,
+      blockedReason: user.blockedReason,
       role: {
         code: user.role.code,
         label: user.role.label,

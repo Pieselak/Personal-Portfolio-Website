@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateProjectBody } from '../dto/input/createProject.dto';
 import { UpdateProjectBody } from '../dto/input/updateProject.dto';
@@ -59,8 +60,10 @@ export class ProjectsController {
   @ApiServiceUnavailableResponse({
     description: 'Service is unavailable',
   })
-  async getProjects(): Promise<GetProjectResponse[]> {
-    return this.projectService.findAllProjects();
+  async getProjects(
+    @Query('lang') language = 'pl',
+  ): Promise<GetProjectResponse[]> {
+    return this.projectService.findAllProjects(language);
   }
 
   @CheckMaintenance()
@@ -88,8 +91,9 @@ export class ProjectsController {
   })
   async getProjectById(
     @Param('uuid', projectUuidPipe) uuid: string,
+    @Query('lang') language = 'pl',
   ): Promise<GetProjectResponse> {
-    return this.projectService.findProjectByUuid(uuid);
+    return this.projectService.findProjectByUuid(uuid, language);
   }
 
   @CheckMaintenance()

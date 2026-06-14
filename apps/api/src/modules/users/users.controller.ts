@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch } from '@nestjs/common';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -9,6 +9,8 @@ import { UsersService } from './services/users.service';
 import { UserResponse } from './dto/response/user.dto';
 import { UpdateUserRoleBody } from './dto/input/updateUserRole.dto';
 import { AuthPermissions } from '../auth/decorators/auth-permissions.decorator';
+import { UpdateUserStatusBody } from './dto/input/updateUserStatus.dto';
+import { BlockUserBody } from './dto/input/blockUser.dto';
 
 @Controller('users')
 @ApiTags('Users')
@@ -54,5 +56,39 @@ export class UsersController {
     @Body() body: UpdateUserRoleBody,
   ): Promise<UserResponse> {
     return this.usersService.updateUserRole(uuid, body.roleCode);
+  }
+
+  @Patch(':uuid/status')
+  @AuthPermissions('users.status:update')
+  @ApiOkResponse({ type: UserResponse })
+  async updateUserStatus(
+    @Param('uuid') uuid: string,
+    @Body() body: UpdateUserStatusBody,
+  ) {
+    return this.usersService.updateUserStatus(uuid, body.isActive);
+  }
+
+  @Patch(':uuid/block')
+  @AuthPermissions('users.status:update')
+  @ApiOkResponse({ type: UserResponse })
+  async blockUser(
+    @Param('uuid') uuid: string,
+    @Body() body: BlockUserBody,
+  ): Promise<UserResponse> {
+    return this.usersService.blockUser(uuid, body.blockedUntil, body.reason);
+  }
+
+  @Delete(':uuid/block')
+  @AuthPermissions('users.status:update')
+  @ApiOkResponse({ type: UserResponse })
+  async unblockUser(@Param('uuid') uuid: string): Promise<UserResponse> {
+    return this.usersService.unblockUser(uuid);
+  }
+
+  @Delete(':uuid')
+  @AuthPermissions('users:delete')
+  async deleteUser(@Param('uuid') uuid: string) {
+    await this.usersService.deleteUser(uuid);
+    return { deleted: true };
   }
 }

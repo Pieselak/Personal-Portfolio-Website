@@ -11,6 +11,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
+import { TranslatedTextDto } from '../../../../common/dto/translated-text.dto';
 
 export enum ProjectStatusCode {
   PLANNED = 'PLANNED',
@@ -43,21 +44,20 @@ export class CreateProjectBody {
   @IsEnum(ProjectStatusCode)
   status: ProjectStatusCode;
 
-  @ApiProperty({ example: 'Portfolio Website with Glucose Sensor Integration' })
-  @IsString()
-  @MaxLength(255)
-  title: string;
+  @ApiProperty({ type: TranslatedTextDto })
+  @ValidateNested()
+  @Type(() => TranslatedTextDto)
+  title: TranslatedTextDto;
 
-  @ApiProperty({ example: 'Modern portfolio website with CGM integration.' })
-  @IsString()
-  shortDescription: string;
+  @ApiProperty({ type: TranslatedTextDto })
+  @ValidateNested()
+  @Type(() => TranslatedTextDto)
+  shortDescription: TranslatedTextDto;
 
-  @ApiProperty({
-    example:
-      'The project presents a portfolio, projects module, and glucose sensor integration.',
-  })
-  @IsString()
-  detailedDescription: string;
+  @ApiProperty({ type: TranslatedTextDto })
+  @ValidateNested()
+  @Type(() => TranslatedTextDto)
+  detailedDescription: TranslatedTextDto;
 
   @ApiPropertyOptional({ example: 'https://example.com/project-preview.png' })
   @IsOptional()
@@ -103,4 +103,9 @@ export class CreateProjectBody {
   @IsOptional()
   @IsDateString()
   completeDate?: string;
+
+  @ApiPropertyOptional({ default: false })
+  @IsOptional()
+  @IsBoolean()
+  isPublished?: boolean;
 }

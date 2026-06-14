@@ -29,12 +29,14 @@ const de = {
         title: "404 Nicht gefunden",
         message:
           "Wir haben überall gesucht. In der Datenbank, unter dem Sofa und in den Taschen unserer Winterjacken. Diese Seite ist nicht hier.",
+        returnHome: "Zurück zur Startseite",
       },
 
       forbidden: {
         title: "403 Verboten",
         message:
           "Wir haben die digitalen Wachhunde von der Leine gelassen. Mach keine hastigen Bewegungen und verlasse diese Seite ganz langsam.",
+        returnHome: "Zurück zur Startseite",
       },
 
       maintenance: {
@@ -47,6 +49,7 @@ const de = {
         title: "Im Aufbau",
         message:
           "Die Farbe trocknet noch, und wir versuchen, die IKEA-Anleitung zum Aufbau dieser Seite zu verstehen. Komm später wieder!",
+        returnHome: "Zurück zur Startseite",
       },
 
       selectLanguage: {
@@ -146,6 +149,112 @@ const de = {
       },
 
       user: {
+        game: {
+          title: "Glykamie-Wachter",
+          subtitle: "Besiege den Wissensboss allein oder mit zwei Verbundeten.",
+          eyebrow: "Lernkampf gegen einen Boss",
+          hero: "Wissen ist dein starkster Angriff.",
+          intro:
+            "Wahle ein Thema, stelle ein Team zusammen und verwandle gepruftes Diabeteswissen in Schaden gegen den Boss.",
+          setupEyebrow: "Spielvorbereitung",
+          setupTitle: "Kampf vorbereiten",
+          setupDescription: "Gib deinen Namen ein und wahle den Spielmodus.",
+          modeLabel: "Spielmodus",
+          create: "Raum erstellen",
+          join: "Raum beitreten",
+          nickname: "Spielername",
+          roomCode: "Raumcode",
+          selectBoss: "Wissensboss wahlen",
+          loadingBosses: "Bosse werden geladen...",
+          bossesError: "Die verfugbaren Bosse konnten nicht geladen werden.",
+          roundsLabel: "Runden",
+          questionsLabel: "Fragen",
+          connected: "Mit dem Spielserver verbunden",
+          connecting: "Verbindung zum Spielserver...",
+          createAction: "Kampf erstellen",
+          joinAction: "Kampf beitreten",
+          disclaimerTitle: "Lerninhalte",
+          disclaimer:
+            "Das Spiel ersetzt keine medizinische Beratung. Kontaktiere im Notfall den ortlichen Rettungsdienst.",
+          features: {
+            knowledge: "Gepruftes Wissen",
+            players: "1-3 Spieler online",
+            help: "Erste-Hilfe-Szenarien",
+          },
+          lobby: {
+            title: "Team-Lobby",
+            subtitle:
+              "Teile den Code, bestatige deine Bereitschaft und starte den Kampf.",
+            roomCode: "Raumcode",
+            host: "Gastgeber",
+            ready: "Bereit",
+            waiting: "Wartet",
+            instructions:
+              "Jeder Spieler erhalt dieselbe Frage und hat 25 Sekunden Zeit.",
+            copyCode: "Raumcode kopieren",
+            players: "Spieler",
+            readyCount: "Bereit",
+            player: "Spieler",
+            status: "Sitzungsstatus",
+            preparation: "Team vorbereiten",
+            answerTime: "Zeit pro Antwort",
+            readyAction: "Ich bin bereit",
+            notReadyAction: "Bereitschaft aufheben",
+            start: "Kampf starten",
+          },
+          battle: {
+            boss: "Wissensboss",
+            bossHealth: "Boss-Lebenspunkte",
+            time: "Zeit",
+            teamScore: "Teampunkte",
+            seconds: "Sekunden",
+            round: "Runde {{current}} von {{total}}",
+            match: "Zuordnungsschlussel",
+            waiting: "Antwort gesendet",
+            answer: "Antwort absenden",
+            chooseAnswer: "Wahle eine Antwort, um fortzufahren",
+            waitingForPlayers: "Antwort gesendet. Das Team wird erwartet.",
+            correct: "Richtige Antwort",
+            incorrect: "Falsche Antwort",
+            correctDescription:
+              "Deine Antwort war richtig und hat den Boss geschwacht.",
+            incorrectDescription:
+              "Deine Antwort war falsch. Lies vor der nachsten Runde die Erklarung.",
+            explanation: "Erklarung",
+            reviewReady:
+              "Die Erklarung bleibt sichtbar, bis der Host fortfahrt.",
+            waitForHost: "Der Host fahrt fort, sobald das Team bereit ist.",
+            nextRound: "Nachste Frage",
+            startFinal: "Finalen Angriff starten",
+          },
+          final: {
+            title: "Finaler Angriff",
+            subtitle:
+              "Wissen hat den Boss geschwacht. Jetzt entscheiden Koordination und Reaktion.",
+            eyebrow: "Reaktionstest",
+            instruction: "Triff alle aktiven Ziele, bevor die Zeit ablauft.",
+            time: "Verbleibende Zeit",
+            weakness: "Boss-Schwachung",
+            hits: "Teamtreffer",
+            arena: "Zielzone",
+            teamHint: "Jeder Spieler kann jedes Ziel einmal treffen",
+            target: "Aktives Ziel treffen",
+            difficulty:
+              "Der geschwachte Boss benotigt {{hits}} Treffer. Jedes Ziel bleibt {{lifetime}} Sekunden aktiv.",
+          },
+          result: {
+            victory: "Boss besiegt",
+            defeat: "Der Boss hat uberlebt",
+            description: "Prufe den Teambeitrag und versuche es erneut.",
+            playAgain: "Noch einmal spielen",
+            completed: "Abgeschlossen",
+            tryAgain: "Erneut versuchen",
+            topScore: "Bestpunktzahl",
+            points: "Punkte",
+            correctAnswers: "{{correct}} von {{total}} richtig",
+          },
+        },
+
         termsOfService: {
           title: "Nutzungsbedingungen",
           subtitle:
@@ -533,7 +642,208 @@ const de = {
         },
       },
 
-      admin: {},
+      admin: {
+        common: {
+          title: "Titel",
+          description: "Beschreibung",
+          status: "Status",
+          actions: "Aktionen",
+          edit: "Bearbeiten",
+          delete: "Loschen",
+          save: "Speichern",
+          cancel: "Abbrechen",
+          publish: "Veroffentlichen",
+          unpublish: "Veroffentlichung aufheben",
+          published: "Veroffentlicht",
+          draft: "Entwurf",
+          yes: "Ja",
+          no: "Nein",
+          empty: "Keine Daten verfugbar.",
+        },
+        errors: {
+          title: "Der Vorgang konnte nicht abgeschlossen werden",
+          loading: "Daten werden geladen...",
+          retry: "Erneut versuchen",
+          dismiss: "Fehler schliessen",
+          network:
+            "Der Server ist nicht erreichbar. Prufen Sie die Verbindung und versuchen Sie es erneut.",
+          unauthorized:
+            "Ihre Sitzung ist abgelaufen. Melden Sie sich erneut an.",
+          forbidden: "Sie haben keine Berechtigung fur diese Aktion.",
+          notFound: "Die angeforderte Ressource existiert nicht mehr.",
+          conflict:
+            "Der Vorgang steht im Konflikt mit dem aktuellen Datenstand.",
+          validation: "Einige ubermittelte Werte sind ungultig.",
+          rateLimit:
+            "Zu viele Anfragen. Warten Sie kurz und versuchen Sie es erneut.",
+          server:
+            "Auf dem Server ist ein Fehler aufgetreten. Versuchen Sie es spater erneut.",
+          unexpected: "Ein unerwarteter Fehler ist aufgetreten.",
+        },
+        nav: {
+          dashboard: "Dashboard",
+          game: "Spielinhalte",
+          projects: "Projekte",
+          announcements: "Ankundigungen",
+          settings: "Einstellungen",
+          users: "Benutzer",
+          roles: "Rollen",
+        },
+        dashboard: {
+          title: "Administration",
+          description: "Inhalte, Benutzer und Betriebseinstellungen verwalten.",
+          cards: {
+            game: "Bosse, Fragen und Bildungsquellen.",
+            projects:
+              "Mehrsprachige Portfolio-Projekte und deren Veroffentlichung.",
+            announcements:
+              "Globaler Informationsbanner oberhalb der Navigation.",
+            roles:
+              "Rollendefinitionen und detaillierte Berechtigungszuweisungen.",
+          },
+        },
+        announcements: {
+          title: "Informationsbanner",
+          description:
+            "Entwurfe erstellen und eine globale Ankundigung veroffentlichen.",
+          new: "Neue Ankundigung",
+          variant: "Variante",
+          content: "Inhalt",
+          actionUrl: "Aktions-URL",
+          actionLabel: "Aktionsbezeichnung",
+          dismissible: "Benutzer konnen die Ankundigung schliessen",
+        },
+        projects: {
+          title: "Projektverwaltung",
+          description:
+            "Ubersetzungen, Projektmetadaten und Veroffentlichung bearbeiten.",
+          new: "Neues Projekt",
+          projectStatus: "Projektstatus",
+          tags: "Tags",
+          shortDescription: "Kurzbeschreibung",
+          detailedDescription: "Ausfuhrliche Beschreibung",
+          imageUrl: "Bild-URL",
+          sourceUrl: "Quellcode-URL",
+          sourceOpen: "Der Quellcode ist offentlich",
+        },
+        game: {
+          title: "Inhalte des Lernspiels",
+          description: "Bosse und geprufte mehrsprachige Fragen verwalten.",
+          bosses: "Bosse",
+          questions: "Fragen",
+          newBoss: "Neuer Boss",
+          bossSlug: "Technische Kennung (Slug)",
+          bossSlugHelp:
+            "Eine eindeutige, sprachunabhangige Kennung fur API und Import. Kleinbuchstaben, Zahlen und Bindestriche verwenden, z. B. hypoglykamie.",
+          newQuestion: "Neue Frage",
+          rounds: "Maximale Rundenzahl",
+          questionType: "Fragetyp",
+          category: "Kategorie",
+          question: "Frage",
+          explanation: "Erklarung",
+          source: "Offizielle Quelle",
+          verifiedAt: "Gepruft am",
+          difficulty: "Schwierigkeit",
+          answers: "Antworten",
+          answer: "Antwort",
+          correct: "Richtig",
+          matchKey: "Zuordnungsschlussel",
+          addAnswer: "Antwort hinzufugen",
+          importJson: "JSON importieren",
+          importTitle: "Bosse mit Fragen importieren",
+          importDescription:
+            "Wahle eine JSON-Datei mit Schemaversion 1. Der Import ist atomar: Ist ein Boss oder eine Frage ungultig, werden keine Daten gespeichert.",
+          importExampleDescription:
+            "Lade ein gultiges Beispiel mit einem Boss und allen unterstutzten Fragetypen herunter.",
+          downloadImportExample: "Beispiel-JSON herunterladen",
+          importFile: "JSON-Datei (maximal 2 MB)",
+          importReady: "{{file}} ist bereit. Bosse in der Datei: {{count}}.",
+          importError: "Die Datei kann nicht importiert werden",
+          importInvalidJson: "Die ausgewahlte Datei ist kein gultiges JSON.",
+          importInvalidStructure:
+            "Die Datei muss Version 1 und ein bosses-Array enthalten.",
+          importTooLarge: "Die ausgewahlte Datei uberschreitet 2 MB.",
+          importAction: "Inhalte importieren",
+          importing: "Import wird ausgefuhrt...",
+          importSuccess: "Import abgeschlossen",
+          importSuccessDescription:
+            "{{bosses}} Bosse und {{questions}} Fragen wurden importiert.",
+        },
+        settings: {
+          title: "Betriebseinstellungen",
+          description:
+            "Steuern Sie die Verfugbarkeit des Dienstes und externe Datenquellen.",
+          game: "Spielmodul",
+          gameDescription:
+            "Neue Sitzungen des Lernspiels zulassen oder blockieren.",
+          maintenance: "Wartungsmodus",
+          maintenanceDescription:
+            "Den offentlichen Bereich fur Wartungsarbeiten vorubergehend sperren.",
+          glucose: "Glukoseanbieter",
+          glucoseDescription: "Die aktive Quelle fur Glukosedaten auswahlen.",
+          enable: "Aktivieren",
+          disable: "Deaktivieren",
+          currentStatus: "Aktueller Status",
+          operational: "Dienst aktiv",
+          maintenanceActive: "Wartung aktiv",
+          statusLoading: "Wird gepruft...",
+          statusError: "Status nicht verfugbar",
+          statusUpdating: "Wird aktualisiert...",
+          statusUpdateError:
+            "Der Status konnte nicht aktualisiert werden. Versuchen Sie es erneut.",
+          gameEnabled: "Spiel aktiviert",
+          gameDisabled: "Spiel deaktiviert",
+          activePlayers: "Aktive Spieler",
+          playersUnavailable: "Nicht verfugbar",
+          gameUpdateError:
+            "Der Spielstatus konnte nicht aktualisiert werden. Versuchen Sie es erneut.",
+          enableGame: "Spiel aktivieren",
+          disableGame: "Spiel deaktivieren",
+          enableMaintenance: "Wartungsmodus aktivieren",
+          disableMaintenance: "Wartungsmodus deaktivieren",
+        },
+        users: {
+          title: "Benutzer",
+          description: "Rollen zuweisen und Kontoverfugbarkeit steuern.",
+          user: "Benutzer",
+          email: "E-Mail",
+          role: "Rolle",
+          active: "Aktiv",
+          inactive: "Inaktiv",
+          activate: "Aktivieren",
+          deactivate: "Deaktivieren",
+          blocked: "Gesperrt",
+          blockedUntil: "Bis: {{date}}",
+          block: "Zeitweise sperren",
+          unblock: "Entsperren",
+          blockTitle: "Konto sperren: {{user}}",
+          blockDescription:
+            "Der Benutzer kann sich bis zum ausgewahlten Zeitpunkt weder anmelden noch eine aktive Sitzung verwenden.",
+          blockedUntilLabel: "Gesperrt bis",
+          blockReason: "Grund der Sperre",
+          confirmBlock: "Konto sperren",
+          deleteConfirm:
+            "Mochten Sie das Konto von {{user}} wirklich dauerhaft loschen?",
+        },
+        roles: {
+          title: "Rollen und Berechtigungen",
+          description:
+            "Eigene Rollen aus dem verfugbaren Berechtigungskatalog erstellen.",
+          new: "Neue Rolle",
+          role: "Rolle",
+          permissions: "Berechtigungen",
+          system: "System",
+          code: "Code",
+          label: "Bezeichnung",
+          deleteTitle: "Rolle loschen: {{role}}",
+          deleteDescription:
+            "Benutzer mit dieser Rolle werden in die ausgewahlte Ersatzrolle verschoben.",
+          replacementRole: "Ersatzrolle",
+          confirmDelete: "Rolle loschen",
+        },
+        brand: "Kontrollraum",
+        backToSite: "Zur Website",
+      },
     },
 
     layouts: {
@@ -554,6 +864,7 @@ const de = {
             aboutme: "Über mich",
             projects: "Projekte",
             glucose: "Blutzucker",
+            game: "Spiel",
           },
           account: {
             login: "Einloggen",
@@ -561,6 +872,7 @@ const de = {
             expand: "Kontomenü öffnen",
             profile: "Profil",
             settings: "Einstellungen",
+            admin: "Adminbereich",
           },
         },
         footer: {

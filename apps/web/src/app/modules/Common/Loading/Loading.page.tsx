@@ -7,7 +7,7 @@ export function LoadingPage() {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2.5 my-auto md:flex-row">
+    <div className="flex flex-1 flex-col justify-center items-center h-full gap-2.5 py-8 my-auto md:flex-row">
       {isMobile ? (
         <PuffLoader size={100} color={"var(--color-primary)"} />
       ) : (

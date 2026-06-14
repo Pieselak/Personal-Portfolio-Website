@@ -14,10 +14,11 @@ type LanguageResource = {
   translation: unknown;
 };
 
-const resources = { en, pl, de } as const satisfies Record<
-  string,
-  LanguageResource
->;
+const resources = {
+  en,
+  pl,
+  de,
+} as const satisfies Record<string, LanguageResource>;
 const languages: languageItem[] = [];
 
 type ResourceKey = keyof typeof resources;

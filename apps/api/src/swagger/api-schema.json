@@ -82,6 +82,35 @@
         "tags": [
           "Users"
         ]
+      },
+      "delete": {
+        "operationId": "UsersController_deleteUser",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/users/{uuid}/role": {
@@ -137,6 +166,334 @@
         "summary": "Update user role",
         "tags": [
           "Users"
+        ]
+      }
+    },
+    "/users/{uuid}/status": {
+      "patch": {
+        "operationId": "UsersController_updateUserStatus",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserStatusBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/{uuid}/block": {
+      "patch": {
+        "operationId": "UsersController_blockUser",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockUserBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_unblockUser",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/roles": {
+      "get": {
+        "operationId": "RolesController_getRoles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Roles"
+        ]
+      },
+      "post": {
+        "operationId": "RolesController_createRole",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/roles/permissions": {
+      "get": {
+        "operationId": "RolesController_getPermissions",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
+    "/roles/{code}": {
+      "patch": {
+        "operationId": "RolesController_updateRole",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoleResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Roles"
+        ]
+      },
+      "delete": {
+        "operationId": "RolesController_deleteRole",
+        "parameters": [
+          {
+            "name": "code",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteRoleBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Roles"
         ]
       }
     },
@@ -571,6 +928,219 @@
         "summary": "Delete a project",
         "tags": [
           "Projects"
+        ]
+      }
+    },
+    "/admin/projects": {
+      "get": {
+        "operationId": "AdminProjectsController_findAll",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      },
+      "post": {
+        "operationId": "AdminProjectsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      }
+    },
+    "/admin/projects/{uuid}": {
+      "get": {
+        "operationId": "AdminProjectsController_findOne",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      },
+      "patch": {
+        "operationId": "AdminProjectsController_update",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      },
+      "delete": {
+        "operationId": "AdminProjectsController_remove",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      }
+    },
+    "/admin/projects/{uuid}/publish": {
+      "post": {
+        "operationId": "AdminProjectsController_publish",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
+        ]
+      }
+    },
+    "/admin/projects/{uuid}/unpublish": {
+      "post": {
+        "operationId": "AdminProjectsController_unpublish",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Admin Projects"
         ]
       }
     },
@@ -1076,6 +1646,717 @@
           "Glucose Statistics"
         ]
       }
+    },
+    "/announcements/active": {
+      "get": {
+        "operationId": "AnnouncementsController_getActive",
+        "parameters": [
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pl",
+                "en",
+                "de"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnnouncementResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Announcements"
+        ]
+      }
+    },
+    "/announcements": {
+      "get": {
+        "operationId": "AnnouncementsController_findAll",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      },
+      "post": {
+        "operationId": "AnnouncementsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAnnouncementBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      }
+    },
+    "/announcements/{uuid}": {
+      "get": {
+        "operationId": "AnnouncementsController_findOne",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      },
+      "patch": {
+        "operationId": "AnnouncementsController_update",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAnnouncementBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      },
+      "delete": {
+        "operationId": "AnnouncementsController_remove",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      }
+    },
+    "/announcements/{uuid}/publish": {
+      "post": {
+        "operationId": "AnnouncementsController_publish",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      }
+    },
+    "/announcements/{uuid}/unpublish": {
+      "post": {
+        "operationId": "AnnouncementsController_unpublish",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Announcements"
+        ]
+      }
+    },
+    "/settings/game/public": {
+      "get": {
+        "operationId": "SettingsController_getPublicGameSettings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameSettingsResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/settings/game": {
+      "get": {
+        "operationId": "SettingsController_getGameSettings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameSettingsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Settings"
+        ]
+      },
+      "patch": {
+        "operationId": "SettingsController_updateGameSettings",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGameSettingsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameSettingsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/game/bosses": {
+      "get": {
+        "operationId": "GameController_getBosses",
+        "parameters": [
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pl",
+                "en",
+                "de"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublicBossResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/history": {
+      "get": {
+        "operationId": "GameController_getHistory",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/bosses": {
+      "get": {
+        "operationId": "GameController_getAdminBosses",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      },
+      "post": {
+        "operationId": "GameController_createBoss",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBossBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/stats": {
+      "get": {
+        "operationId": "GameController_getAdminStats",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameAdminStatsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/import": {
+      "post": {
+        "operationId": "GameController_importGameContent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportGameContentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportGameContentResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/bosses/{uuid}": {
+      "patch": {
+        "operationId": "GameController_updateBoss",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBossBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      },
+      "delete": {
+        "operationId": "GameController_deleteBoss",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/questions": {
+      "get": {
+        "operationId": "GameController_getAdminQuestions",
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      },
+      "post": {
+        "operationId": "GameController_createQuestion",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateQuestionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
+    },
+    "/game/admin/questions/{uuid}": {
+      "patch": {
+        "operationId": "GameController_updateQuestion",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuestionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      },
+      "delete": {
+        "operationId": "GameController_deleteQuestion",
+        "parameters": [
+          {
+            "name": "uuid",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden, insufficient permissions"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Game"
+        ]
+      }
     }
   },
   "info": {
@@ -1134,6 +2415,17 @@
           "isActive": {
             "type": "boolean"
           },
+          "isBlocked": {
+            "type": "boolean"
+          },
+          "blockedUntil": {
+            "type": "string",
+            "nullable": true
+          },
+          "blockedReason": {
+            "type": "string",
+            "nullable": true
+          },
           "role": {
             "$ref": "#/components/schemas/UserRoleResponse"
           }
@@ -1143,6 +2435,7 @@
           "email",
           "username",
           "isActive",
+          "isBlocked",
           "role"
         ]
       },
@@ -1156,6 +2449,114 @@
         },
         "required": [
           "roleCode"
+        ]
+      },
+      "UpdateUserStatusBody": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isActive"
+        ]
+      },
+      "BlockUserBody": {
+        "type": "object",
+        "properties": {
+          "blockedUntil": {
+            "type": "string",
+            "example": "2026-06-21T12:00:00.000Z",
+            "description": "ISO timestamp until which the account remains blocked"
+          },
+          "reason": {
+            "type": "string",
+            "example": "Repeated violation of the service rules",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "blockedUntil",
+          "reason"
+        ]
+      },
+      "RoleResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "EDITOR"
+          },
+          "label": {
+            "type": "string",
+            "example": "Editor"
+          },
+          "isSystem": {
+            "type": "boolean"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "label",
+          "isSystem",
+          "permissions"
+        ]
+      },
+      "CreateRoleBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "example": "EDITOR"
+          },
+          "label": {
+            "type": "string",
+            "example": "Editor"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "label",
+          "permissions"
+        ]
+      },
+      "UpdateRoleBody": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DeleteRoleBody": {
+        "type": "object",
+        "properties": {
+          "replacementRoleCode": {
+            "type": "string",
+            "example": "USER"
+          }
+        },
+        "required": [
+          "replacementRoleCode"
         ]
       },
       "RegisterBody": {
@@ -1407,6 +2808,25 @@
           "developers"
         ]
       },
+      "TranslatedTextDto": {
+        "type": "object",
+        "properties": {
+          "pl": {
+            "type": "string"
+          },
+          "en": {
+            "type": "string"
+          },
+          "de": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pl",
+          "en",
+          "de"
+        ]
+      },
       "ProjectDeveloperBody": {
         "type": "object",
         "properties": {
@@ -1441,16 +2861,13 @@
             "example": "PLANNED"
           },
           "title": {
-            "type": "string",
-            "example": "Portfolio Website with Glucose Sensor Integration"
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "shortDescription": {
-            "type": "string",
-            "example": "Modern portfolio website with CGM integration."
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "detailedDescription": {
-            "type": "string",
-            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "imageUrl": {
             "type": "string",
@@ -1488,6 +2905,10 @@
           "completeDate": {
             "type": "string",
             "example": "2026-01-31"
+          },
+          "isPublished": {
+            "type": "boolean",
+            "default": false
           }
         },
         "required": [
@@ -1584,16 +3005,13 @@
             "example": "PLANNED"
           },
           "title": {
-            "type": "string",
-            "example": "Portfolio Website with Glucose Sensor Integration"
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "shortDescription": {
-            "type": "string",
-            "example": "Modern portfolio website with CGM integration."
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "detailedDescription": {
-            "type": "string",
-            "example": "The project presents a portfolio, projects module, and glucose sensor integration."
+            "$ref": "#/components/schemas/TranslatedTextDto"
           },
           "imageUrl": {
             "type": "string",
@@ -1631,6 +3049,10 @@
           "completeDate": {
             "type": "string",
             "example": "2026-01-31"
+          },
+          "isPublished": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -2100,6 +3522,23 @@
           "message"
         ]
       },
+      "GlucoseProviderModeResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "auto"
+          },
+          "selected": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "name",
+          "selected"
+        ]
+      },
       "GetProviderModesResponse": {
         "type": "object",
         "properties": {
@@ -2117,7 +3556,7 @@
             ],
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/GlucoseProviderModeResponse"
             }
           }
         },
@@ -2330,6 +3769,499 @@
           "isDataSufficient",
           "value"
         ]
+      },
+      "AnnouncementResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "actionLabel": {
+            "type": "string"
+          },
+          "actionUrl": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "SUCCESS",
+              "WARNING",
+              "CRITICAL"
+            ]
+          },
+          "dismissible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "uuid",
+          "title",
+          "content",
+          "variant",
+          "dismissible"
+        ]
+      },
+      "CreateAnnouncementBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "actionLabel": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "actionUrl": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "SUCCESS",
+              "WARNING",
+              "CRITICAL"
+            ]
+          },
+          "dismissible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "content",
+          "variant",
+          "dismissible"
+        ]
+      },
+      "UpdateAnnouncementBody": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "actionLabel": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "actionUrl": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string",
+            "enum": [
+              "INFO",
+              "SUCCESS",
+              "WARNING",
+              "CRITICAL"
+            ]
+          },
+          "dismissible": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GameSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether new educational game sessions are enabled",
+            "example": true
+          }
+        },
+        "required": [
+          "enabled"
+        ]
+      },
+      "UpdateGameSettingsBody": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ]
+      },
+      "PublicBossResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "maxRounds": {
+            "type": "number"
+          },
+          "questionCount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "uuid",
+          "slug",
+          "name",
+          "description",
+          "maxRounds",
+          "questionCount"
+        ]
+      },
+      "GameAdminStatsResponse": {
+        "type": "object",
+        "properties": {
+          "activePlayers": {
+            "type": "number",
+            "description": "Number of players currently connected to active game rooms",
+            "example": 4,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "activePlayers"
+        ]
+      },
+      "CreateBossBody": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "description": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "maxRounds": {
+            "type": "number",
+            "minimum": 5,
+            "maximum": 30
+          },
+          "published": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "maxRounds"
+        ]
+      },
+      "GameAnswerBody": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "isCorrect": {
+            "type": "boolean"
+          },
+          "orderIndex": {
+            "type": "number"
+          },
+          "matchKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "content",
+          "isCorrect"
+        ]
+      },
+      "ImportQuestionBody": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "explanation": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SINGLE_CHOICE",
+              "TRUE_FALSE",
+              "ORDER",
+              "MATCHING"
+            ]
+          },
+          "category": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "verifiedAt": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameAnswerBody"
+            }
+          },
+          "published": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "content",
+          "explanation",
+          "type",
+          "category",
+          "difficulty",
+          "sourceUrl",
+          "verifiedAt",
+          "answers"
+        ]
+      },
+      "ImportBossBody": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "description": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "maxRounds": {
+            "type": "number",
+            "minimum": 5,
+            "maximum": 30
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportQuestionBody"
+            }
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "maxRounds",
+          "questions"
+        ]
+      },
+      "ImportGameContentBody": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number",
+            "enum": [
+              1
+            ],
+            "example": 1
+          },
+          "bosses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportBossBody"
+            }
+          }
+        },
+        "required": [
+          "version",
+          "bosses"
+        ]
+      },
+      "ImportedBossResponse": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid",
+          "slug"
+        ]
+      },
+      "ImportGameContentResponse": {
+        "type": "object",
+        "properties": {
+          "bossesImported": {
+            "type": "number"
+          },
+          "questionsImported": {
+            "type": "number"
+          },
+          "bosses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImportedBossResponse"
+            }
+          }
+        },
+        "required": [
+          "bossesImported",
+          "questionsImported",
+          "bosses"
+        ]
+      },
+      "UpdateBossBody": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "description": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "maxRounds": {
+            "type": "number",
+            "minimum": 5,
+            "maximum": 30
+          },
+          "published": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateQuestionBody": {
+        "type": "object",
+        "properties": {
+          "bossUuid": {
+            "type": "string"
+          },
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "explanation": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SINGLE_CHOICE",
+              "TRUE_FALSE",
+              "ORDER",
+              "MATCHING"
+            ]
+          },
+          "category": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "verifiedAt": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameAnswerBody"
+            }
+          },
+          "published": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "bossUuid",
+          "content",
+          "explanation",
+          "type",
+          "category",
+          "difficulty",
+          "sourceUrl",
+          "verifiedAt",
+          "answers"
+        ]
+      },
+      "UpdateQuestionBody": {
+        "type": "object",
+        "properties": {
+          "bossUuid": {
+            "type": "string"
+          },
+          "content": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "explanation": {
+            "$ref": "#/components/schemas/TranslatedTextDto"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "SINGLE_CHOICE",
+              "TRUE_FALSE",
+              "ORDER",
+              "MATCHING"
+            ]
+          },
+          "category": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "sourceUrl": {
+            "type": "string"
+          },
+          "verifiedAt": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameAnswerBody"
+            }
+          },
+          "published": {
+            "type": "boolean"
+          }
+        }
       }
     }
   }

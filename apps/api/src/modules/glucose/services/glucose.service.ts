@@ -99,7 +99,8 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
             const isActive = await service.isSensorActive();
             if (isActive) {
               this.selectedGlucoseService = service;
-              this.selectedProviderName = glucoseServiceMapKey as GlucoseProviders;
+              this.selectedProviderName =
+                glucoseServiceMapKey as GlucoseProviders;
               this.logger.log(
                 `Auto-detected glucose provider: ${glucoseServiceMapKey}`,
               );
@@ -120,7 +121,7 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
           );
         }
       } else if (this.glucoseServiceMap[this.sensorProviderMode]) {
-        this.selectedProviderName = this.sensorProviderMode as GlucoseProviders;
+        this.selectedProviderName = this.sensorProviderMode;
         this.selectedGlucoseService =
           this.glucoseServiceMap[this.sensorProviderMode];
       } else {
@@ -180,9 +181,10 @@ export class GlucoseService implements OnModuleInit, OnModuleDestroy {
     if (!enabled) {
       reason = GlucoseAvailabilityReason.MODULE_DISABLED;
     } else if (!this.isAvailable && !hasProvider) {
-      reason = configuredProvider === 'auto'
-        ? GlucoseAvailabilityReason.NO_PROVIDER
-        : GlucoseAvailabilityReason.INITIALIZING;
+      reason =
+        configuredProvider === 'auto'
+          ? GlucoseAvailabilityReason.NO_PROVIDER
+          : GlucoseAvailabilityReason.INITIALIZING;
     } else if (!hasProvider) {
       reason = GlucoseAvailabilityReason.NO_PROVIDER;
     }

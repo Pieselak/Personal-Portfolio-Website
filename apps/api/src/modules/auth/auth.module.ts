@@ -27,6 +27,6 @@ import { TokenBlacklistService } from './services/token-blacklist.service';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, TokenBlacklistService],
-  exports: [AuthService],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

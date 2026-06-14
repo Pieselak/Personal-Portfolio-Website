@@ -3,6 +3,7 @@ import {
   LogInIcon,
   LogOutIcon,
   SettingsIcon,
+  ShieldCogIcon,
   UserCircleIcon,
   UserRoundIcon,
 } from "lucide-react";
@@ -11,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "@/app/api/mutations";
 import { useAuthStore } from "@/app/modules/Auth/authStore.ts";
+import { ADMIN_PERMISSIONS } from "@/app/auth/permissions.ts";
 
 type UserAuthCardProps = {
   mobile?: boolean;
@@ -27,6 +29,9 @@ export function UserAuthCard({
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const logoutMutation = useLogoutMutation();
   const [isOpen, setIsOpen] = useState(false);
+  const canAccessAdmin = ADMIN_PERMISSIONS.some((permission) =>
+    user?.role.permissions.includes(permission),
+  );
 
   async function handleLogout() {
     await logoutMutation.mutateAsync();
@@ -110,6 +115,19 @@ export function UserAuthCard({
             <SettingsIcon className="size-4.5" aria-hidden />
             {t("layouts.user.nav.account.settings")}
           </Link>
+          {canAccessAdmin && (
+            <Link
+              to="/admin"
+              onClick={() => {
+                setIsOpen(false);
+                onNavigate?.();
+              }}
+              className="flex min-h-10 items-center gap-2 rounded-control px-3 text-sm font-bold text-muted-foreground transition-[background-color,color] duration-200 hover:bg-surface-raised hover:text-primary"
+            >
+              <ShieldCogIcon className="size-4.5" aria-hidden />
+              {t("layouts.user.nav.account.admin")}
+            </Link>
+          )}
           <button
             type="button"
             onClick={handleLogout}

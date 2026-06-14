@@ -20,6 +20,9 @@ export class RoleEntity {
   @Column({ type: 'varchar', length: 100 })
   label: string;
 
+  @Column({ type: 'boolean', default: false, name: 'is_system' })
+  isSystem: boolean;
+
   @ManyToMany(() => PermissionEntity, (permission) => permission.roles, {
     cascade: true,
     eager: true,

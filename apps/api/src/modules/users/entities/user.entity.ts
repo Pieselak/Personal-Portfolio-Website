@@ -29,6 +29,17 @@ export class UserEntity {
   @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive: boolean;
 
+  @Column({ type: 'timestamptz', nullable: true, name: 'blocked_until' })
+  blockedUntil: Date | null;
+
+  @Column({
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+    name: 'blocked_reason',
+  })
+  blockedReason: string | null;
+
   @ManyToOne(() => RoleEntity, (role) => role.users, {
     eager: true,
     nullable: false,

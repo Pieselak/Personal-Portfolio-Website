@@ -6,6 +6,7 @@ import { ProjectEntity } from './entities/project.entity';
 import { ProjectStatusEntity } from './entities/projectStatus.entity';
 import { ProjectsRepository } from './repositories/projects.repository';
 import { ProjectTagEntity } from './entities/projectTag.entity';
+import { AdminProjectsController } from './controllers/admin-projects.controller';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { ProjectTagEntity } from './entities/projectTag.entity';
       ProjectTagEntity,
     ]),
   ],
-  controllers: [ProjectsController],
+  controllers: [ProjectsController, AdminProjectsController],
   providers: [ProjectsService, ProjectsRepository],
 })
 export class ProjectsModule {}

@@ -34,7 +34,7 @@ export class AuthService {
       ? await this.usersService.findUserByEmail(identifier)
       : await this.usersService.findUserByUsername(identifier);
 
-    if (!user || !user.isActive) {
+    if (!user || !this.usersService.isUserAccessAllowed(user)) {
       throw new UnauthorizedException('Invalid credentials');
     }
 

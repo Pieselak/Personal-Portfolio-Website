@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/app/components/ui/Button.tsx";
 import { Notice } from "@/app/components/ui/Notice.tsx";
 import { PageShell } from "@/app/components/ui/PageShell.tsx";
@@ -25,6 +25,7 @@ const initialValues: LoginFormValues = {
 export function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const loginMutation = useLoginMutation();
   const [values, setValues] = useState<LoginFormValues>(initialValues);
   const [fieldErrors, setFieldErrors] = useState<AuthFieldErrors<LoginFormValues>>({});
@@ -46,7 +47,9 @@ export function LoginPage() {
 
     try {
       await loginMutation.mutateAsync(values);
-      navigate("/home");
+      const redirect = (location.state as { redirect?: string } | null)
+        ?.redirect;
+      navigate(redirect ?? "/home", { replace: true });
     } catch (error) {
       setRequestError(t(`pages.auth.errors.${getAuthRequestError(error)}`));
     }

@@ -11,6 +11,7 @@ export class ProjectsService implements OnModuleInit {
 
   async onModuleInit(): Promise<void> {
     await this.ensureDefaultProjectStatuses();
+    await this.repository.migrateLegacyProjects();
   }
 
   async ensureDefaultProjectStatuses(): Promise<void> {
@@ -21,15 +22,28 @@ export class ProjectsService implements OnModuleInit {
     );
   }
 
-  async findAllProjects(): Promise<GetProjectResponse[]> {
-    return this.repository.findAllProjects();
+  async findAllProjects(language = 'pl'): Promise<GetProjectResponse[]> {
+    return this.repository.findAllProjects(language);
   }
 
-  async findProjectByUuid(uuid: string): Promise<GetProjectResponse> {
-    const response = await this.repository.findProjectByUuid(uuid);
+  async findProjectByUuid(
+    uuid: string,
+    language = 'pl',
+  ): Promise<GetProjectResponse> {
+    const response = await this.repository.findProjectByUuid(uuid, language);
     if (!response) {
       throw new NotFoundException('Project not found', 'PROJECT_NOT_FOUND');
     }
+    return response;
+  }
+
+  findAllAdminProjects() {
+    return this.repository.findAllAdminProjects();
+  }
+
+  async findAdminProjectByUuid(uuid: string) {
+    const response = await this.repository.findAdminProjectByUuid(uuid);
+    if (!response) throw new NotFoundException('Project not found');
     return response;
   }
 
@@ -65,5 +79,11 @@ export class ProjectsService implements OnModuleInit {
         'PROJECT_NOT_FOUND',
       );
     }
+  }
+
+  async setPublished(uuid: string, isPublished: boolean) {
+    const response = await this.repository.setPublished(uuid, isPublished);
+    if (!response) throw new NotFoundException('Project not found');
+    return response;
   }
 }
