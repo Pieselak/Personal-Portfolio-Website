@@ -3042,17 +3042,19 @@
               "$ref": "#/components/schemas/ProjectDeveloperBody"
             }
           },
-          "startDate": {
-            "type": "string",
-            "example": "2025-11-19"
-          },
-          "completeDate": {
-            "type": "string",
-            "example": "2026-01-31"
-          },
           "isPublished": {
             "type": "boolean",
             "default": false
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2025-11-19",
+            "nullable": true
+          },
+          "completeDate": {
+            "type": "string",
+            "example": "2026-01-31",
+            "nullable": true
           }
         }
       },

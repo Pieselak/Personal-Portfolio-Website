@@ -32,13 +32,17 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       type: 'postgres',
       url: this.databaseUrl,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      ssl:
+        process.env.NODE_ENV !== 'localdevelopment'
+          ? { rejectUnauthorized: false }
+          : false,
       migrations: [
         GameAdminPlatform1760000000000,
         UserBlockingAndAnnouncementCleanup1760000001000,
         EnsureRoleSystemColumn1760000002000,
       ],
-      migrationsRun: process.env.NODE_ENV !== 'localdevelopment',
-      synchronize: process.env.NODE_ENV === 'localdevelopment',
+      migrationsRun: false, //process.env.NODE_ENV !== 'localdevelopment',
+      synchronize: true, //process.env.NODE_ENV === 'localdevelopment',
       driver: pg,
     };
   }

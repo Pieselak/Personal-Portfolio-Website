@@ -5,7 +5,10 @@ import { Button } from "@/app/components/ui/Button.tsx";
 import { DataTable } from "@/app/components/ui/DataTable.tsx";
 import { AdminShell } from "@/app/modules/Admin/AdminShell.tsx";
 import type { AdminProject, TranslatedText } from "@/app/api/admin.types.ts";
-import type { CreateProjectBody } from "@/app/api/generated-api.ts";
+import type {
+  CreateProjectBody,
+  ProjectDeveloperBody,
+} from "@/app/api/generated-api.ts";
 import { useAdminProjectMutation, useProjectAction } from "@/app/api/mutations";
 import { useAdminProjects } from "@/app/api/queries";
 import { TranslatedFields } from "@/app/modules/Admin/components/TranslatedFields.tsx";
@@ -13,6 +16,7 @@ import {
   AdminErrorNotice,
   AdminLoadingState,
 } from "@/app/modules/Admin/components/AdminAsyncState.tsx";
+import { ProjectDevelopersFields } from "@/app/modules/Admin/Projects/ProjectDevelopersFields.tsx";
 
 const emptyText = (): TranslatedText => ({ pl: "", en: "", de: "" });
 
@@ -31,6 +35,10 @@ export function AdminProjectsPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [sourceCodeUrl, setSourceCodeUrl] = useState("");
   const [sourceCodeOpen, setSourceCodeOpen] = useState(true);
+  const [developers, setDevelopers] = useState<ProjectDeveloperBody[]>([]);
+  const [startDate, setStartDate] = useState("");
+  const [completeDate, setCompleteDate] = useState("");
+  const [dateError, setDateError] = useState(false);
 
   function openForm(project?: AdminProject) {
     save.reset();
@@ -48,32 +56,62 @@ export function AdminProjectsPage() {
     setImageUrl(project?.imageUrl ?? "");
     setSourceCodeUrl(project?.sourceCodeUrl ?? "");
     setSourceCodeOpen(project?.sourceCodeOpen ?? true);
+    setDevelopers(
+      project?.developers.map((developer) => ({ ...developer })) ?? [],
+    );
+    setStartDate(project?.startDate ?? "");
+    setCompleteDate(project?.completeDate ?? "");
+    setDateError(false);
     setFormOpen(true);
   }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (startDate && completeDate && completeDate < startDate) {
+      setDateError(true);
+      return;
+    }
+
+    setDateError(false);
     try {
-      await save.mutateAsync({
-        uuid: editing?.uuid,
-        payload: {
-          title,
-          shortDescription,
-          detailedDescription,
-          status,
-          tags: tags
-            .split(",")
-            .map((tag) => tag.trim())
-            .filter(Boolean),
-          imageUrl: imageUrl || undefined,
-          sourceCodeOpen,
-          sourceCodeUrl: sourceCodeUrl || undefined,
-          developers: editing?.developers ?? [],
-          startDate: editing?.startDate,
-          completeDate: editing?.completeDate,
-          isPublished: editing?.isPublished ?? false,
-        },
-      });
+      const payload = {
+        title,
+        shortDescription,
+        detailedDescription,
+        status,
+        tags: tags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+        imageUrl: imageUrl || undefined,
+        sourceCodeOpen,
+        sourceCodeUrl: sourceCodeUrl || undefined,
+        developers: developers.map((developer) => ({
+          name: developer.name.trim(),
+          role: developer.role?.trim() || undefined,
+          profileUrl: developer.profileUrl?.trim() || undefined,
+        })),
+        isPublished: editing?.isPublished ?? false,
+      };
+
+      await save.mutateAsync(
+        editing
+          ? {
+              uuid: editing.uuid,
+              payload: {
+                ...payload,
+                startDate: startDate || null,
+                completeDate: completeDate || null,
+              },
+            }
+          : {
+              payload: {
+                ...payload,
+                startDate: startDate || undefined,
+                completeDate: completeDate || undefined,
+              },
+            },
+      );
       setFormOpen(false);
     } catch {
       // The mutation state renders the API error without closing the form.
@@ -177,8 +215,52 @@ export function AdminProjectsPage() {
             legend={t("pages.admin.projects.detailedDescription")}
             value={detailedDescription}
             multiline
+            rows={10}
+            helpText={t("pages.admin.projects.markdownHelp")}
             onChange={setDetailedDescription}
           />
+          <ProjectDevelopersFields
+            value={developers}
+            onChange={setDevelopers}
+          />
+          <fieldset className="grid gap-3 rounded-tile border border-border p-3">
+            <legend className="px-2 text-sm font-black">
+              {t("pages.admin.projects.timeline")}
+            </legend>
+            <div className="grid gap-3 md:grid-cols-2">
+              <label className="grid gap-1 text-sm font-bold">
+                {t("pages.admin.projects.startDate")}
+                <input
+                  type="date"
+                  value={startDate}
+                  max={completeDate || undefined}
+                  onChange={(event) => {
+                    setStartDate(event.target.value);
+                    setDateError(false);
+                  }}
+                  className="min-h-10 rounded-control border border-border bg-background px-3"
+                />
+              </label>
+              <label className="grid gap-1 text-sm font-bold">
+                {t("pages.admin.projects.completeDate")}
+                <input
+                  type="date"
+                  value={completeDate}
+                  min={startDate || undefined}
+                  onChange={(event) => {
+                    setCompleteDate(event.target.value);
+                    setDateError(false);
+                  }}
+                  className="min-h-10 rounded-control border border-border bg-background px-3"
+                />
+              </label>
+            </div>
+            {dateError ? (
+              <p className="text-sm font-bold text-red-text">
+                {t("pages.admin.projects.dateOrderError")}
+              </p>
+            ) : null}
+          </fieldset>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             <label className="grid gap-1 text-sm font-bold">
               {t("pages.admin.projects.projectStatus")}

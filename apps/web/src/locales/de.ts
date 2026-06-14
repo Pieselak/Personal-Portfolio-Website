@@ -722,6 +722,21 @@ const de = {
           tags: "Tags",
           shortDescription: "Kurzbeschreibung",
           detailedDescription: "Ausfuhrliche Beschreibung",
+          markdownHelp:
+            "Unterstutzt Markdown: Uberschriften, Fett- und Kursivschrift, Listen, Links, Zitate, Tabellen und Codeblocke.",
+          developers: "Entwickler",
+          developerName: "Name",
+          developerRole: "Rolle im Projekt",
+          developerProfileUrl: "Profil-URL",
+          addDeveloper: "Entwickler hinzufugen",
+          removeDeveloper: "Entfernen",
+          noDevelopers:
+            "Diesem Projekt wurden noch keine Entwickler zugewiesen.",
+          timeline: "Projektzeitraum",
+          startDate: "Startdatum",
+          completeDate: "Abschlussdatum",
+          dateOrderError:
+            "Das Abschlussdatum darf nicht vor dem Startdatum liegen.",
           imageUrl: "Bild-URL",
           sourceUrl: "Quellcode-URL",
           sourceOpen: "Der Quellcode ist offentlich",

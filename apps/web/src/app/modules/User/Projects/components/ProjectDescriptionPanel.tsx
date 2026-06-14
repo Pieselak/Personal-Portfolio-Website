@@ -1,4 +1,5 @@
 import { BentoTile } from "@/app/components/ui/BentoTile.tsx";
+import { MarkdownContent } from "@/app/components/content/MarkdownContent.tsx";
 
 type ProjectDescriptionPanelProps = {
   eyebrow: string;
@@ -13,9 +14,7 @@ export function ProjectDescriptionPanel({
 }: ProjectDescriptionPanelProps) {
   return (
     <BentoTile eyebrow={eyebrow} title={title}>
-      <p className="whitespace-pre-wrap text-sm leading-7 text-muted-foreground">
-        {description}
-      </p>
+      <MarkdownContent>{description}</MarkdownContent>
     </BentoTile>
   );
 }

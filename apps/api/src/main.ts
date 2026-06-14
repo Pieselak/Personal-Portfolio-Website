@@ -6,17 +6,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { writeFileSync } from 'node:fs';
-import type { Request, Response } from 'express';
 
-type ExpressHandler = (request: Request, response: Response) => void;
-
-async function createApplication(): Promise<NestExpressApplication> {
+async function bootstrap() {
+  const logger = new Logger('AppModule');
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useBodyParser('json', { limit: '2mb' });
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN,
+    origin: process.env.CORS_ORIGIN || '*', // Zawsze warto mieć fallback
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -25,6 +23,7 @@ async function createApplication(): Promise<NestExpressApplication> {
   app.useStaticAssets(join(__dirname, '..', 'public'), {
     prefix: '/assets/',
   });
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const documentConfig = new DocumentBuilder()
@@ -48,46 +47,13 @@ async function createApplication(): Promise<NestExpressApplication> {
     );
   }
 
-  return app;
+  // DigitalOcean automatycznie wstrzykuje zmienną PORT (domyślnie 8080).
+  // Parametr '0.0.0.0' jest niezbędny w kontenerach Docker/DO,
+  // aby aplikacja była widoczna na zewnątrz kontenera.
+  const port = process.env.PORT ?? 8080;
+  await app.listen(port, '0.0.0.0');
+
+  logger.log(`Server started on port ${port}`);
 }
 
-async function bootstrap() {
-  const logger = new Logger('AppModule');
-  const app = await createApplication();
-  await app.listen(process.env.PORT ?? 3000);
-  logger.log(`Server started on port ${process.env.PORT}`);
-}
-
-let serverPromise: Promise<ExpressHandler> | undefined;
-
-async function getServer(): Promise<ExpressHandler> {
-  serverPromise ??= createApplication().then(async (app) => {
-    await app.init();
-    return app.getHttpAdapter().getInstance() as ExpressHandler;
-  });
-
-  return serverPromise;
-}
-
-export default async function handler(
-  request: Request,
-  response: Response,
-): Promise<void> {
-  const server = await getServer();
-
-  await new Promise<void>((resolve, reject) => {
-    response.once('finish', resolve);
-    response.once('close', resolve);
-    response.once('error', reject);
-
-    try {
-      server(request, response);
-    } catch (error) {
-      reject(error instanceof Error ? error : new Error(String(error)));
-    }
-  });
-}
-
-if (!process.env.VERCEL) {
-  void bootstrap();
-}
+void bootstrap();

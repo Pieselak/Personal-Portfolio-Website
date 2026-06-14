@@ -322,12 +322,12 @@ export interface UpdateProjectBody {
   /** @example "https://github.com/Pieselak/Vite_React_ExpressJS_AboutMe" */
   sourceCodeUrl?: string;
   developers?: ProjectDeveloperBody[];
-  /** @example "2025-11-19" */
-  startDate?: string;
-  /** @example "2026-01-31" */
-  completeDate?: string;
   /** @default false */
   isPublished?: boolean;
+  /** @example "2025-11-19" */
+  startDate?: string | null;
+  /** @example "2026-01-31" */
+  completeDate?: string | null;
 }
 
 export interface UpdateProjectResponse {

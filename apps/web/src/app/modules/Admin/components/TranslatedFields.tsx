@@ -4,6 +4,8 @@ type TranslatedFieldsProps = {
   legend: string;
   value: TranslatedText;
   multiline?: boolean;
+  rows?: number;
+  helpText?: string;
   onChange: (value: TranslatedText) => void;
 };
 
@@ -13,11 +15,16 @@ export function TranslatedFields({
   legend,
   value,
   multiline = false,
+  rows = 4,
+  helpText,
   onChange,
 }: TranslatedFieldsProps) {
   return (
     <fieldset className="grid gap-3 rounded-tile border border-border p-3">
       <legend className="px-2 text-sm font-black">{legend}</legend>
+      {helpText ? (
+        <p className="text-xs leading-5 text-muted-foreground">{helpText}</p>
+      ) : null}
       <div className="grid gap-3 md:grid-cols-3">
         {languages.map((language) => (
           <label key={language} className="grid gap-1 text-xs font-bold">
@@ -28,7 +35,7 @@ export function TranslatedFields({
                 onChange={(event) =>
                   onChange({ ...value, [language]: event.target.value })
                 }
-                rows={4}
+                rows={rows}
                 required
                 className="rounded-control border border-border bg-background px-3 py-2 text-sm font-normal"
               />
