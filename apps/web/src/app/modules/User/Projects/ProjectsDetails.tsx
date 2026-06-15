@@ -14,8 +14,11 @@ import { ProjectsLoadingState } from "@/app/modules/User/Projects/components/Pro
 
 export function MyProjectsDetailsPage() {
   const params = useParams();
-  const { t } = useTranslation();
-  const projectQuery = useProject(params.projectId);
+  const { t, i18n } = useTranslation();
+  const projectQuery = useProject(
+    params.projectId,
+    i18n.resolvedLanguage ?? i18n.language,
+  );
   const project = projectQuery.data;
 
   if (projectQuery.isLoading) {

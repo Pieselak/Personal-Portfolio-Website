@@ -1437,10 +1437,16 @@ export class API<
      * @summary Retrieve a list of all projects
      * @request GET:/projects
      */
-    projectsControllerGetProjects: (params: RequestParams = {}) =>
+    projectsControllerGetProjects: (
+      query?: {
+        lang?: "pl" | "en" | "de";
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<GetProjectResponse[], void>({
         path: `/projects`,
         method: "GET",
+        query: query,
         format: "json",
         ...params,
       }),
@@ -1478,11 +1484,15 @@ export class API<
      */
     projectsControllerGetProjectById: (
       uuid: string,
+      query?: {
+        lang?: "pl" | "en" | "de";
+      },
       params: RequestParams = {},
     ) =>
       this.request<GetProjectResponse, void>({
         path: `/projects/${uuid}`,
         method: "GET",
+        query: query,
         format: "json",
         ...params,
       }),

@@ -36,7 +36,7 @@ export const useUpdateProjectMutation = (projectUuid: string) => {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: projectQueryKeys.lists() });
       queryClient.invalidateQueries({
-        queryKey: projectQueryKeys.detail(projectUuid),
+        queryKey: projectQueryKeys.detailRoot(projectUuid),
       });
     },
   });
@@ -54,7 +54,7 @@ export const useDeleteProjectMutation = () => {
     onSuccess(_, projectUuid) {
       queryClient.invalidateQueries({ queryKey: projectQueryKeys.lists() });
       queryClient.removeQueries({
-        queryKey: projectQueryKeys.detail(projectUuid),
+        queryKey: projectQueryKeys.detailRoot(projectUuid),
       });
     },
   });

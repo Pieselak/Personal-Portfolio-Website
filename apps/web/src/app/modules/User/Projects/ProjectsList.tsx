@@ -14,9 +14,11 @@ import type { ProjectFilter } from "@/app/modules/User/Projects/types/project.ty
 import { useProjectList } from "@/app/api/queries/useProjects.ts";
 
 export function MyProjectsListPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [filter, setFilter] = useState<ProjectFilter>("ALL");
-  const projectsQuery = useProjectList();
+  const projectsQuery = useProjectList(
+    i18n.resolvedLanguage ?? i18n.language,
+  );
 
   const visibleProjects = useMemo(() => {
     const projects = projectsQuery.data ?? [];

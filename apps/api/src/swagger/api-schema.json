@@ -695,7 +695,21 @@
       "get": {
         "description": "Fetches and returns an array of all project entities stored in the system.",
         "operationId": "ProjectsController_getProjects",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pl",
+                "en",
+                "de"
+              ],
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of all projects retrieved successfully",
@@ -781,6 +795,19 @@
             "required": true,
             "in": "path",
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pl",
+                "en",
+                "de"
+              ],
               "type": "string"
             }
           }

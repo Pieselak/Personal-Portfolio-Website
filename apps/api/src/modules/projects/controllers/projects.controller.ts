@@ -21,6 +21,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiQuery,
   ApiServiceUnavailableResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -54,6 +55,11 @@ export class ProjectsController {
     type: GetProjectResponse,
     description: 'List of all projects retrieved successfully',
   })
+  @ApiQuery({
+    name: 'lang',
+    required: false,
+    enum: ['pl', 'en', 'de'],
+  })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
@@ -76,6 +82,11 @@ export class ProjectsController {
   @ApiOkResponse({
     type: GetProjectResponse,
     description: 'Project retrieved successfully',
+  })
+  @ApiQuery({
+    name: 'lang',
+    required: false,
+    enum: ['pl', 'en', 'de'],
   })
   @ApiNotFoundResponse({
     description: 'Project with the specified ID not found',
